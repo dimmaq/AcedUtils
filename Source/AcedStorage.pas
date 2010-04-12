@@ -425,7 +425,7 @@ type
     функция LoadFile вернет False. При успешной загрузке коллекции функция
     возвращает True. }
 
-    function LoadFile(const FileName: string;
+    function LoadFile(const FileName: AnsiString;
       EncryptionKey: PSHA256Digest = nil): Boolean;
 
   { Если в коллекции есть какие-либо изменения (свойство Changed коллекции
@@ -443,7 +443,7 @@ type
     только в режиме монопольного доступа, т.к. он перезаписывает изменения,
     внесенные другими пользователями. }
 
-    function SaveFileDirect(const FileName: string; EncryptionKey: PSHA256Digest = nil;
+    function SaveFileDirect(const FileName: AnsiString; EncryptionKey: PSHA256Digest = nil;
       CompressionMode: TCompressionMode = dcmNoCompression): Boolean;
 
   { Функция OpenFile открывает файл с именем FileName в режиме чтения/записи
@@ -461,7 +461,7 @@ type
     операцию", функция вернет значение False. При успешном открытии файла
     функция возвращает True. }
 
-    function OpenFile(const FileName: string; EncryptionKey: PSHA256Digest = nil;
+    function OpenFile(const FileName: AnsiString; EncryptionKey: PSHA256Digest = nil;
       CompressionMode: TCompressionMode = dcmNoCompression): Boolean;
 
   { Если в коллекции есть какие-либо изменения (свойство Changed коллекции
@@ -871,12 +871,12 @@ type
 
 
 { Класс TStringIndex - потомок класса TDataIndex, предназначенный для
-  индексирования коллекции по значению типа String. }
+  индексирования коллекции по значению типа AnsiString. }
 
 { Прототип функции, используемой для получения индексируемого значения типа
-  String объекта типа TSerializableObject, переданного параметром SO. }
+  AnsiString объекта типа TSerializableObject, переданного параметром SO. }
 
-  TKeyOfFunction_String = function(SO: TSerializableObject): string;
+  TKeyOfFunction_String = function(SO: TSerializableObject): AnsiString;
 
   TStringIndex = class(TDataIndex)
   private
@@ -895,7 +895,7 @@ type
 
   { Конструктор Create создает экземпляр класса TStringIndex. В качестве
     первого параметра (KeyOf) принимает адрес функции, которая возвращает
-    индексируемое значение типа String элемента коллекции. Параметр Unique
+    индексируемое значение типа AnsiString элемента коллекции. Параметр Unique
     определяет, должен ли индекс быть уникальным. Если он равен True, для
     коллекции вводится ограничение уникального ключа и в нее невозможно
     добавить второй элемент с тем же индексируемым значением. Последний
@@ -926,14 +926,14 @@ type
     в зависимости от значения свойства CaseSensitive. Если строка Key
     не найдена среди индексируемых значений, функция возвращает False. }
 
-    function Contains(const Key: string): Boolean;
+    function Contains(const Key: AnsiString): Boolean;
 
   { Функция Search возвращает элемент коллекции, для которого индексируемое
     значение равно строке Key. При сравнении строк регистр символов учитывается
     или не учитывается в зависимости от значения свойства CaseSensitive. Если
     строка Key не найдена среди индексируемых значений, функция возвращает nil. }
 
-    function Search(const Key: string): TSerializableObject;
+    function Search(const Key: AnsiString): TSerializableObject;
 
   { Функция IndexOf возвращает индекс первого элемента в массиве, адресуемом
     свойством ItemList, для которого индексируемое значение равно строке Key.
@@ -942,7 +942,7 @@ type
     не найдена среди индексируемых значений, функция IndexOf возвращает
     значение -1. }
 
-    function IndexOf(const Key: string): Integer;
+    function IndexOf(const Key: AnsiString): Integer;
 
   { Следующая функция SelectRange выделяет диапазон элементов массива,
     адресуемого свойством ItemList индекса, такой, что индексируемое значение
@@ -956,7 +956,7 @@ type
     учитывается или не учитывается в зависимости от значения свойства
     CaseSensitive. }
 
-    function SelectRange(const Key1, Key2: string; var Index: Integer): Integer; overload;
+    function SelectRange(const Key1, Key2: AnsiString; var Index: Integer): Integer; overload;
 
   { Следующая функция SelectRange выделяет диапазон элементов массива,
     адресуемого свойством ItemList индекса, такой, что индексируемое значение
@@ -968,7 +968,7 @@ type
     учитывается или не учитывается в зависимости от значения свойства
     CaseSensitive. }
 
-    function SelectRange(const Key: string): Integer; overload;
+    function SelectRange(const Key: AnsiString): Integer; overload;
 
   { Функция StartsWith выделяет диапазон элементов массива, адресуемого
     свойством ItemList индекса, такой, что индексируемое строковое значение
@@ -978,7 +978,7 @@ type
     При сравнении строк регистр символов учитывается или не учитывается
     в зависимости от значения свойства CaseSensitive. }
 
-    function StartsWith(const S: string; var Index: Integer): Integer;
+    function StartsWith(const S: AnsiString; var Index: Integer): Integer;
   end;
 
 
@@ -1841,12 +1841,12 @@ type
 
 
 { Класс TCharIndex - потомок класса TDataIndex, предназначенный для
-  индексирования коллекции по значению типа Char. }
+  индексирования коллекции по значению типа AnsiChar. }
 
 { Прототип функции, используемой для получения индексируемого значения типа
-  Char объекта типа TSerializableObject, переданного параметром SO. }
+  AnsiChar объекта типа TSerializableObject, переданного параметром SO. }
 
-  TKeyOfFunction_Char = function(SO: TSerializableObject): Char;
+  TKeyOfFunction_Char = function(SO: TSerializableObject): AnsiChar;
 
   TCharIndex = class(TDataIndex)
   private
@@ -1862,7 +1862,7 @@ type
 
   { Конструктор Create создает экземпляр класса TCharIndex. В качестве
     первого параметра (KeyOf) принимает адрес функции, которая возвращает
-    индексируемое значение типа Char для элемента коллекции. Параметр
+    индексируемое значение типа AnsiChar для элемента коллекции. Параметр
     Unique определяет, должен ли индекс быть уникальным. Если он равен True,
     для коллекции вводится ограничение уникального ключа и в нее невозможно
     добавить второй элемент с тем же индексируемым значением. }
@@ -1880,19 +1880,19 @@ type
     Если такое значение не найдено в списке индексируемых значений, функция
     возвращает False. }
 
-    function Contains(Key: Char): Boolean;
+    function Contains(Key: AnsiChar): Boolean;
 
   { Функция Search возвращает элемент коллекции, для которого индексируемое
     значение равно значению параметра Key. Если такое значение не найдено
     в индексе, функция возвращает nil. }
 
-    function Search(Key: Char): TSerializableObject;
+    function Search(Key: AnsiChar): TSerializableObject;
 
   { Функция IndexOf возвращает индекс первого элемента в массиве, адресуемом
     свойством ItemList, для которого индексируемое значение равно Key. Если
     такое значение не найдено в индексе, функция возвращает -1. }
 
-    function IndexOf(Key: Char): Integer;
+    function IndexOf(Key: AnsiChar): Integer;
 
   { Следующая функция SelectRange выделяет диапазон элементов массива,
     адресуемого свойством ItemList индекса, такой, что индексируемое значение
@@ -1904,7 +1904,7 @@ type
     значение для всех его элементов меньше или равно значению параметра Key1
     и больше значения параметра Key2. }
 
-    function SelectRange(Key1, Key2: Char; var Index: Integer): Integer; overload;
+    function SelectRange(Key1, Key2: AnsiChar; var Index: Integer): Integer; overload;
 
   { Следующая функция SelectRange выделяет диапазон элементов массива,
     адресуемого свойством ItemList индекса, такой, что индексируемое значение
@@ -1914,7 +1914,7 @@ type
     диапазон, что индексируемое значение для всех его элементов меньше или
     равно значению параметра Key. }
 
-    function SelectRange(Key: Char): Integer; overload;
+    function SelectRange(Key: AnsiChar): Integer; overload;
   end;
 
 
@@ -2324,7 +2324,7 @@ begin
   FChanged := False;
 end;
 
-function TSerializableCollection.LoadFile(const FileName: string;
+function TSerializableCollection.LoadFile(const FileName: AnsiString;
   EncryptionKey: PSHA256Digest): Boolean;
 var
   Handle: THandle;
@@ -2336,7 +2336,7 @@ begin
   Result := True;
   if FHandle <> INVALID_HANDLE_VALUE then
     RaiseErrorFmt(SErrFileOpenedForWrite, FileName);
-  Handle := FindFirstFile(PChar(FileName), FindData);
+  Handle := FindFirstFile(PAnsiChar(FileName), FindData);
   if Handle = INVALID_HANDLE_VALUE then
   begin
     Clear;
@@ -2347,7 +2347,7 @@ begin
     Windows.FindClose(Handle);
     repeat
       NetWaitAction := netWaitActionNone;
-      Handle := Windows.CreateFile(PChar(FileName), GENERIC_READ, FILE_SHARE_READ,
+      Handle := Windows.CreateFile(PAnsiChar(FileName), GENERIC_READ, FILE_SHARE_READ,
         nil, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
       if Handle = INVALID_HANDLE_VALUE then
       begin
@@ -2404,7 +2404,7 @@ begin
   end;
 end;
 
-function TSerializableCollection.SaveFileDirect(const FileName: string;
+function TSerializableCollection.SaveFileDirect(const FileName: AnsiString;
   EncryptionKey: PSHA256Digest; CompressionMode: TCompressionMode): Boolean;
 var
   Handle: THandle;
@@ -2420,7 +2420,7 @@ begin
     Save(Writer);
     repeat
       NetWaitAction := netWaitActionNone;
-      Handle := Windows.CreateFile(PChar(FileName), GENERIC_WRITE,
+      Handle := Windows.CreateFile(PAnsiChar(FileName), GENERIC_WRITE,
         0, nil, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
       if Handle = INVALID_HANDLE_VALUE then
       begin
@@ -2462,7 +2462,7 @@ begin
   end;
 end;
 
-function TSerializableCollection.OpenFile(const FileName: string;
+function TSerializableCollection.OpenFile(const FileName: AnsiString;
   EncryptionKey: PSHA256Digest; CompressionMode: TCompressionMode): Boolean;
 var
   Size, Tick: LongWord;
@@ -2474,7 +2474,7 @@ begin
     RaiseErrorFmt(SErrFileOpenedForWrite, FileName);
   repeat
     NetWaitAction := netWaitActionNone;
-    FHandle := Windows.CreateFile(PChar(FileName), GENERIC_READ or GENERIC_WRITE,
+    FHandle := Windows.CreateFile(PAnsiChar(FileName), GENERIC_READ or GENERIC_WRITE,
       0, nil, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     if FHandle = INVALID_HANDLE_VALUE then
     begin
@@ -3512,7 +3512,7 @@ procedure TStringIndex.QuickSortTextAsc(L, R: Integer);
 var
   I, J: Integer;
   T: TSerializableObject;
-  P: string;
+  P: AnsiString;
 begin
   I := L;
   J := R;
@@ -3537,7 +3537,7 @@ procedure TStringIndex.QuickSortTextDesc(L, R: Integer);
 var
   I, J: Integer;
   T: TSerializableObject;
-  P: string;
+  P: AnsiString;
 begin
   I := L;
   J := R;
@@ -3562,7 +3562,7 @@ procedure TStringIndex.QuickSortStrAsc(L, R: Integer);
 var
   I, J: Integer;
   T: TSerializableObject;
-  P: string;
+  P: AnsiString;
 begin
   I := L;
   J := R;
@@ -3587,7 +3587,7 @@ procedure TStringIndex.QuickSortStrDesc(L, R: Integer);
 var
   I, J: Integer;
   T: TSerializableObject;
-  P: string;
+  P: AnsiString;
 begin
   I := L;
   J := R;
@@ -3612,7 +3612,7 @@ function TStringIndex.CanInsert(SO: TSerializableObject): Boolean;
 var
   Items: PSerializableObjectList;
   I: Integer;
-  Key: string;
+  Key: AnsiString;
 begin
   Result := True;
   if not FUnique then
@@ -3649,7 +3649,7 @@ end;
 procedure TStringIndex.Insert(SO: TSerializableObject);
 var
   L, H, I: Integer;
-  Key: string;
+  Key: AnsiString;
 begin
   L := 0;
   H := FOwner.FCount - 1;
@@ -3722,7 +3722,7 @@ begin
   end;
 end;
 
-function TStringIndex.Contains(const Key: string): Boolean;
+function TStringIndex.Contains(const Key: AnsiString): Boolean;
 var
   L, H, C, I: Integer;
 begin
@@ -3802,7 +3802,7 @@ begin
   Result := False;
 end;
 
-function TStringIndex.Search(const Key: string): TSerializableObject;
+function TStringIndex.Search(const Key: AnsiString): TSerializableObject;
 var
   I: Integer;
 begin
@@ -3813,7 +3813,7 @@ begin
     Result := nil;
 end;
 
-function TStringIndex.IndexOf(const Key: string): Integer;
+function TStringIndex.IndexOf(const Key: AnsiString): Integer;
 var
   L, H, C, I: Integer;
 begin
@@ -3901,7 +3901,7 @@ begin
   end;
 end;
 
-function TStringIndex.SelectRange(const Key1, Key2: string; var Index: Integer): Integer;
+function TStringIndex.SelectRange(const Key1, Key2: AnsiString; var Index: Integer): Integer;
 var
   L, H, C, I: Integer;
 begin
@@ -4031,7 +4031,7 @@ begin
   Result := H - Index + 1;
 end;
 
-function TStringIndex.SelectRange(const Key: string): Integer;
+function TStringIndex.SelectRange(const Key: AnsiString): Integer;
 var
   L, H, C, I: Integer;
 begin
@@ -4115,7 +4115,7 @@ begin
   Result := L;
 end;
 
-function TStringIndex.StartsWith(const S: string; var Index: Integer): Integer;
+function TStringIndex.StartsWith(const S: AnsiString; var Index: Integer): Integer;
 var
   L, H, I, X: Integer;
 begin
@@ -8374,7 +8374,7 @@ procedure TCharIndex.QuickSortAsc(L, R: Integer);
 var
   I, J: Integer;
   T: TSerializableObject;
-  P: Char;
+  P: AnsiChar;
 begin
   I := L;
   J := R;
@@ -8399,7 +8399,7 @@ procedure TCharIndex.QuickSortDesc(L, R: Integer);
 var
   I, J: Integer;
   T: TSerializableObject;
-  P: Char;
+  P: AnsiChar;
 begin
   I := L;
   J := R;
@@ -8424,7 +8424,7 @@ function TCharIndex.CanInsert(SO: TSerializableObject): Boolean;
 var
   Items: PSerializableObjectList;
   I: Integer;
-  Key: Char;
+  Key: AnsiChar;
 begin
   Result := True;
   if not FUnique then
@@ -8450,7 +8450,7 @@ end;
 procedure TCharIndex.Insert(SO: TSerializableObject);
 var
   L, H, I: Integer;
-  Key: Char;
+  Key: AnsiChar;
 begin
   L := 0;
   H := FOwner.FCount - 1;
@@ -8485,7 +8485,7 @@ end;
 
 function TCharIndex.Compare(SO1, SO2: TSerializableObject): Integer;
 var
-  C1, C2: Char;
+  C1, C2: AnsiChar;
 begin
   C1 := FKeyOf(SO1);
   C2 := FKeyOf(SO2);
@@ -8508,10 +8508,10 @@ begin
   end;
 end;
 
-function TCharIndex.Contains(Key: Char): Boolean;
+function TCharIndex.Contains(Key: AnsiChar): Boolean;
 var
   L, H, I: Integer;
-  C: Char;
+  C: AnsiChar;
 begin
   if not FActive then
     Activate;
@@ -8552,7 +8552,7 @@ begin
   Result := False;
 end;
 
-function TCharIndex.Search(Key: Char): TSerializableObject;
+function TCharIndex.Search(Key: AnsiChar): TSerializableObject;
 var
   I: Integer;
 begin
@@ -8563,10 +8563,10 @@ begin
     Result := nil;
 end;
 
-function TCharIndex.IndexOf(Key: Char): Integer;
+function TCharIndex.IndexOf(Key: AnsiChar): Integer;
 var
   L, H, I: Integer;
-  C: Char;
+  C: AnsiChar;
 begin
   if not FActive then
     Activate;
@@ -8611,10 +8611,10 @@ begin
     end;
 end;
 
-function TCharIndex.SelectRange(Key1, Key2: Char; var Index: Integer): Integer;
+function TCharIndex.SelectRange(Key1, Key2: AnsiChar; var Index: Integer): Integer;
 var
   L, H, I: Integer;
-  C: Char;
+  C: AnsiChar;
 begin
   if not FActive then
     Activate;
@@ -8680,10 +8680,10 @@ begin
   Result := H - Index + 1;
 end;
 
-function TCharIndex.SelectRange(Key: Char): Integer;
+function TCharIndex.SelectRange(Key: AnsiChar): Integer;
 var
   L, H, I: Integer;
-  C: Char;
+  C: AnsiChar;
 begin
   if not FActive then
     Activate;

@@ -60,10 +60,10 @@ type
   PPointerItemList = ^TPointerItemList;
   TPointerItemList = array[0..DWordListUpperLimit] of Pointer;
 
-{ Тип массива и указателя на массив элементов типа String }
+{ Тип массива и указателя на массив элементов типа AnsiString }
 
   PStringItemList = ^TStringItemList;
-  TStringItemList = array[0..DWordListUpperLimit] of string;
+  TStringItemList = array[0..DWordListUpperLimit] of AnsiString;
 
 { Тип массива и указателя на массив элементов типа Word }
 
@@ -90,10 +90,10 @@ type
   PBytes = ^TBytes;
   TBytes = array[0..ByteListUpperLimit] of Byte;
 
-{ Тип массива и указателя на массив элементов типа Char }
+{ Тип массива и указателя на массив элементов типа AnsiChar }
 
   PChars = ^TChars;
-  TChars = array[0..ByteListUpperLimit] of Char;
+  TChars = array[0..ByteListUpperLimit] of AnsiChar;
 
 
 { Функции для выбора оптимального размера внутреннего массива обычного
@@ -171,11 +171,11 @@ procedure RaiseVersionNotSupported(O: TObject; Version: Integer);
 
 { Методы, генерирующие исключения типа Exception и EConvertError. }
 
-procedure RaiseErrorFmt(const msg, S: string); overload;
-procedure RaiseErrorFmt(const msg, S1, S2: string); overload;
-procedure RaiseConvertErrorFmt(const msg, S: string);
-procedure RaiseError(const msg: string);
-procedure RaiseConvertError(const msg: string);
+procedure RaiseErrorFmt(const msg, S: AnsiString); overload;
+procedure RaiseErrorFmt(const msg, S1, S2: AnsiString); overload;
+procedure RaiseConvertErrorFmt(const msg, S: AnsiString);
+procedure RaiseError(const msg: AnsiString);
+procedure RaiseConvertError(const msg: AnsiString);
 
 implementation
 
@@ -382,29 +382,29 @@ begin
   raise Exception.CreateFmt(SErrVersionNotSupported, [O.ClassName, Version]);
 end;
 
-procedure RaiseErrorFmt(const msg, S: string);
+procedure RaiseErrorFmt(const msg, S: AnsiString);
 begin
-  raise Exception.CreateFmt(msg, [S]);
+  raise Exception.CreateFmt(string(msg), [S]);
 end;
 
-procedure RaiseErrorFmt(const msg, S1, S2: string);
+procedure RaiseErrorFmt(const msg, S1, S2: AnsiString);
 begin
-  raise Exception.CreateFmt(msg, [S1, S2]);
+  raise Exception.CreateFmt(string(msg), [S1, S2]);
 end;
 
-procedure RaiseConvertErrorFmt(const msg, S: string);
+procedure RaiseConvertErrorFmt(const msg, S: AnsiString);
 begin
-  raise EConvertError.CreateFmt(msg, [S]);
+  raise EConvertError.CreateFmt(string(msg), [S]);
 end;
 
-procedure RaiseError(const msg: string);
+procedure RaiseError(const msg: AnsiString);
 begin
-  raise Exception.Create(msg);
+  raise Exception.Create(string(msg));
 end;
 
-procedure RaiseConvertError(const msg: string);
+procedure RaiseConvertError(const msg: AnsiString);
 begin
-  raise EConvertError.Create(msg);
+  raise EConvertError.Create(string(msg));
 end;
 
 end.

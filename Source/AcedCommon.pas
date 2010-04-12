@@ -21,61 +21,61 @@ const
 
 { Полные названия месяцев по-русски с большой буквы }
 
-  MonthLongNameUp: array[1..12] of string =
+  MonthLongNameUp: array[1..12] of AnsiString =
     ('Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август',
      'Сентябрь','Октябрь','Ноябрь','Декабрь');
 
 { Полные названия месяцев по-русски с маленькой буквы }
 
-  MonthLongNameLo: array[1..12] of string =
+  MonthLongNameLo: array[1..12] of AnsiString =
     ('января','февраля','марта','апреля','мая','июня','июля','августа',
      'сентября','октября','ноября','декабря');
 
 { Полные названия месяцев по-английски }
 
-  MonthLongNameEng: array[1..12] of string =
+  MonthLongNameEng: array[1..12] of AnsiString =
     ('January','February','March','April','May','June','July','August',
      'September','October','November','December');
 
 { Сокращенные названия месяцев по-русски с большой буквы }
 
-  MonthShortNameUp: array[1..12] of string =
+  MonthShortNameUp: array[1..12] of AnsiString =
     ('Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек');
 
 { Сокращенные названия месяцев по-русски с маленькой буквы }
 
-  MonthShortNameLo: array[1..12] of string =
+  MonthShortNameLo: array[1..12] of AnsiString =
     ('янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек');
 
 { Сокращенные названия месяцев по-английски }
 
-  MonthShortNameEng: array[1..12] of string =
+  MonthShortNameEng: array[1..12] of AnsiString =
     ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
 { Полные названия дней недели по-русски }
 
-  WeekDayLongName: array[1..7] of string =
+  WeekDayLongName: array[1..7] of AnsiString =
     ('воскресенье','понедельник','вторник','среда','четверг',
      'пятница','суббота');
 
 { Полные названия дней недели по-английски }
 
-  WeekDayLongNameEng: array[1..7] of string =
+  WeekDayLongNameEng: array[1..7] of AnsiString =
     ('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
 
 { Сокращенные названия дней недели из двух букв по-русски }
 
-  WeekDayShortName2: array[1..7] of string =
+  WeekDayShortName2: array[1..7] of AnsiString =
     ('вс','пн','вт','ср','чт','пт','сб');
 
 { Сокращенные названия дней недели из трех букв по-русски }
 
-  WeekDayShortName3: array[1..7] of string =
+  WeekDayShortName3: array[1..7] of AnsiString =
     ('вск','пон','втр','срд','чет','пят','суб');
 
 { Сокращенные названия дней недели из трех букв по-английски }
 
-  WeekDayShortNameEng: array[1..7] of string =
+  WeekDayShortNameEng: array[1..7] of AnsiString =
     ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 
     
@@ -103,7 +103,7 @@ const
   выбирающими формат дня недели, с помощью "or". В этом случае название дня
   недели будет следовать после даты и отделяться от нее запятой. }
 
-function G_FormatDate(const DateTime: TDateTime; FormatFlags: LongWord = dfNormal): string;
+function G_FormatDate(const DateTime: TDateTime; FormatFlags: LongWord = dfNormal): AnsiString;
 
 { G_FormatTime преобразует время в строку по формату, заданному параметром
   FormatFlags. Возможные значения для параметра FormatFlags: }
@@ -120,13 +120,13 @@ const
 
 { Эти константы могут комбинироваться друг с другом с помощью "or". }
 
-function G_FormatTime(const DateTime: TDateTime; FormatFlags: LongWord = tfShort): string;
+function G_FormatTime(const DateTime: TDateTime; FormatFlags: LongWord = tfShort): AnsiString;
 
 { G_SplitDate для значения даты, переданной параметром DateTime (например,
   5 апреля 2004 г.) возвращает день (5), как результат функции, и месяц
   с годом в переменной MonthYear ('апреля 2004 г.'). }
 
-function G_SplitDate(const DateTime: TDateTime; out MonthYear: string): Integer;
+function G_SplitDate(const DateTime: TDateTime; out MonthYear: AnsiString): Integer;
 
 
 { Работа со значениями типа Double и Currency }
@@ -195,14 +195,14 @@ function G_NextCRC32(var CRC32: LongWord; P: Pointer; L: Cardinal): LongWord;
   функции G_CRC32_Text, если две строки различаются только регистром символов,
   значение контрольной суммы будет для них различным. }
 
-function G_CRC32_Str(const S: string): LongWord; overload;
+function G_CRC32_Str(const S: AnsiString): LongWord; overload;
 function G_CRC32_Str(P: Pointer): LongWord; overload;
 
 { G_CRC32_Text вычисляет контрольную сумму CRC-32 для строки S. В отличие от
   функции G_CRC32_Str, если две строки различаются только регистром символов,
   значение контрольной суммы будет для них одинаковым. }
 
-function G_CRC32_Text(const S: string): LongWord; overload;
+function G_CRC32_Text(const S: AnsiString): LongWord; overload;
 function G_CRC32_Text(P: Pointer): LongWord; overload;
 
 
@@ -212,8 +212,12 @@ function G_CRC32_Text(P: Pointer): LongWord; overload;
   представленные в кодировке Base64. Выходная строка дополняется символами
   '=' до длины, кратной 4. }
 
-function G_Base64Encode(P: Pointer; L: Integer): string; overload;
-function G_Base64Encode(const S: string): string; overload;
+procedure IntBase64Encode(P1, P2: Pointer; L: Integer); // ***
+
+function G_Base64Encode(P: Pointer; L: Integer): AnsiString; overload;
+function G_Base64Encode(const S: AnsiString): AnsiString; overload;
+
+
 
 { G_Base64Decode возвращает результат декодирования строки S из Base64, т.е.
   восстанавливает первоначальное содержимое строки или байтового массива.
@@ -223,14 +227,16 @@ function G_Base64Encode(const S: string): string; overload;
   функция только возвращает длину байтового массива, необходимого для
   сохранения выходных данных. }
 
-function G_Base64Decode(const S: string; P: Pointer): Integer; overload;
-function G_Base64Decode(const S: string): string; overload;
+function IntBase64Decode(P1, P2: Pointer; L: Integer): Integer;
+
+function G_Base64Decode(const S: AnsiString; P: Pointer): Integer; overload;
+function G_Base64Decode(const S: AnsiString): AnsiString; overload;
 
 { G_StrToCodes возвращает строку, состоящую из шестнадцатеричных кодов
   символов строки S. Например, G_StrToCodes('A?<*') -> '413F3C2A'.
   Исходная строка при этом не изменяется. }
 
-function G_StrToCodes(const S: string): string;
+function G_StrToCodes(const S: AnsiString): AnsiString;
 
 { G_CodesToStr преобразует строку S, состоящую из шестнадцатеричных кодов,
   в строку символов и возвращает ее как результат функции. Например,
@@ -238,38 +244,38 @@ function G_StrToCodes(const S: string): string;
   Если во время преобразования происходит ошибка, возникает исключение
   EConvertError. }
 
-function G_CodesToStr(const S: string): string;
+function G_CodesToStr(const S: AnsiString): AnsiString;
 
 
 { Функции для преобразования числа в строку и строки в число }
 
 { G_IntToStr возвращает десятичную запись числа N в виде строки. }
 
-function G_IntToStr(N: Integer): string;
+function G_IntToStr(N: Integer): AnsiString;
 
 { G_UIntToStr возвращает десятичную запись беззнакового числа N в виде строки. }
 
-function G_UIntToStr(N: LongWord): string;
+function G_UIntToStr(N: LongWord): AnsiString;
 
 { G_UIntToStrL возвращает десятичную запись беззнакового числа N в виде строки.
   Параметр Digits задает количество символов в возвращаемом числе. При
   необходимости, оно обрезается слева или дополняется нулями слева до длины
   Digits. }
 
-function G_UIntToStrL(N: LongWord; Digits: Cardinal): string;
+function G_UIntToStrL(N: LongWord; Digits: Cardinal): AnsiString;
 
 { G_UIntToHex возвращает шестнадцатеричную запись беззнакового числа N в виде
   строки. Параметр Digits задает количество цифр в возвращаемом числе. При
   необходимости, оно обрезается слева или дополняется нулями слева до длины
   Digits. }
 
-function G_UIntToHex(N: LongWord; Digits: Cardinal = 8): string;
+function G_UIntToHex(N: LongWord; Digits: Cardinal = 8): AnsiString;
 
 { G_HexToUInt преобразует шестнадцатеричное число, переданное строкой S,
   в целое беззнаковое число. Если во время преобразования происходит ошибка,
   возникает исключение EConvertError. }
 
-function G_HexToUInt(const S: string): LongWord;
+function G_HexToUInt(const S: AnsiString): LongWord;
 
 { G_AdjustSeparator заменяет первую точку в строке S на запятую, если символ
   DecimalSeparator, определенный в модуле SysUtils, равен запятой, либо
@@ -280,7 +286,7 @@ function G_HexToUInt(const S: string): LongWord;
   Val не обращает внимания на DecimalSeparator и всегда ожидает, что дробная
   часть отделяется точкой. }
 
-function G_AdjustSeparator(const S: string): string;
+function G_AdjustSeparator(const S: AnsiString): AnsiString;
 
 { Функции G_Between_... возвращают True, если строка S содержит число (целое,
   целое без знака, 64-битное целое, вещественное или число, обозначающее
@@ -290,11 +296,11 @@ function G_AdjustSeparator(const S: string): string;
   числа должна отделяться от дробной части символом, назначенным переменной
   DecimalSeparator, определенной в модуле SysUtils. }
 
-function G_Between_Integer(const S: string; LowBound, HighBound: Integer): Boolean;
-function G_Between_LongWord(const S: string; LowBound, HighBound: LongWord): Boolean;
-function G_Between_Int64(const S: string; LowBound, HighBound: Int64): Boolean;
-function G_Between_Extended(const S: string; LowBound, HighBound: Extended): Boolean;
-function G_Between_Currency(const S: string; LowBound, HighBound: Currency): Boolean;
+function G_Between_Integer(const S: AnsiString; LowBound, HighBound: Integer): Boolean;
+function G_Between_LongWord(const S: AnsiString; LowBound, HighBound: LongWord): Boolean;
+function G_Between_Int64(const S: AnsiString; LowBound, HighBound: Int64): Boolean;
+function G_Between_Extended(const S: AnsiString; LowBound, HighBound: Extended): Boolean;
+function G_Between_Currency(const S: AnsiString; LowBound, HighBound: Currency): Boolean;
 
 { Функции G_StrTo_... преобразуют число, символьная запись которого передается
   строкой S, в обычную числовую форму. Результат преобразования сохраняется в
@@ -302,11 +308,11 @@ function G_Between_Currency(const S: string; LowBound, HighBound: Currency): Boo
   функции возвращают True. Если в ходе преобразования возникла ошибка, функции
   возвращают False. Исключение при этом не возникает. }
 
-function G_StrTo_Integer(const S: string; var V: Integer): Boolean;
-function G_StrTo_LongWord(const S: string; var V: LongWord): Boolean;
-function G_StrTo_Int64(const S: string; var V: Int64): Boolean;
-function G_StrTo_Extended(const S: string; var V: Extended): Boolean;
-function G_StrTo_Currency(const S: string; var V: Currency): Boolean;
+function G_StrTo_Integer(const S: AnsiString; var V: Integer): Boolean;
+function G_StrTo_LongWord(const S: AnsiString; var V: LongWord): Boolean;
+function G_StrTo_Int64(const S: AnsiString; var V: Int64): Boolean;
+function G_StrTo_Extended(const S: AnsiString; var V: Extended): Boolean;
+function G_StrTo_Currency(const S: AnsiString; var V: Currency): Boolean;
 
 { G_ModDiv10 оптимальным образом выполняет следующие операции:
   Result := V mod 10; V := V div 10. Значение переменной V изменяется. }
@@ -336,7 +342,7 @@ const
 { Cтрока, возвращаемая в параметре S, всегда заканчивается пробелом. Чтобы
   убрать его, вызовите G_CutRight(S, 1). }
 
-function G_NumToStr(N: Int64; var S: string; FormatFlags: LongWord = 0): Integer;
+function G_NumToStr(N: Int64; var S: AnsiString; FormatFlags: LongWord = 0): Integer;
 
 { G_NumToRub возвращает денежную сумму прописью. В параметре V передается
   численное значение денежной суммы в рублях. Сотые доли выражают копейки.
@@ -360,7 +366,7 @@ const
   отрицательная, строка заключается в круглые скобки. }
 
 function G_NumToRub(V: Currency; RubFormat: LongWord = ruFull;
-  CopFormat: LongWord = ruNumShort): string;
+  CopFormat: LongWord = ruNumShort): AnsiString;
 
 
 { Работа со счетчиками и таймерами. }
@@ -438,7 +444,7 @@ const
   где MainFormClassName - имя класса главной формы приложения, которая
   обрабатывает сообщение WM_USER_SWITCH_TO. }
 
-function G_SwitchToApplication(const MainFormClassName: string): Boolean;
+function G_SwitchToApplication(const MainFormClassName: AnsiString): Boolean;
 
 { G_SelectMenu активизирует меню текущего окна, выбирает пункт с номером,
   соответствующим первому элементу массива ItemNumbers (нумерация пунктов
@@ -476,15 +482,31 @@ function G_IsToggled(Key: Integer): Boolean;
   Если параметр Number равен нулю, а S - пустой строке, в Event Log
   помещается сообщение, содержащее псевдослучайное число от 0 до 999. }
 
-procedure G_ODS(Number: Integer = 0; const S: string = '');
+procedure G_ODS(Number: Integer = 0; const S: AnsiString = '');
 
 implementation
 
-uses Windows, SysUtils, AcedStrings, AcedBinary, AcedConsts;
+uses Windows, SysUtils,{$IFDEF UNICODE} SysConst,{$ENDIF} AcedStrings, AcedBinary, AcedConsts;
+
+
+{$IFDEF UNICODE}
+procedure ConvertError(ResString: PResStringRec); local;
+begin
+  raise EConvertError.CreateRes(ResString);
+end;
+function FormatFloat(const Format: AnsiString; Value: Extended): AnsiString;
+var
+  Buffer: array[0..255] of AnsiChar;
+begin
+  if Length(Format) > Length(Buffer) - 32 then ConvertError(@SFormatTooLong);
+  SetString(Result, Buffer, FloatToTextFmt(Buffer, Value, fvExtended,
+    PAnsiChar(Format)));
+end;
+{$ENDIF}
 
 { Функции для работы с датой и временем }
 
-function G_FormatDate(const DateTime: TDateTime; FormatFlags: LongWord): string;
+function G_FormatDate(const DateTime: TDateTime; FormatFlags: LongWord): AnsiString;
 var
   Y, M, D, DayOfWeek: Word;
 begin
@@ -580,7 +602,7 @@ begin
   end;
 end;
 
-function G_FormatTime(const DateTime: TDateTime; FormatFlags: LongWord): string;
+function G_FormatTime(const DateTime: TDateTime; FormatFlags: LongWord): AnsiString;
 var
   Hour, Min, Sec, MSec: Word;
 begin
@@ -600,7 +622,7 @@ begin
   end;
 end;
 
-function G_SplitDate(const DateTime: TDateTime; out MonthYear: string): Integer;
+function G_SplitDate(const DateTime: TDateTime; out MonthYear: AnsiString): Integer;
 var
   Y, M, D, DOW: Word;
 begin
@@ -810,7 +832,7 @@ asm
 @@qt:   MOV     EAX,[EAX]
 end;
 
-function G_CRC32_Str(const S: string): LongWord;
+function G_CRC32_Str(const S: AnsiString): LongWord;
 asm
         TEST    EAX,EAX
         JE      @@qt1
@@ -860,7 +882,7 @@ asm
 @@qt1:
 end;
 
-function G_CRC32_Text(const S: string): LongWord;
+function G_CRC32_Text(const S: AnsiString): LongWord;
 asm
         TEST    EAX,EAX
         JE      @@qt1
@@ -915,7 +937,7 @@ end;
 { Функции для перекодировки строк и массива байт }
 
 const
-  ToBase64: array[0..63] of Char =
+  ToBase64: array[0..63] of AnsiChar =
     ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R',
      'S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j',
      'k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1',
@@ -997,7 +1019,7 @@ asm
         POP     EBX
 end;
 
-function G_Base64Encode(P: Pointer; L: Integer): string;
+function G_Base64Encode(P: Pointer; L: Integer): AnsiString;
 begin
   if L <> 0 then
   begin
@@ -1007,7 +1029,7 @@ begin
     Result := '';
 end;
 
-function G_Base64Encode(const S: string): string;
+function G_Base64Encode(const S: AnsiString): AnsiString;
 var
   L: Integer;
 begin
@@ -1116,7 +1138,7 @@ asm
         POP     EBX
 end;
 
-function G_Base64Decode(const S: string; P: Pointer): Integer;
+function G_Base64Decode(const S: AnsiString; P: Pointer): Integer;
 var
   L: Integer;
 begin
@@ -1140,7 +1162,7 @@ begin
     Result := 0;
 end;
 
-function G_Base64Decode(const S: string): string;
+function G_Base64Decode(const S: AnsiString): AnsiString;
 var
   L, N: Integer;
 begin
@@ -1161,7 +1183,7 @@ begin
     Result := '';
 end;
 
-function G_StrToCodes(const S: string): string;
+function G_StrToCodes(const S: AnsiString): AnsiString;
 asm
         TEST    EAX,EAX
         JE      @@cl
@@ -1177,6 +1199,9 @@ asm
         MOV     EAX,EDX
         SHL     ECX,1
         XOR     EDX,EDX
+        {$IFDEF UNICODE}
+          PUSH  DefaultSystemCodePage
+        {$ENDIF}
         CALL    System.@LStrFromPCharLen
         MOV     EDI,[EDI]
 @@lp:   MOV     AL,BYTE PTR [ESI]
@@ -1208,9 +1233,9 @@ asm
         CALL    System.@LStrClr
 end;
 
-function G_CodesToStr(const S: string): string;
+function G_CodesToStr(const S: AnsiString): AnsiString;
 const
-  ErrorMessage: string = SErrCodesToStrConversionFault;
+  ErrorMessage: AnsiString = SErrCodesToStrConversionFault;
 asm
         TEST    EAX,EAX
         JE      @@cl
@@ -1226,6 +1251,9 @@ asm
         MOV     EBX,ECX
         MOV     EAX,EDX
         XOR     EDX,EDX
+        {$IFDEF UNICODE}
+          PUSH  DefaultSystemCodePage
+        {$ENDIF}
         CALL    System.@LStrFromPCharLen
         MOV     EDI,[EDI]
 @@lp:   MOV     AL,BYTE PTR [ESI]
@@ -1279,7 +1307,7 @@ end;
 
 { Функции для преобразования числа в строку и строки в число }
 
-function G_IntToStr(N: Integer): string;
+function G_IntToStr(N: Integer): AnsiString;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -1300,7 +1328,11 @@ asm
         MOV     ECX,7
         JMP     @@do
 @@x2:   MOV     ECX,$0B
-@@do:   CALL    System.@LStrFromPCharLen
+@@do:
+        {$IFDEF UNICODE}
+          PUSH  DefaultSystemCodePage
+        {$ENDIF}
+        CALL    System.@LStrFromPCharLen
         MOV     EAX,ESI
         MOV     ESI,[EDI]
         MOV     EDI,ESI
@@ -1351,7 +1383,7 @@ asm
         POP     ESI
 end;
 
-function G_UIntToStr(N: LongWord): string;
+function G_UIntToStr(N: LongWord): AnsiString;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -1368,7 +1400,11 @@ asm
         MOV     ECX,$07
         JMP     @@do
 @@x2:   MOV     ECX,$0B
-@@do:   CALL    System.@LStrFromPCharLen
+@@do:
+        {$IFDEF UNICODE}
+          PUSH  DefaultSystemCodePage
+        {$ENDIF}
+        CALL    System.@LStrFromPCharLen
         MOV     EAX,ESI
         MOV     ESI,[EDI]
         MOV     EDI,ESI
@@ -1404,7 +1440,7 @@ asm
         POP     ESI
 end;
 
-function G_UIntToStrL(N: LongWord; Digits: Cardinal): string;
+function G_UIntToStrL(N: LongWord; Digits: Cardinal): AnsiString;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -1415,6 +1451,9 @@ asm
         MOV     EAX,ECX
         MOV     ECX,EDX
         XOR     EDX,EDX
+        {$IFDEF UNICODE}
+          PUSH  DefaultSystemCodePage
+        {$ENDIF}
         CALL    System.@LStrFromPCharLen
         MOV     EAX,ESI
         MOV     ESI,[EDI]
@@ -1448,7 +1487,7 @@ asm
         POP     ESI
 end;
 
-function G_UIntToHex(N: LongWord; Digits: Cardinal): string;
+function G_UIntToHex(N: LongWord; Digits: Cardinal): AnsiString;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -1459,6 +1498,9 @@ asm
         MOV     EAX,ECX
         MOV     ECX,EDX
         XOR     EDX,EDX
+        {$IFDEF UNICODE}
+          PUSH  DefaultSystemCodePage
+        {$ENDIF}
         CALL    System.@LStrFromPCharLen
         MOV     EAX,ESI
         MOV     ESI,[EDI]
@@ -1499,9 +1541,9 @@ asm
         POP     ESI
 end;
 
-function G_HexToUInt(const S: string): LongWord;
+function G_HexToUInt(const S: AnsiString): LongWord;
 const
-  ErrorMessage: string = SErrHexToIntConversionFault;
+  ErrorMessage: AnsiString = SErrHexToIntConversionFault;
 asm
         PUSH    ESI
         PUSH    EBX
@@ -1542,10 +1584,10 @@ asm
         CALL    RaiseConvertErrorFmt
 end;
 
-function G_AdjustSeparator(const S: string): string;
+function G_AdjustSeparator(const S: AnsiString): AnsiString;
 var
   I, L: Integer;
-  P: PChar;
+  P: PAnsiChar;
 begin
   L := Length(S);
   if DecimalSeparator = ',' then
@@ -1577,44 +1619,44 @@ begin
   end
 end;
 
-function G_Between_Integer(const S: string; LowBound, HighBound: Integer): Boolean;
+function G_Between_Integer(const S: AnsiString; LowBound, HighBound: Integer): Boolean;
 var
   N: Integer;
 begin
   Result := G_StrTo_Integer(S, N) and (N >= LowBound) and (N <= HighBound);
 end;
 
-function G_Between_LongWord(const S: string; LowBound, HighBound: LongWord): Boolean;
+function G_Between_LongWord(const S: AnsiString; LowBound, HighBound: LongWord): Boolean;
 var
   N: LongWord;
 begin
   Result := G_StrTo_LongWord(S, N) and (N >= LowBound) and (N <= HighBound);
 end;
 
-function G_Between_Int64(const S: string; LowBound, HighBound: Int64): Boolean;
+function G_Between_Int64(const S: AnsiString; LowBound, HighBound: Int64): Boolean;
 var
   N: Int64;
 begin
   Result := G_StrTo_Int64(S, N) and (N >= LowBound) and (N <= HighBound);
 end;
 
-function G_Between_Extended(const S: string; LowBound, HighBound: Extended): Boolean;
+function G_Between_Extended(const S: AnsiString; LowBound, HighBound: Extended): Boolean;
 var
   N: Extended;
 begin
-  Result := TextToFloat(PChar(S), N, fvExtended) and (N >= LowBound) and (N <= HighBound);
+  Result := TextToFloat(PAnsiChar(S), N, fvExtended) and (N >= LowBound) and (N <= HighBound);
 end;
 
-function G_Between_Currency(const S: string; LowBound, HighBound: Currency): Boolean;
+function G_Between_Currency(const S: AnsiString; LowBound, HighBound: Currency): Boolean;
 var
   N: Currency;
 begin
-  Result := TextToFloat(PChar(S), N, fvCurrency) and (N >= LowBound) and (N <= HighBound);
+  Result := TextToFloat(PAnsiChar(S), N, fvCurrency) and (N >= LowBound) and (N <= HighBound);
 end;
 
-function G_StrTo_Integer(const S: string; var V: Integer): Boolean;
+function G_StrTo_Integer(const S: AnsiString; var V: Integer): Boolean;
 var
-  P: PChar;
+  P: PAnsiChar;
   C: Integer;
   Sign: Boolean;
 begin
@@ -1646,7 +1688,7 @@ begin
     end;
     repeat
       C := Byte(P^);
-      if Char(C) in ['0'..'9'] then
+      if AnsiChar(C) in ['0'..'9'] then
         Dec(C, 48)
       else
         Break;
@@ -1668,7 +1710,7 @@ begin
     Inc(P);
     repeat
       C := Byte(P^);
-      case Char(C) of
+      case AnsiChar(C) of
         '0'..'9': Dec(C, 48);
         'A'..'F': Dec(C, 55);
         'a'..'f': Dec(C, 87);
@@ -1694,9 +1736,9 @@ begin
   Result := C = 0;
 end;
 
-function G_StrTo_LongWord(const S: string; var V: LongWord): Boolean;
+function G_StrTo_LongWord(const S: AnsiString; var V: LongWord): Boolean;
 var
-  P: PChar;
+  P: PAnsiChar;
   C: LongWord;
 begin
   V := 0;
@@ -1717,7 +1759,7 @@ begin
     end;
     repeat
       C := Byte(P^);
-      if Char(C) in ['0'..'9'] then
+      if AnsiChar(C) in ['0'..'9'] then
         Dec(C, 48)
       else
         Break;
@@ -1735,7 +1777,7 @@ begin
     Inc(P);
     repeat
       C := Byte(P^);
-      case Char(C) of
+      case AnsiChar(C) of
         '0'..'9': Dec(C, 48);
         'A'..'F': Dec(C, 55);
         'a'..'f': Dec(C, 87);
@@ -1754,12 +1796,12 @@ begin
   Result := C = 0;
 end;
 
-function G_StrTo_Int64(const S: string; var V: Int64): Boolean;
+function G_StrTo_Int64(const S: AnsiString; var V: Int64): Boolean;
 type
   PArr64 = ^TArr64;
   TArr64 = array[0..7] of Byte;
 var
-  P: PChar;
+  P: PAnsiChar;
   C: LongWord;
   Sign: Boolean;
 begin
@@ -1791,7 +1833,7 @@ begin
     end;
     repeat
       C := Byte(P^);
-      if Char(C) in ['0'..'9'] then
+      if AnsiChar(C) in ['0'..'9'] then
         Dec(C, 48)
       else
         Break;
@@ -1813,7 +1855,7 @@ begin
     Inc(P);
     repeat
       C := Byte(P^);
-      case Char(C) of
+      case AnsiChar(C) of
         '0'..'9': Dec(C, 48);
         'A'..'F': Dec(C, 55);
         'a'..'f': Dec(C, 87);
@@ -1840,14 +1882,14 @@ begin
   Result := C = 0;
 end;
 
-function G_StrTo_Extended(const S: string; var V: Extended): Boolean;
+function G_StrTo_Extended(const S: AnsiString; var V: Extended): Boolean;
 begin
-  Result := TextToFloat(PChar(S), V, fvExtended);
+  Result := TextToFloat(PAnsiChar(S), V, fvExtended);
 end;
 
-function G_StrTo_Currency(const S: string; var V: Currency): Boolean;
+function G_StrTo_Currency(const S: AnsiString; var V: Currency): Boolean;
 begin
-  Result := TextToFloat(PChar(S), V, fvCurrency);
+  Result := TextToFloat(PAnsiChar(S), V, fvCurrency);
 end;
 
 function G_ModDiv10(var V: LongWord): Integer;
@@ -1862,24 +1904,24 @@ asm
         MOV     EAX,EDX
 end;
 
-function G_NumToStr(N: Int64; var S: string; FormatFlags: LongWord): Integer;
+function G_NumToStr(N: Int64; var S: AnsiString; FormatFlags: LongWord): Integer;
 const
-  M_Ed: array [1..9] of string =
+  M_Ed: array [1..9] of AnsiString =
     ('один ','два ','три ','четыре ','пять ','шесть ','семь ','восемь ','девять ');
-  W_Ed: array [1..9] of string =
+  W_Ed: array [1..9] of AnsiString =
     ('одна ','две ','три ','четыре ','пять ','шесть ','семь ','восемь ','девять ');
-  G_Ed: array [1..9] of string =
+  G_Ed: array [1..9] of AnsiString =
     ('одно ','два ','три ','четыре ','пять ','шесть ','семь ','восемь ','девять ');
-  E_Ds: array [0..9] of string =
+  E_Ds: array [0..9] of AnsiString =
     ('десять ','одиннадцать ','двенадцать ','тринадцать ','четырнадцать ',
      'пятнадцать ','шестнадцать ','семнадцать ','восемнадцать ','девятнадцать ');
-  D_Ds: array [2..9] of string =
+  D_Ds: array [2..9] of AnsiString =
     ('двадцать ','тридцать ','сорок ','пятьдесят ','шестьдесят ','семьдесят ',
      'восемьдесят ','девяносто ');
-  U_Hd: array [1..9] of string =
+  U_Hd: array [1..9] of AnsiString =
     ('сто ','двести ','триста ','четыреста ','пятьсот ','шестьсот ','семьсот ',
      'восемьсот ','девятьсот ');
-  M_Tr: array[1..6,0..3] of string =
+  M_Tr: array[1..6,0..3] of AnsiString =
     (('тыс. ','тысяча ','тысячи ','тысяч '),
      ('млн. ','миллион ','миллиона ','миллионов '),
      ('млрд. ','миллиард ','миллиарда ','миллиардов '),
@@ -1975,10 +2017,10 @@ begin
   SB.Free;
 end;
 
-function G_NumToRub(V: Currency; RubFormat, CopFormat: LongWord): string;
+function G_NumToRub(V: Currency; RubFormat, CopFormat: LongWord): AnsiString;
 var
   V1: Int64;
-  S1, S2, S3, S4: string;
+  S1, S2, S3, S4: AnsiString;
   Cp, I: Integer;
   Negative: Boolean;
 begin
@@ -2007,7 +2049,7 @@ begin
             end
           else
           begin
-            S1 := IntToStr(V1);
+            S1 := G_IntToStr(V1);
             I := V1 mod 100;
             if (I < 10) or (I > 20) then
               case I mod 10 of
@@ -2026,7 +2068,7 @@ begin
           S2 := 'руб. ';
         end else
         begin
-          S1 := IntToStr(V1);
+          S1 := G_IntToStr(V1);
           S2 := ' руб. ';
         end;
       end else
@@ -2091,7 +2133,7 @@ begin
             end
           else
           begin
-            S1 := IntToStr(V1);
+            S1 := G_IntToStr(V1);
             I := V1 mod 100;
             if (I < 10) or (I > 20) then
               case I mod 10 of
@@ -2110,7 +2152,7 @@ begin
           S2 := 'руб.';
         end else
         begin
-          S1 := IntToStr(V1);
+          S1 := G_IntToStr(V1);
           S2 := ' руб.';
         end;
         S1[1] := ToUpperChars[Byte(S1[1])];
@@ -2135,7 +2177,7 @@ begin
         end
       else
       begin
-        S1 := IntToStr(V1);
+        S1 := G_IntToStr(V1);
         I := V1 mod 100;
         if (I < 10) or (I > 20) then
           case I mod 10 of
@@ -2154,7 +2196,7 @@ begin
       S2 := 'коп.';
     end else
     begin
-      S1 := IntToStr(V1);
+      S1 := G_IntToStr(V1);
       S2 := ' коп.';
     end;
     S1[1] := ToUpperChars[Byte(S1[1])];
@@ -2226,15 +2268,15 @@ end;
 
 { Прочие функции }
 
-function G_SwitchToApplication(const MainFormClassName: string): Boolean;
+function G_SwitchToApplication(const MainFormClassName: AnsiString): Boolean;
 var
   Handle: HWND;
 begin
   Result := False;
-  Handle := FindWindow(PChar(MainFormClassName), nil);
+  Handle := FindWindowA(PAnsiChar(MainFormClassName), nil);
   if Handle <> 0 then
   begin
-    Handle := SendMessage(Handle, WM_USER_SWITCH_TO, 0, 0);
+    Handle := SendMessageA(Handle, WM_USER_SWITCH_TO, 0, 0);
     if Handle <> 0 then
     begin
       SetForegroundWindow(Handle);
@@ -2300,20 +2342,20 @@ begin
   Result := (GetKeyState(Key) and 1) <> 0;
 end;
 
-procedure G_ODS(Number: Integer; const S: string);
+procedure G_ODS(Number: Integer; const S: AnsiString);
 begin
   if Length(S) > 0 then
   begin
     if Number <> 0 then
-      OutputDebugString(PChar('<' + G_IntToStr(Number) + '> ' + S))
+      OutputDebugStringA(PAnsiChar('<' + G_IntToStr(Number) + '> ' + S))
     else
-      OutputDebugString(PChar(S));
+      OutputDebugStringA(PAnsiChar(S));
   end else
   begin
     if Number <> 0 then
-      OutputDebugString(PChar('<' + G_IntToStr(Number) + '>'))
+      OutputDebugStringA(PAnsiChar('<' + G_IntToStr(Number) + '>'))
     else
-      OutputDebugString(PChar('<' + G_UIntToStrL(LongWord(Random(1000)), 3) + '>'));
+      OutputDebugStringA(PAnsiChar('<' + G_UIntToStrL(LongWord(Random(1000)), 3) + '>'));
   end;
 end;
 

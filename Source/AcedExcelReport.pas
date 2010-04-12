@@ -359,7 +359,7 @@ type
     ExcelColumnOffset столбцов. Например, для коллекции, содержащей три
     интервала, функция может вернуть строку: "R1C2:R2C2;R3C5;R4C1:R4C5". }
 
-    function GetAbsoluteAddress: string;
+    function GetAbsoluteAddress: AnsiString;
 
   { Функция GetRelativeAddress возвращает строку, содержащую относительную
     ссылку на диапазон ячеек относительно ячейки:
@@ -367,7 +367,7 @@ type
     интервалов этот метод, вызванный относительно ячейки R2C2, может вернуть
     строку: "R[-1]C:RC;R[1]C[3];R[2]C[-1]:R[2]C[3]". }
 
-    function GetRelativeAddress(BaseRowNumber, BaseColumnNumber: Integer): string;
+    function GetRelativeAddress(BaseRowNumber, BaseColumnNumber: Integer): AnsiString;
 
   { Функция GetRange возвращает объект типа ExcelRange, представляющий диапазон
     ячеек на рабочем листе, с учетом смещения на ExcelRowOffset строк и
@@ -420,7 +420,7 @@ function CreateExcelWorkbook(var WB: _Workbook;
   книгу в параметре WB. При возникновении ошибки функция возвращает False. }
 
 function CreateExcelWorkbook(var WB: _Workbook;
-  const TemplateFileName: string): Boolean; overload;
+  const TemplateFileName: AnsiString): Boolean; overload;
 
 { InitializeExcelWorkbook настраивает визуальные свойства рабочей книги,
   переданной параметром WB, устанавливает оба смещения: ExcelRowOffset и
@@ -436,7 +436,7 @@ function CreateExcelWorkbook(var WB: _Workbook;
   DisplayVerticalScrollBar - если False, полоса вертикальной
     прокрутки скрывается. }
 
-procedure InitializeExcelWorkbook(WB: _Workbook; const Caption: string;
+procedure InitializeExcelWorkbook(WB: _Workbook; const Caption: AnsiString;
   DisplayWorkbookTabs: Boolean = True; DisplayZeros: Boolean = False;
   DisplayHeadings: Boolean = False; DisplayGridlines: Boolean = False;
   DisplayHorizontalScrollBar: Boolean = True;
@@ -462,7 +462,7 @@ function GetExcelRange(Cells: ExcelRange; RowNumber, ColumnNumber,
 { GetNamedExcelRange возвращает ссылку на именованный диапазон ячеек с именем
   Name. Параметр Cells задает полный диапазон ячеек рабочего листа. }
 
-function GetNamedExcelRange(Cells: ExcelRange; const Name: string): ExcelRange;
+function GetNamedExcelRange(Cells: ExcelRange; const Name: AnsiString): ExcelRange;
 
 { GetExcelRows возвращает ссылку на диапазон, состоящий из RowCount строк,
   начиная со строки RowNumber, с учетом смещения на ExcelRowOffset строк.
@@ -498,7 +498,7 @@ procedure InsertExcelColumns(Cells: ExcelRange; NextColumnNumber: Integer;
   и ExcelColumnOffset столбцов. }
 
 function GetAbsoluteAddress(RowNumber, ColumnNumber,
-  RowCount, ColumnCount: Integer): string;
+  RowCount, ColumnCount: Integer): AnsiString;
 
 { GetRelativeAddress возвращает строку, содержащую относительную ссылку на
   диапазон ячеек из RowCount строк и ColumnCount столбцов, начиная со строки
@@ -506,7 +506,7 @@ function GetAbsoluteAddress(RowNumber, ColumnNumber,
   BaseColumnNumber]. }
 
 function GetRelativeAddress(BaseRowNumber, BaseColumnNumber,
-  RowNumber, ColumnNumber, RowCount, ColumnCount: Integer): string;
+  RowNumber, ColumnNumber, RowCount, ColumnCount: Integer): AnsiString;
 
 { Следующая процедура AssignAbsoluteFormula заносит формулу, выбранную
   параметром F, во все ячейки диапазона TargetRange. В качестве аргумента
@@ -626,8 +626,8 @@ implementation
 uses Office97, Variants, AcedCommon, AcedConsts, AcedStrings;
 
 const
-  ExcelIntervalDelimiter: Char = ';';
-  ExcelRangeFunctions: array[0..5] of string =
+  ExcelIntervalDelimiter: AnsiChar = ';';
+  ExcelRangeFunctions: array[0..5] of AnsiString =
     ('=СУММ(', '=СРЗНАЧ(', '=СЧЁТ(', '=МАКС(', '=МИН(', '=ПРОИЗВЕД(');
 
 var
@@ -888,7 +888,7 @@ begin
   FSorted := False;
 end;
 
-function TExcelRange.GetAbsoluteAddress: string;
+function TExcelRange.GetAbsoluteAddress: AnsiString;
 var
   SB: TStringBuilder;
   List: PPointerItemList;
@@ -939,7 +939,7 @@ begin
 end;
 
 function TExcelRange.GetRelativeAddress(BaseRowNumber,
-  BaseColumnNumber: Integer): string;
+  BaseColumnNumber: Integer): AnsiString;
 var
   SB: TStringBuilder;
   Delta: Integer;
@@ -1206,7 +1206,7 @@ begin
 end;
 
 function CreateExcelWorkbook(var WB: _Workbook;
-  const TemplateFileName: string): Boolean;
+  const TemplateFileName: AnsiString): Boolean;
 begin
   Result := True;
   try
@@ -1218,7 +1218,7 @@ begin
   end;
 end;
 
-procedure InitializeExcelWorkbook(WB: _Workbook; const Caption: string;
+procedure InitializeExcelWorkbook(WB: _Workbook; const Caption: AnsiString;
   DisplayWorkbookTabs, DisplayZeros, DisplayHeadings, DisplayGridlines,
   DisplayHorizontalScrollBar, DisplayVerticalScrollBar: Boolean);
 var
@@ -1255,7 +1255,7 @@ begin
     Result := GetExcelCell(Cells, RowNumber, ColumnNumber);
 end;
 
-function GetNamedExcelRange(Cells: ExcelRange; const Name: string): ExcelRange;
+function GetNamedExcelRange(Cells: ExcelRange; const Name: AnsiString): ExcelRange;
 begin
   Result := Cells.Range[Name, Name];
 end;
@@ -1303,7 +1303,7 @@ begin
 end;
 
 function GetAbsoluteAddress(RowNumber, ColumnNumber,
-  RowCount, ColumnCount: Integer): string;
+  RowCount, ColumnCount: Integer): AnsiString;
 var
   SB: TStringBuilder;
 begin
@@ -1327,7 +1327,7 @@ begin
 end;
 
 function GetRelativeAddress(BaseRowNumber, BaseColumnNumber,
-  RowNumber, ColumnNumber, RowCount, ColumnCount: Integer): string;
+  RowNumber, ColumnNumber, RowCount, ColumnCount: Integer): AnsiString;
 var
   SB: TStringBuilder;
 begin

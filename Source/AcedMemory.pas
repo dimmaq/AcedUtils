@@ -12,6 +12,7 @@
 unit AcedMemory;
 
 {$B-,H+,R-,Q-,T-,X+}
+{$WARNINGS OFF}
 
 (*
   AcedMemory заменяет собой стандартный менеджер памяти, используемый

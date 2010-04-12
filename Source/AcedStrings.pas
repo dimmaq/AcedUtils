@@ -19,9 +19,9 @@ interface
 
 { ВАЖНОЕ ЗАМЕЧАНИЕ:
 
-  Если необходимо применить G_StrToUpper(P: PChar), G_StrToAnsi(P: PChar) или
+  Если необходимо применить G_StrToUpper(P: PAnsiChar), G_StrToAnsi(P: PAnsiChar) или
   другую подобную функцию, в которую передается указатель и данные по указателю
-  изменяются, к строке S типа String, то сначала надо вызвать стандартную
+  изменяются, к строке S типа AnsiString, то сначала надо вызвать стандартную
   процедуру UniqueString(S) для фактического выделения памяти и исключения
   множественных ссылок и ссылок на константную строку. Только после этого
   можно изменять строку по указателю, как, например: G_StrToUpper(Pointer(S)). }
@@ -35,8 +35,8 @@ uses SysUtils, AcedConsts;
   S1 = S2. Эта функция прекращает сравнение, когда обнаружено различие строк
   или когда обнаружен символ с кодом 0, т.е. символ конца строки. }
 
-function G_CompareStr(const S1, S2: string): Integer; overload;
-function G_CompareStr(P1, P2: PChar): Integer; overload;
+function G_CompareStr(const S1, S2: AnsiString): Integer; overload;
+function G_CompareStr(P1, P2: PAnsiChar): Integer; overload;
 
 { G_CompareStrL сравнивает две строки по, самое большое, maxL первым
   символам с учетом регистра. Возвращаемый результат меньше нуля, если
@@ -44,15 +44,16 @@ function G_CompareStr(P1, P2: PChar): Integer; overload;
   Copy(S1, 1, maxL) > Copy(S2, 1, maxL), иначе результат равен нулю,
   если Copy(S1, 1, maxL) = Copy(S2, 1, maxL). }
 
-function G_CompareStrL(const S1, S2: string; maxL: Cardinal = MaxInt): Integer;
+function G_CompareStrL(const S1, S2: AnsiString; maxL: Cardinal = MaxInt): Integer; overload;
+function G_CompareStrL(P1, P2: PAnsiChar; maxL: Cardinal = MaxInt): Integer; overload;
 
 { G_CompareText сравнивает две строки без учета регистра. Возвращаемый
   результат меньше нуля, если S1 < S2; больше нуля, если S1 > S2, и равен нулю,
   если S1 = S2. Эта функция прекращает сравнение, когда обнаружено различие
   строк или когда обнаружен символ с кодом 0,  т.е. символ конца строки. }
 
-function G_CompareText(const S1, S2: string): Integer; overload;
-function G_CompareText(P1, P2: PChar): Integer; overload;
+function G_CompareText(const S1, S2: AnsiString): Integer; overload;
+function G_CompareText(P1, P2: PAnsiChar): Integer; overload;
 
 { G_CompareTextL сравнивает две строки по, самое большое, maxL первым символам
   без учета регистра. Если фрагмент первой строки больше (в алфавитном порядке),
@@ -60,86 +61,87 @@ function G_CompareText(P1, P2: PChar): Integer; overload;
   первой строки меньше, чем фрагмент второй строки, возвращаемое значение
   меньше нуля, иначе, если строки равны, результат равен нулю. }
 
-function G_CompareTextL(const S1, S2: string; maxL: Cardinal = MaxInt): Integer;
+function G_CompareTextL(const S1, S2: AnsiString; maxL: Cardinal = MaxInt): Integer; overload;
+function G_CompareTextL(P1, P2: PAnsiChar; maxL: Cardinal = MaxInt): Integer; overload;
 
 { G_SameStr сравнивает две строки с учетом регистра и возвращает True, если
   строки равны, иначе возвращает False. }
 
-function G_SameStr(const S1, S2: string): Boolean; overload;
+function G_SameStr(const S1, S2: AnsiString): Boolean; overload;
 function G_SameStr(P1, P2: Pointer): Boolean; overload;
 
 { G_SameStrL сравнивает две строки по, самое большое, maxL первым символам с
   учетом регистра. Возвращает True, если строки равны, иначе возвращает False. }
 
-function G_SameStrL(const S1, S2: string; maxL: Cardinal): Boolean;
+function G_SameStrL(const S1, S2: AnsiString; maxL: Cardinal): Boolean;
 
 { G_SameText сравнивает две строки без учета регистра и возвращает True, если
   строки равны, иначе возвращает False. }
 
-function G_SameText(const S1, S2: string): Boolean; overload;
+function G_SameText(const S1, S2: AnsiString): Boolean; overload;
 function G_SameText(P1, P2: Pointer): Boolean; overload;
 
 { G_SameTextL сравнивает две строки по, самое большое, maxL первым символам
   без учета регистра. Возвращает True, если строки равны, иначе - False. }
 
-function G_SameTextL(const S1, S2: string; maxL: Cardinal): Boolean;
+function G_SameTextL(const S1, S2: AnsiString; maxL: Cardinal): Boolean;
 
 
 { Функции для изменения регистра символов }
 
 { G_CharToUpper переводит символ C в верхний регистр (в большую букву). }
 
-function G_CharToUpper(C: Char): Char;
+function G_CharToUpper(C: AnsiChar): AnsiChar;
 
 { G_CharToLower переводит символ C в нижний регистр (в маленькую букву). }
 
-function G_CharToLower(C: Char): Char;
+function G_CharToLower(C: AnsiChar): AnsiChar;
 
 { G_StrToUpper переводит строку S в верхний регистр (в большие буквы).
   Исходная строка изменяется. }
 
-procedure G_StrToUpper(var S: string); overload;
-function G_StrToUpper(P: PChar): PChar; overload;
+procedure G_StrToUpper(var S: AnsiString); overload;
+function G_StrToUpper(P: PAnsiChar): PAnsiChar; overload;
 
 { G_StrToLower переводит строку S в нижний регистр (в маленькие буквы).
   Исходная строка изменяется. }
 
-procedure G_StrToLower(var S: string); overload;
-function G_StrToLower(P: PChar): PChar; overload;
+procedure G_StrToLower(var S: AnsiString); overload;
+function G_StrToLower(P: PAnsiChar): PAnsiChar; overload;
 
 { G_StrToUpperL переводит L первых символов строки, указываемой параметром P,
   в верхний регистр. При этом изменяется исходная строка. Функция возвращает
   указатель на начало строки. }
 
-function G_StrToUpperL(P: PChar; L: Cardinal): PChar;
+function G_StrToUpperL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_StrToLowerL переводит L первых символов строки, указываемой параметром P,
   в нижний регистр. При этом изменяется исходная строка. Функция возвращает
   указатель на начало строки. }
 
-function G_StrToLowerL(P: PChar; L: Cardinal): PChar;
+function G_StrToLowerL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_StrToUpperMoveL переводит L первых символов строки Source в верхний
   регистр. Результат сохраняется в строке Dest. Функция возвращает указатель
   на начало строки-приемника Dest. }
 
-function G_StrToUpperMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToUpperMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_StrToLowerMoveL переводит L первых символов строки Source в нижний
   регистр. Результат сохраняется в строке Dest. Функция возвращает указатель
   на начало строки-приемника Dest. }
 
-function G_StrToLowerMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToLowerMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_ToUpper переводит все символы строки S в верхний регистр и возвращает
   полученную строку как результат функции. Исходная строка не изменяется. }
 
-function G_ToUpper(const S: string): string;
+function G_ToUpper(const S: AnsiString): AnsiString;
 
 { G_ToLower переводит все символы строки S в нижний регистр и возвращает
   полученную строку как результат функции. Исходная строка не изменяется. }
 
-function G_ToLower(const S: string): string;
+function G_ToLower(const S: AnsiString): AnsiString;
 
 
 { Перекодировка строк из DOS в Windows и обратно }
@@ -147,50 +149,50 @@ function G_ToLower(const S: string): string;
 { G_StrToAnsi переводит строку S из кодировки DOS в кодировку Windows.
   Исходная строка изменяется. }
 
-procedure G_StrToAnsi(var S: string); overload;
-function G_StrToAnsi(P: PChar): PChar; overload;
+procedure G_StrToAnsi(var S: AnsiString); overload;
+function G_StrToAnsi(P: PAnsiChar): PAnsiChar; overload;
 
 { G_StrToOem переводит строку S из кодировки Windows в кодировку DOS.
   Исходная строка изменяется. }
 
-procedure G_StrToOem(var S: string); overload;
-function G_StrToOem(P: PChar): PChar; overload;
+procedure G_StrToOem(var S: AnsiString); overload;
+function G_StrToOem(P: PAnsiChar): PAnsiChar; overload;
 
 { G_StrToAnsiL переводит L первых символов строки, указываемой параметром P,
   из кодировки DOS в кодировку Windows. При этом изменяется исходная строка.
   Функция возвращает указатель на начало строки. }
 
-function G_StrToAnsiL(P: PChar; L: Cardinal): PChar;
+function G_StrToAnsiL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_StrToOemL переводит L первых символов строки, указываемой параметром P,
   из кодировки Windows в кодировку DOS. При этом изменяется исходная строка.
   Функция возвращает указатель на начало строки. }
 
-function G_StrToOemL(P: PChar; L: Cardinal): PChar;
+function G_StrToOemL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_StrToAnsiMoveL переводит L первых символов строки Source из кодировки
   DOS в кодировку Windows. Результат сохраняется в строке Dest. Функция
   возвращает указатель на начало строки-приемника Dest. }
 
-function G_StrToAnsiMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToAnsiMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_StrToOemMoveL переводит L первых символов строки Source из кодировки Windows
   в кодировку DOS. Результат сохраняется в строке Dest. Функция возвращает
   указатель на начало строки-приемника Dest. }
 
-function G_StrToOemMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToOemMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 
 { G_ToAnsi переводит строку OemStr из кодировки DOS в кодировку Windows и
   возвращает полученную строку как результат функции. Исходная строка при
   этом не изменяется. }
 
-function G_ToAnsi(const OemStr: string): string;
+function G_ToAnsi(const OemStr: AnsiString): AnsiString;
 
 { G_ToOem переводит строку AnsiStr из кодировки Windows в кодировку DOS и
   возвращает полученную строку как результат функции. Исходная строка при
   этом не изменяется. }
 
-function G_ToOem(const AnsiStr: string): string;
+function G_ToOem(const AnsiStr: AnsiString): AnsiString;
 
 
 { Поиск, замена и удаление подстрок и отдельных символов }
@@ -200,14 +202,14 @@ function G_ToOem(const AnsiStr: string): string;
   вхождение или ноль, если подстрока FindStr не найдена в строке SourceStr.
   Поиск подстроки выполняется с учетом регистра символов. }
 
-function G_PosStr(const FindStr, SourceStr: string; StartPos: Integer = 1): Integer;
+function G_PosStr(const FindStr, SourceStr: AnsiString; StartPos: Integer = 1): Integer;
 
 { G_PosText находит первое вхождение подстроки FindStr в строке SourceStr,
   начиная с позиции StartPos. Возвращает номер символа, с которого начинается
   вхождение или ноль, если подстрока FindStr не найдена в строке SourceStr.
   Поиск подстроки выполняется без учета регистра символов. }
 
-function G_PosText(const FindStr, SourceStr: string; StartPos: Integer = 1): Integer;
+function G_PosText(const FindStr, SourceStr: AnsiString; StartPos: Integer = 1): Integer;
 
 { G_LastPosStr находит последнее вхождение подстроки FindStr в строке SourceStr
   левее позиции NextPos. Если NextPos превышает длину строки SourceStr, то
@@ -216,7 +218,7 @@ function G_PosText(const FindStr, SourceStr: string; StartPos: Integer = 1): Int
   Отдельные вхождения подстроки не перекрываются. Поиск выполняется с учетом
   регистра символов. }
 
-function G_LastPosStr(const FindStr, SourceStr: string; NextPos: Integer = MaxInt): Integer;
+function G_LastPosStr(const FindStr, SourceStr: AnsiString; NextPos: Integer = MaxInt): Integer;
 
 { G_LastPosText находит последнее вхождение подстроки FindStr в строке SourceStr
   левее позиции NextPos. Если NextPos превышает длину строки SourceStr, то ищется
@@ -225,29 +227,29 @@ function G_LastPosStr(const FindStr, SourceStr: string; NextPos: Integer = MaxIn
   Отдельные вхождения подстроки не перекрываются. Поиск выполняется без учета
   регистра символов. }
 
-function G_LastPosText(const FindStr, SourceStr: string; NextPos: Integer = MaxInt): Integer;
+function G_LastPosText(const FindStr, SourceStr: AnsiString; NextPos: Integer = MaxInt): Integer;
 
 { G_CharPos находит первое вхождение символа C в строке S, начиная с символа
   номер StartPos. Возвращает номер найденного символа или ноль, если символ C
   в строке S не найден. }
 
-function G_CharPos(C: Char; const S: string; StartPos: Integer = 1): Integer; overload;
-function G_CharPos(C: Char; P: Pointer; StartPos: Integer = 1): Integer; overload;
+function G_CharPos(C: AnsiChar; const S: AnsiString; StartPos: Integer = 1): Integer; overload;
+function G_CharPos(C: AnsiChar; P: Pointer; StartPos: Integer = 1): Integer; overload;
 
 { G_LastCharPos находит последнее вхождение символа C в строке S. Поиск
   начинается с символа, предшествующего символу S[NextPos] или с последнего
   символа строки, если NextPos превышает длину строки S. Функция возвращает
   номер найденного символа или ноль, если символ C в строке S не найден. }
 
-function G_LastCharPos(C: Char; const S: string; NextPos: Integer = MaxInt): Integer; overload;
-function G_LastCharPos(C: Char; P: Pointer; NextPos: Integer = MaxInt): Integer; overload;
+function G_LastCharPos(C: AnsiChar; const S: AnsiString; NextPos: Integer = MaxInt): Integer; overload;
+function G_LastCharPos(C: AnsiChar; P: Pointer; NextPos: Integer = MaxInt): Integer; overload;
 
 { G_Paste заменяет Count символов строки Dest, начиная с позиции Pos,
   содержимым строки Source. Строка Dest при этом изменяется. Например,
   если строка Dest равна 'How do you do', то после выполнения процедуры:
   G_Paste(Dest, 5, 6, 'does he'), она будет равна 'How does he do'. }
 
-procedure G_Paste(var Dest: string; Pos, Count: Integer; const Source: string);
+procedure G_Paste(var Dest: AnsiString; Pos, Count: Integer; const Source: AnsiString);
 
 { G_ReplaceStr заменяет все вхождения подстроки FindStr в строке SourceStr
   подстрокой ReplacementStr. Поиск подстроки выполняется с учетом регистра
@@ -255,7 +257,7 @@ procedure G_Paste(var Dest: string; Pos, Count: Integer; const Source: string);
   Если подстрока FindStr отсутствует в строке SourceStr, возвращается исходная
   строка SourceStr. }
 
-function G_ReplaceStr(const SourceStr, FindStr, ReplacementStr: string): string;
+function G_ReplaceStr(const SourceStr, FindStr, ReplacementStr: AnsiString): AnsiString;
 
 { G_ReplaceText заменяет все вхождения подстроки FindStr в строке SourceStr
   подстрокой ReplacementStr. Поиск подстроки выполняется без учета регистра
@@ -263,93 +265,93 @@ function G_ReplaceStr(const SourceStr, FindStr, ReplacementStr: string): string;
   результат. Если подстрока FindStr отсутствует в строке SourceStr,
   возвращается исходная строка SourceStr. }
 
-function G_ReplaceText(const SourceStr, FindStr, ReplacementStr: string): string;
+function G_ReplaceText(const SourceStr, FindStr, ReplacementStr: AnsiString): AnsiString;
 
 { G_ReplaceChar заменяет в строке S каждое вхождение символа OldChar на символ
   NewChar. Результат функции равен количеству произведенных замен. Исходная
   строка S изменяется. }
 
-function G_ReplaceChar(var S: string; OldChar, NewChar: Char): Integer;
+function G_ReplaceChar(var S: AnsiString; OldChar, NewChar: AnsiChar): Integer;
 
 { G_ReplaceChars заменяет в строке S все символы из строки OldCharStr
   соответствующими символами из строки NewCharStr. Исходная строка S
   изменяется. Если число символов в строке OldCharStr не равно числу символов
   в строке NewCharStr, возникает исключение. }
 
-procedure G_ReplaceChars(var S: string; const OldCharStr, NewCharStr: string);
+procedure G_ReplaceChars(var S: AnsiString; const OldCharStr, NewCharStr: AnsiString);
 
 { G_ReplaceCharsWithOneChar заменяет все подряд идущие вхождения символов из
   множества OldCharSet в строке S одним символом NewChar. Исходная строка S при
   этом изменяется. Если надо заменить несколько символов одним без удаления
   повторений, лучше воспользоваться процедурой G_ReplaceChars. }
 
-procedure G_ReplaceCharsWithOneChar(var S: string; const OldCharSet: TSysCharSet; NewChar: Char);
+procedure G_ReplaceCharsWithOneChar(var S: AnsiString; const OldCharSet: TSysCharSet; NewChar: AnsiChar);
 
 { G_Delete удаляет подстроку из строки S. При этом исходная строка изменяется.
   Index - индекс первого удаляемого символа (нумерация символов с единицы),
   Count - количество символов, подлежащих удалению. }
 
-procedure G_Delete(var S: string; Index, Count: Integer);
+procedure G_Delete(var S: AnsiString; Index, Count: Integer);
 
 { G_CutLeft обрезает строку S слева на CharCount символов, уменьшая при этом
   ее длину. Если параметр CharCount отрицательный, строка обрезается справа. }
 
-procedure G_CutLeft(var S: string; CharCount: Integer);
+procedure G_CutLeft(var S: AnsiString; CharCount: Integer);
 
 { G_CutRight обрезает строку S справа на CharCount символов, уменьшая при этом
   ее длину. Если параметр CharCount отрицательный, строка обрезается слева. }
 
-procedure G_CutRight(var S: string; CharCount: Integer);
+procedure G_CutRight(var S: AnsiString; CharCount: Integer);
 
 { G_DeleteStr удаляет из строки S все вхождения подстроки SubStrToDel. Поиск
   подстроки выполняется с учетом регистра символов. Функция возвращает
   количество найденных и удаленных фрагментов. }
 
-function G_DeleteStr(var S: string; const SubStrToDel: string): Integer;
+function G_DeleteStr(var S: AnsiString; const SubStrToDel: AnsiString): Integer;
 
 { G_DeleteText удаляет из строки S все вхождения подстроки SubStrToDel. Поиск
   подстроки выполняется без учета регистра символов. Функция возвращает
   количество найденных и удаленных фрагментов. }
 
-function G_DeleteText(var S: string; const SubStrToDel: string): Integer;
+function G_DeleteText(var S: AnsiString; const SubStrToDel: AnsiString): Integer;
 
 { G_DeleteChar удаляет все символы C из строки S. Исходная строка при
   этом изменяется. }
 
-procedure G_DeleteChar(var S: string; C: Char = ' ');
+procedure G_DeleteChar(var S: AnsiString; C: AnsiChar = ' ');
 
 { G_DeleteChars удаляет из строки S символы, которые присутствуют во
   множестве CharsToRemove. Исходная строка S изменяется. }
 
-procedure G_DeleteChars(var S: string; const CharsToRemove: TSysCharSet);
+procedure G_DeleteChars(var S: AnsiString; const CharsToRemove: TSysCharSet);
 
 { G_KeepChars оставляет в строке S только символы, которые присутствуют во
   множестве CharsToKeep, остальные символы удаляет. Исходная строка S
   изменяется. }
 
-procedure G_KeepChars(var S: string; const CharsToKeep: TSysCharSet);
+procedure G_KeepChars(var S: AnsiString; const CharsToKeep: TSysCharSet);
 
 { G_Compact удаляет из строки начальные и конечные пробелы и управляющие
   символы (меньшие пробела). Идущие подряд пробелы и управляющие символы
   в середине строки заменяются одним пробелом. При этом изменяется
   исходная строка. }
 
-procedure G_Compact(var S: string);
+procedure G_Compact(var S: AnsiString);
 
 { G_Trim удаляет начальные и конечные пробелы и управляющие символы из
   строки S. Исходная строка изменяется. }
 
-procedure G_Trim(var S: string);
+procedure G_Trim(var S: AnsiString);
 
 { G_TrimLeft удаляет начальные пробелы и управляющие символы из строки S.
   Исходная строка изменяется. }
 
-procedure G_TrimLeft(var S: string);
+procedure G_TrimLeft(var S: AnsiString);
 
 { G_TrimRight удаляет конечные пробелы и управляющие символы из строки S.
   Исходная строка изменяется. }
 
-procedure G_TrimRight(var S: string);
+procedure G_TrimRight(var S: AnsiString);
 
 
 { Функции для работы с маской }
@@ -360,7 +362,7 @@ procedure G_TrimRight(var S: string);
   SourceStr должна быть равна количеству символов MaskChar в маске. Пример:
   G_ApplyMask('(###) ##-##-##', '075724793', '#') вернет '(075) 72-47-93'. }
 
-function G_ApplyMask(const Mask, SourceStr: string; MaskChar: Char = 'X'): string;
+function G_ApplyMask(const Mask, SourceStr: AnsiString; MaskChar: AnsiChar = 'X'): AnsiString;
 
 { G_ExtractWithMask удаляет из строки S символы, являющиеся фиксированными
   для маски Mask, оставляя только подставленные символы, которым в маске
@@ -368,7 +370,7 @@ function G_ApplyMask(const Mask, SourceStr: string; MaskChar: Char = 'X'): strin
   как результат функции. Длина строк S и Mask должна быть одинаковой.
   Например, вызов: G_ExtractWithMask('7-35-01', 'X-XX-XX') вернет '73501'. }
 
-function G_ExtractWithMask(const S, Mask: string; MaskChar: Char = 'X'): string;
+function G_ExtractWithMask(const S, Mask: AnsiString; MaskChar: AnsiChar = 'X'): AnsiString;
 
 { G_ValidateMask проверяет, удовлетворяет ли строка S маске Mask, полагая,
   что каждый символ MaskChar в строке Mask может быть заменен любым другим
@@ -376,7 +378,7 @@ function G_ExtractWithMask(const S, Mask: string; MaskChar: Char = 'X'): string;
   True, иначе False. Например, следующий вызов этой функции вернет True:
   G_ValidateMask('ISBN 5-95-00787', 'ISBN ?-??-?????', '?'). }
 
-function G_ValidateMask(const S, Mask: string; MaskChar: Char = 'X'): Boolean;
+function G_ValidateMask(const S, Mask: AnsiString; MaskChar: AnsiChar = 'X'): Boolean;
 
 { G_ValidateWildStr проверяет, удовлетворяет ли строка S маске Mask, полагая,
   что каждый символ MaskChar в строке Mask может быть заменен любым другим
@@ -386,8 +388,8 @@ function G_ValidateMask(const S, Mask: string; MaskChar: Char = 'X'): Boolean;
   функция возвращает True, иначе False. Например, следующий вызов функции
   вернет True: G_ValidateWildStr('abc12345_inf@_XL.dat', 'abc*_???@_*.d*at'). }
 
-function G_ValidateWildStr(const S, Mask: string; MaskChar: Char = '?';
-  WildCard: Char = '*'): Boolean;
+function G_ValidateWildStr(const S, Mask: AnsiString; MaskChar: AnsiChar = '?';
+  WildCard: AnsiChar = '*'): Boolean;
 
 { G_ValidateWildText проверяет, удовлетворяет ли строка S маске Mask, полагая,
   что каждый символ MaskChar в строке Mask может быть заменен любым другим
@@ -398,8 +400,8 @@ function G_ValidateWildStr(const S, Mask: string; MaskChar: Char = '?';
   возвращает True, иначе False. Например, следующий вызов функции вернет True:
   G_ValidateWildText('ABC12345_inf@_XL.DAT', 'abc*_???@_*.d*aT'). }
 
-function G_ValidateWildText(const S, Mask: string; MaskChar: Char = '?';
-  WildCard: Char = '*'): Boolean;
+function G_ValidateWildText(const S, Mask: AnsiString; MaskChar: AnsiChar = '?';
+  WildCard: AnsiChar = '*'): Boolean;
 
 
 { Другие функции для работы со строками }
@@ -407,40 +409,40 @@ function G_ValidateWildText(const S, Mask: string; MaskChar: Char = '?';
 { G_CountOfChar подсчитывает и возвращает количество вхождений символа C
   в строку S. }
 
-function G_CountOfChar(const S: string; C: Char): Integer;
+function G_CountOfChar(const S: AnsiString; C: AnsiChar): Integer;
 
 { G_CountOfChars подсчитывает в строке S количество вхождений символов,
   присутствующих в множестве CharSet, и возвращает полученное число как
   результат функции. }
 
-function G_CountOfChars(const S: string; const CharSet: TSysCharSet): Integer;
+function G_CountOfChars(const S: AnsiString; const CharSet: TSysCharSet): Integer;
 
 { G_IsEmpty возвращает True, если строка S содержит только пробелы и
   управляющие символы (меньшие пробела), иначе возвращает False. }
 
-function G_IsEmpty(const S: string): Boolean;
+function G_IsEmpty(const S: AnsiString): Boolean;
 
 { G_PadLeft дополняет строку S слева до длины Length символами PaddingChar
   и возвращает полученную строку как результат функции. Если длина строки S
   больше или равна Length, функция просто возвращает исходная строку. }
 
-function G_PadLeft(const S: string; Length: Integer; PaddingChar: Char = ' '): string;
+function G_PadLeft(const S: AnsiString; Length: Integer; PaddingChar: AnsiChar = ' '): AnsiString;
 
 { G_PadRight дополняет строку S справа до длины Length символами PaddingChar
   и возвращает полученную строку как результат функции. Если длина строки S
   больше или равна Length, функция просто возвращает исходная строку. }
 
-function G_PadRight(const S: string; Length: Integer; PaddingChar: Char = ' '): string;
+function G_PadRight(const S: AnsiString; Length: Integer; PaddingChar: AnsiChar = ' '): AnsiString;
 
 { G_Center центрирует строку S относительно длины Length символами PaddingChar
   и возвращает полученную строку как результат функции. Если длина строки S
   больше или равна Length, функция просто возвращает исходная строку. }
 
-function G_Center(const S: string; Length: Integer; PaddingChar: Char = ' '): string;
+function G_Center(const S: AnsiString; Length: Integer; PaddingChar: AnsiChar = ' '): AnsiString;
 
 { G_Duplicate возвращает строку, состоящую из Count копий строки S. }
 
-function G_Duplicate(const S: string; Count: Integer): string;
+function G_Duplicate(const S: AnsiString; Count: Integer): AnsiString;
 
 { G_StrMoveL копирует содержимое строки Source в строку Dest. Максимальное
   число копируемых символов равно maxL. Длина строки Dest устанавливается
@@ -448,20 +450,20 @@ function G_Duplicate(const S: string; Count: Integer): string;
   распределена заранее вызовом SetString или SetLength размером не менее
   maxL символов. }
 
-procedure G_StrMoveL(const Source: string; var Dest: string; maxL: Cardinal);
+procedure G_StrMoveL(const Source: AnsiString; var Dest: AnsiString; maxL: Cardinal);
 
 { G_StrReverse переворачивает строку S так, что первый символ становится
   последним, второй -  предпоследним и т.д. Исходная строка изменяется и
   возвращается как результат функции. }
 
-procedure G_StrReverse(var S: string); overload;
+procedure G_StrReverse(var S: AnsiString); overload;
 function G_StrReverse(P: Pointer): Pointer; overload;
 
-{ G_PCharLen возвращает длину строки типа PChar, адресуемой параметром P.
+{ G_PCharLen возвращает длину строки типа PAnsiChar, адресуемой параметром P.
   Эта функция работает значительно быстрее стандартной StrLen. Автором
   реализации является Robert Lee (rhlee@optimalcode.com). }
 
-function G_PCharLen(P: PChar): Integer;
+function G_PCharLen(P: PAnsiChar): Integer;
 
 
 { Класс TStringBuilder для динамического создания или изменения строк
@@ -490,13 +492,13 @@ type
   { Следующий конструктор Create создает экземпляр класса TStringBuilder
     и помещает в него значение строки S. }
 
-    constructor Create(const S: string); overload;
+    constructor Create(const S: AnsiString); overload;
 
   { Следующий конструктор Create создает экземпляр класса TStringBulder
     и помещает в него Count символов строки S, начиная с символа с номером
     StartIndex (нумерация символов с единицы). }
 
-    constructor Create(const S: string; StartIndex, Count: Integer); overload;
+    constructor Create(const S: AnsiString; StartIndex, Count: Integer); overload;
 
   { Следующий конструктор Create создает экземпляр класса TStringBuilder
     и помещает в него L символов, адресуемых указателем P. }
@@ -508,6 +510,10 @@ type
     символов строки. }
 
     destructor Destroy; override;
+
+  {  }
+
+    procedure CopyFrom(ASource: TStringBuilder);
 
   { Свойства }
 
@@ -539,7 +545,7 @@ type
   { Метод Fill заполняет Count символов строки, начиная с позиции Index
     (нумерация с единицы), символом C. }
 
-    procedure Fill(C: Char; Index, Count: Integer);
+    procedure Fill(C: AnsiChar; Index, Count: Integer);
 
   { Следующая функция Append добавляет к строке десятичное представление
     числа N типа Integer и возвращает ссылку на данный экземпляр класса
@@ -564,29 +570,29 @@ type
   { Следующая функция Append добавляет символ C в конец строки и возвращает
     ссылку на данный экземпляр класса TStringBuilder. }
 
-    function Append(C: Char): TStringBuilder; overload;
+    function Append(C: AnsiChar): TStringBuilder; overload;
 
   { Следующая функция Append добавляет Count копий символа C в конец строки и
     возвращает ссылку на данный экземпляр класса TStringBuilder. }
 
-    function Append(C: Char; Count: Integer): TStringBuilder; overload;
+    function Append(C: AnsiChar; Count: Integer): TStringBuilder; overload;
 
   { Следующая функция Append добавляет строку S в конец данной строки и
     возвращает ссылку на данный экземпляр класса TStringBuilder. }
 
-    function Append(const S: string): TStringBuilder; overload;
+    function Append(const S: AnsiString): TStringBuilder; overload;
 
   { Следующая функция Append добавляет Count копий строки S в конец данной
     строки и возвращает ссылку на данный экземпляр класса TStringBuilder.}
 
-    function Append(const S: string; Count: Integer): TStringBuilder; overload;
+    function Append(const S: AnsiString; Count: Integer): TStringBuilder; overload;
 
   { Следующая функция Append добавляет фрагмент строки S, начиная с позиции
     StartIndex (нумерация с единицы), длиной Count символов в конец данной
     строки. Функция возвращает ссылку на данный экземпляр класса
     TStringBuilder. }
 
-    function Append(const S: string; StartIndex, Count: Integer): TStringBuilder; overload;
+    function Append(const S: AnsiString; StartIndex, Count: Integer): TStringBuilder; overload;
 
   { Следующая функция Append добавляет в конец строки L символов, адресуемых
     указателем P, и возвращает ссылку на данный экземпляр класса TStringBuilder. }
@@ -602,33 +608,33 @@ type
     а затем добавляет символы перевода строки #13#10 и возвращает ссылку
     на данный экземпляр класса TStringBuilder. }
 
-    function AppendLine(const S: string): TStringBuilder; overload;
+    function AppendLine(const S: AnsiString): TStringBuilder; overload;
 
   { Следующий метод Insert вставляет символ C в позицию Index строки (нумерация
     с единицы). }
 
-    procedure Insert(Index: Integer; C: Char); overload;
+    procedure Insert(Index: Integer; C: AnsiChar); overload;
 
   { Следующий метод Insert вставляет Count копий символа C в позицию Index
     строки (нумерация с единицы). }
 
-    procedure Insert(Index: Integer; C: Char; Count: Integer); overload;
+    procedure Insert(Index: Integer; C: AnsiChar; Count: Integer); overload;
 
   { Следующий метод Insert вставляет строку S в позицию Index данной строки
     (нумерация с единицы). }
 
-    procedure Insert(Index: Integer; const S: string); overload;
+    procedure Insert(Index: Integer; const S: AnsiString); overload;
 
   { Следующий метод Insert вставляет Count копий строки S в позицию Index
     данной строки (нумерация с единицы). }
 
-    procedure Insert(Index: Integer; const S: string; Count: Integer); overload;
+    procedure Insert(Index: Integer; const S: AnsiString; Count: Integer); overload;
 
   { Следующий метод Insert вставляет фрагмент строки S, начиная с позиции
     StartIndex (нумерация с единицы), длиной Count символов в позицию Index
     данной строки (нумерация с единицы). }
 
-    procedure Insert(Index: Integer; const S: string; StartIndex, Count: Integer); overload;
+    procedure Insert(Index: Integer; const S: AnsiString; StartIndex, Count: Integer); overload;
 
   { Следующий метод Insert вставляет L символов, адресуемых указателем P,
     в позицию Index данной строки (нумерация с единицы). }
@@ -660,15 +666,15 @@ type
     данной строки длиной Count символов, начиная с позиции Index (нумерация
     с единицы). }
 
-    function ToString: string; overload;
-    function ToString(Index, Count: Integer): string; overload;
+    function ToString: AnsiString;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
+    function ToString(Index, Count: Integer): AnsiString;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Функция Equals возвращает True, если текущее значение строки равно
     соответствующему значению, представленному экземпляром класса
     TStringBuilder, переданным параметром SB. Если две строки отличаются друг
     от друга, функция возвращает False. }
 
-    function Equals(SB: TStringBuilder): Boolean;
+    function Equals(SB: TStringBuilder): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Метод TrimToSize перераспределяет память, занятую под внутренний массив
     Chars таким образом, чтобы содержать только занятое в настоящий момент
@@ -687,49 +693,51 @@ type
 
 {DEFINE USE_ACED_MEMORY} // Определить при использовании AcedMemory
 
+{$IFDEF UNICODE}
 {$IFDEF USE_ACED_MEMORY}
 
 { G_NewStr создает и возвращает новый экземпляр строки и резервирует место
   для возможного расширения строки с помощью G_Append. Параметр Capacity
   задает максимальное количество символов, которое может содержать строка. }
 
-function G_NewStr(const S: string): string; overload;
-function G_NewStr(Capacity: Integer): string; overload;
-function G_NewStr(const S: string; Capacity: Integer): string; overload;
-function G_NewStr(const S1, S2: string): string; overload;
-function G_NewStr(const S1, S2: string; Capacity: Integer): string; overload;
-function G_NewStr(const S1, S2, S3: string): string; overload;
-function G_NewStr(const S1, S2, S3: string; Capacity: Integer): string; overload;
-function G_NewStr(const S1, S2, S3, S4: string): string; overload;
-function G_NewStr(const S1, S2, S3, S4: string; Capacity: Integer): string; overload;
+function G_NewStr(const S: AnsiString): AnsiString; overload;
+function G_NewStr(Capacity: Integer): AnsiString; overload;
+function G_NewStr(const S: AnsiString; Capacity: Integer): AnsiString; overload;
+function G_NewStr(const S1, S2: AnsiString): AnsiString; overload;
+function G_NewStr(const S1, S2: AnsiString; Capacity: Integer): AnsiString; overload;
+function G_NewStr(const S1, S2, S3: AnsiString): AnsiString; overload;
+function G_NewStr(const S1, S2, S3: AnsiString; Capacity: Integer): AnsiString; overload;
+function G_NewStr(const S1, S2, S3, S4: AnsiString): AnsiString; overload;
+function G_NewStr(const S1, S2, S3, S4: AnsiString; Capacity: Integer): AnsiString; overload;
 
 { Аналогично вызову G_NewStr(S1, Copy(S2, Index2, Count2)). }
 
-function G_NewStr(const S1, S2: string; Index2, Count2: Integer): string; overload;
+function G_NewStr(const S1, S2: AnsiString; Index2, Count2: Integer): AnsiString; overload;
 
 { G_Append добавляет в конец строки S одну, две, три строки или один символ.
   Строка S при этом изменяется. }
 
-procedure G_Append(var S: string; const S1: string); overload;
-procedure G_Append(var S: string; const S1, S2: string); overload;
-procedure G_Append(var S: string; const S1, S2, S3: string); overload;
-procedure G_Append(var S: string; C: Char); overload;
+procedure G_Append(var S: AnsiString; const S1: AnsiString); overload;
+procedure G_Append(var S: AnsiString; const S1, S2: AnsiString); overload;
+procedure G_Append(var S: AnsiString; const S1, S2, S3: AnsiString); overload;
+procedure G_Append(var S: AnsiString; C: AnsiChar); overload;
 
 { Аналогично вызову G_Append(S, Copy(S1, Index1, Count1)). }
 
-procedure G_Append(var S: string; const S1: string; Index1: Integer;
+procedure G_Append(var S: AnsiString; const S1: AnsiString; Index1: Integer;
   Count1: Integer = MaxInt); overload;
 
 { Добавляет символы перевода строки #13, #10 в конец строки S. }
 
-procedure G_AppendLine(var S: string); overload;
-procedure G_AppendLine(var S: string; const S1: string); overload;
+procedure G_AppendLine(var S: AnsiString); overload;
+procedure G_AppendLine(var S: AnsiString; const S1: AnsiString); overload;
 
 { Аналогично вызову Insert(Copy(S1, Index1, Count1), S, Index). }
 
-procedure G_Insert(const S1: string; var S: string; Index, Index1: Integer;
+procedure G_Insert(const S1: AnsiString; var S: AnsiString; Index, Index1: Integer;
   Count1: Integer = MaxInt); overload;
 
+{$ENDIF}
 {$ENDIF}
 
 
@@ -738,7 +746,7 @@ procedure G_Insert(const S1: string; var S: string; Index, Index1: Integer;
 { StringOfChar возвращает строку, состоящую из Count символов Ch. Например,
    StringOfChar('A', 10) вернет строку 'AAAAAAAAAA'. (модуль System)
 
-function StringOfChar(Ch: Char; Count: Integer): string; }
+function StringOfChar(Ch: AnsiChar; Count: Integer): AnsiString; }
 
 { SetString устанавливает S таким образом, чтобы она указывала на заново
   распределенную строку длиной Len символов. Если параметр Buffer равен nil,
@@ -751,7 +759,7 @@ function StringOfChar(Ch: Char; Count: Integer): string; }
   Для размещения в памяти новой строки S длиной Len символов используйте вызов
   процедуры SetString: SetString(S, nil, Len). (модуль System)
 
-procedure SetString(var S: string; Buffer: PChar; Len: Integer); }
+procedure SetString(var S: AnsiString; Buffer: PAnsiChar; Len: Integer); }
 
 { SetLength перераспределяет память под строку адресуемую параметром S, таким
   образом, чтобы ее длина равнялась NewLength. Существующие символы в строке
@@ -764,26 +772,26 @@ procedure SetString(var S: string; Buffer: PChar; Len: Integer); }
 procedure SetLength(var S; NewLength: Integer); }
 
 { Copy возвращает подстроку из строки. S - это исходная строка (выражение типа
-  string), Index и Count - целочисленные выражения. Copy возвращает подстроку,
+  AnsiString), Index и Count - целочисленные выражения. Copy возвращает подстроку,
   содержащую Count символов, начиная с S[Index]. Если Index больше, чем длина
   строки S, Copy возвращает пустую строку. Если Count задает больше символов,
   чем их есть до конца строки, то возвращаются подстрока, начиная с S[Index]
   и до конца строки. (модуль System)
 
-function Copy(S; Index, Count: Integer): string; }
+function Copy(S; Index, Count: Integer): AnsiString; }
 
 { Insert вставляет подстроку в строку, начиная с указанного символа. Подстрока
   Source вставляется в строку S, начиная с символа S[Index]. Index - номер
   символа, с которого начинается вставка. Если Index больше длины строки S,
   подстрока Source просто добавляется в конец строки S. (модуль System)
 
-procedure Insert(Source: string; var S: string; Index: Integer); }
+procedure Insert(Source: AnsiString; var S: AnsiString; Index: Integer); }
 
 { UniqueString гарантирует, что данная строка Str будет иметь счетчик ссылок
   равный единице. Вызов этой процедуры необходим, когда в программе строка
-  приводится к типу PChar, а затем содержимое строки изменяется. (модуль System)
+  приводится к типу PAnsiChar, а затем содержимое строки изменяется. (модуль System)
 
-procedure UniqueString(var Str: string); }
+procedure UniqueString(var Str: AnsiString); }
 
 { WrapText находит в строке Line символы, входящие во множество BreakChars,
   и добавляет перевод строки, переданный параметром BreakStr, после последнего
@@ -794,9 +802,9 @@ procedure UniqueString(var Str: string); }
   символов #13#10. Эта функция не вставляет разрывы строки во фрагменты,
   заключенные в одиночные или двойные ковычки. (модуль SysUtils)
 
-function WrapText(const Line, BreakStr: string; BreakChars: TSysCharSet;
-  MaxCol: Integer): string; overload;
-function WrapText(const Line: string; MaxCol: Integer = 45): string; overload; }
+function WrapText(const Line, BreakStr: AnsiString; BreakChars: TSysCharSet;
+  MaxCol: Integer): AnsiString; overload;
+function WrapText(const Line: AnsiString; MaxCol: Integer = 45): AnsiString; overload; }
 
 { AdjustLineBreaks заменяет все переводы строки в строке S на правильную
   последовательность символов CR/LF. Эта функция превращает любой символ CR,
@@ -805,13 +813,13 @@ function WrapText(const Line: string; MaxCol: Integer = 45): string; overload; }
   в пары CR/LF. Последовательность LF/CR обычно используется в текстовых
   файлах Unix. (модуль SysUtils)
 
-function AdjustLineBreaks(const S: string): string; }
+function AdjustLineBreaks(const S: AnsiString): AnsiString; }
 
 { QuotedStr заключает переданную в нее строку в одинарные кавычки ('). Они
   добавляются в начале и в конце строки. Кроме того, каждый символ одинарной
   кавычки внутри строки удваивается. (модуль SysUtils)
 
-function QuotedStr(const S: string): string; }
+function QuotedStr(const S: AnsiString): AnsiString; }
 
 
 { Кодовые таблицы для изменения регистра символов и перекодировки строк из
@@ -841,7 +849,7 @@ function QuotedStr(const S: string): string; }
     AssignFile(F, 'CsTables.txt');
     Rewrite(F);
     WriteLn(F);
-    WriteLn(F, '  ToUpperChars: array[0..255] of Char =');
+    WriteLn(F, '  ToUpperChars: array[0..255] of AnsiChar =');
     Write(F,'    (');
     for I := 0 to 15 do
     begin
@@ -860,7 +868,7 @@ function QuotedStr(const S: string): string; }
       Write(F, '     ');
     end;
     WriteLn(F);
-    WriteLn(F, '  ToLowerChars: array[0..255] of Char =');
+    WriteLn(F, '  ToLowerChars: array[0..255] of AnsiChar =');
     Write(F, '    (');
     for I := 0 to 15 do
     begin
@@ -879,7 +887,7 @@ function QuotedStr(const S: string): string; }
       Write(F, '     ');
     end;
     WriteLn(F);
-    WriteLn(F, '  ToOemChars: array[0..255] of Char =');
+    WriteLn(F, '  ToOemChars: array[0..255] of AnsiChar =');
     Write(F, '    (');
     for I := 0 to 15 do
     begin
@@ -897,7 +905,7 @@ function QuotedStr(const S: string): string; }
       Write(F, '     ');
     end;
     WriteLn(F);
-    WriteLn(F, '  ToAnsiChars: array[0..255] of Char =');
+    WriteLn(F, '  ToAnsiChars: array[0..255] of AnsiChar =');
     Write(F, '    (');
     for I := 0 to 15 do
     begin
@@ -924,7 +932,7 @@ function QuotedStr(const S: string): string; }
 }
 
 const
-  ToUpperChars: array[0..255] of Char =
+  ToUpperChars: array[0..255] of AnsiChar =
     (#$00,#$01,#$02,#$03,#$04,#$05,#$06,#$07,#$08,#$09,#$0A,#$0B,#$0C,#$0D,#$0E,#$0F,
      #$10,#$11,#$12,#$13,#$14,#$15,#$16,#$17,#$18,#$19,#$1A,#$1B,#$1C,#$1D,#$1E,#$1F,
      #$20,#$21,#$22,#$23,#$24,#$25,#$26,#$27,#$28,#$29,#$2A,#$2B,#$2C,#$2D,#$2E,#$2F,
@@ -942,7 +950,7 @@ const
      #$C0,#$C1,#$C2,#$C3,#$C4,#$C5,#$C6,#$C7,#$C8,#$C9,#$CA,#$CB,#$CC,#$CD,#$CE,#$CF,
      #$D0,#$D1,#$D2,#$D3,#$D4,#$D5,#$D6,#$D7,#$D8,#$D9,#$DA,#$DB,#$DC,#$DD,#$DE,#$DF);
 
-  ToLowerChars: array[0..255] of Char =
+  ToLowerChars: array[0..255] of AnsiChar =
     (#$00,#$01,#$02,#$03,#$04,#$05,#$06,#$07,#$08,#$09,#$0A,#$0B,#$0C,#$0D,#$0E,#$0F,
      #$10,#$11,#$12,#$13,#$14,#$15,#$16,#$17,#$18,#$19,#$1A,#$1B,#$1C,#$1D,#$1E,#$1F,
      #$20,#$21,#$22,#$23,#$24,#$25,#$26,#$27,#$28,#$29,#$2A,#$2B,#$2C,#$2D,#$2E,#$2F,
@@ -960,7 +968,7 @@ const
      #$E0,#$E1,#$E2,#$E3,#$E4,#$E5,#$E6,#$E7,#$E8,#$E9,#$EA,#$EB,#$EC,#$ED,#$EE,#$EF,
      #$F0,#$F1,#$F2,#$F3,#$F4,#$F5,#$F6,#$F7,#$F8,#$F9,#$FA,#$FB,#$FC,#$FD,#$FE,#$FF);
 
-  ToOemChars: array[0..255] of Char =
+  ToOemChars: array[0..255] of AnsiChar =
     (#$00,#$01,#$02,#$03,#$04,#$05,#$06,#$07,#$08,#$09,#$0A,#$0B,#$0C,#$0D,#$0E,#$0F,
      #$10,#$11,#$12,#$13,#$14,#$15,#$16,#$17,#$18,#$19,#$1A,#$1B,#$1C,#$1D,#$1E,#$1F,
      #$20,#$21,#$22,#$23,#$24,#$25,#$26,#$27,#$28,#$29,#$2A,#$2B,#$2C,#$2D,#$2E,#$2F,
@@ -978,7 +986,7 @@ const
      #$A0,#$A1,#$A2,#$A3,#$A4,#$A5,#$A6,#$A7,#$A8,#$A9,#$AA,#$AB,#$AC,#$AD,#$AE,#$AF,
      #$E0,#$E1,#$E2,#$E3,#$E4,#$E5,#$E6,#$E7,#$E8,#$E9,#$EA,#$EB,#$EC,#$ED,#$EE,#$EF);
 
-  ToAnsiChars: array[0..255] of Char =
+  ToAnsiChars: array[0..255] of AnsiChar =
     (#$00,#$01,#$02,#$03,#$04,#$05,#$06,#$07,#$08,#$09,#$0A,#$0B,#$0C,#$0D,#$0E,#$A4,
      #$10,#$11,#$12,#$13,#$B6,#$A7,#$16,#$17,#$18,#$19,#$1A,#$1B,#$1C,#$1D,#$1E,#$1F,
      #$20,#$21,#$22,#$23,#$24,#$25,#$26,#$27,#$28,#$29,#$2A,#$2B,#$2C,#$2D,#$2E,#$2F,
@@ -999,10 +1007,10 @@ const
 {$ELSE}
 
 var
-  ToUpperChars: array[0..255] of Char;
-  ToLowerChars: array[0..255] of Char;
-  ToOemChars: array[0..255] of Char;
-  ToAnsiChars: array[0..255] of Char;
+  ToUpperChars: array[0..255] of AnsiChar;
+  ToLowerChars: array[0..255] of AnsiChar;
+  ToOemChars: array[0..255] of AnsiChar;
+  ToAnsiChars: array[0..255] of AnsiChar;
 
 {$ENDIF}
 
@@ -1016,7 +1024,7 @@ uses Windows, AcedBinary, AcedCommon
 
 { Функции для сравнения строк }
 
-function G_CompareStr(const S1, S2: string): Integer;
+function G_CompareStr(const S1, S2: AnsiString): Integer;
 asm
         CMP     EAX,EDX
         JE      @@ex
@@ -1082,7 +1090,7 @@ asm
 @@7:
 end;
 
-function G_CompareStr(P1, P2: PChar): Integer;
+function G_CompareStr(P1, P2: PAnsiChar): Integer;
 asm
         CMP     EAX,EDX
         JE      @@ex
@@ -1148,7 +1156,7 @@ asm
 @@7:
 end;
 
-function G_CompareStrL(const S1, S2: string; maxL: Cardinal): Integer;
+function G_CompareStrL(const S1, S2: AnsiString; maxL: Cardinal): Integer;
 asm
         CMP     EAX,EDX
         JE      @@1
@@ -1220,7 +1228,79 @@ asm
 @@7:
 end;
 
-function G_CompareText(const S1, S2: string): Integer;
+function G_CompareStrL(P1, P2: PAnsiChar; maxL: Cardinal): Integer;
+asm
+        CMP     EAX,EDX
+        JE      @@1
+        TEST    ECX,ECX
+        JE      @@1
+        TEST    EAX,EAX
+        JE      @@2
+        TEST    EDX,EDX
+        JE      @@3
+        PUSH    EBX
+        PUSH    ESI
+        MOV     EBX,[EAX-4]
+        MOV     ESI,[EDX-4]
+        SUB     EBX,ESI
+        JG      @@w1
+        ADD     ESI,EBX
+@@w1:   CMP     ECX,ESI
+        JA      @@fc
+@@dn:   POP     ESI
+@@lp:   DEC     ECX
+        JS      @@zq
+        MOV     BL,BYTE PTR [EAX]
+        MOV     BH,BYTE PTR [EDX]
+        CMP     BL,BH
+        JNE     @@ne
+        DEC     ECX
+        JS      @@zq
+        MOV     BL,BYTE PTR [EAX+1]
+        MOV     BH,BYTE PTR [EDX+1]
+        CMP     BL,BH
+        JNE     @@ne
+        DEC     ECX
+        JS      @@zq
+        MOV     BL,BYTE PTR [EAX+2]
+        MOV     BH,BYTE PTR [EDX+2]
+        CMP     BL,BH
+        JNE     @@ne
+        DEC     ECX
+        JS      @@zq
+        MOV     BL,BYTE PTR [EAX+3]
+        MOV     BH,BYTE PTR [EDX+3]
+        ADD     EAX,4
+        ADD     EDX,4
+        CMP     BL,BH
+        JE      @@lp
+@@ne:   MOVZX   EAX,BL
+        MOVZX   EDX,BH
+        SUB     EAX,EDX
+        POP     EBX
+        RET
+@@fc:   LEA     ECX,[ESI+1]
+        JMP     @@dn
+@@1:    XOR     EAX,EAX
+        RET
+@@2:    TEST    EDX,EDX
+        JE      @@7
+        MOV     CH,BYTE PTR [EDX]
+        TEST    CH,CH
+        JE      @@7
+        NOT     EAX
+        RET
+@@3:    MOV     CL,BYTE PTR [EAX]
+        TEST    CL,CL
+        JE      @@5
+        MOV     EAX,1
+        RET
+@@zq:   POP     EBX
+@@5:    XOR     EAX,EAX
+@@7:
+end;
+
+function G_CompareText(const S1, S2: AnsiString): Integer;
 asm
         CMP     EAX,EDX
         JE      @@ex
@@ -1271,7 +1351,7 @@ asm
 @@7:
 end;
 
-function G_CompareText(P1, P2: PChar): Integer;
+function G_CompareText(P1, P2: PAnsiChar): Integer;
 asm
         CMP     EAX,EDX
         JE      @@ex
@@ -1322,7 +1402,7 @@ asm
 @@7:
 end;
 
-function G_CompareTextL(const S1, S2: string; maxL: Cardinal): Integer;
+function G_CompareTextL(const S1, S2: AnsiString; maxL: Cardinal): Integer;
 asm
         CMP     EAX,EDX
         JE      @@5
@@ -1381,7 +1461,66 @@ asm
 @@7:
 end;
 
-function G_SameStr(const S1, S2: string): Boolean;
+function G_CompareTextL(P1, P2: PAnsiChar; maxL: Cardinal): Integer;
+asm
+        CMP     EAX,EDX
+        JE      @@5
+        TEST    ECX,ECX
+        JE      @@5
+        TEST    EAX,EAX
+        JE      @@2
+        TEST    EDX,EDX
+        JE      @@3
+        PUSH    ESI
+        PUSH    EDI
+        MOV     ESI,[EAX-4]
+        MOV     EDI,[EDX-4]
+        SUB     ESI,EDI
+        JG      @@w1
+        ADD     EDI,ESI
+@@w1:   CMP     ECX,EDI
+        JA      @@fc
+@@dn:   MOV     ESI,EAX
+        MOV     EDI,EDX
+@@lp:   DEC     ECX
+        JS      @@zq
+        MOVZX   EAX,BYTE PTR [ESI]
+        MOVZX   EDX,BYTE PTR [EDI]
+        INC     ESI
+        INC     EDI
+        CMP     AL,DL
+        JE      @@lp
+        MOV     AL,BYTE PTR [EAX+ToUpperChars]
+        MOV     DL,BYTE PTR [EDX+ToUpperChars]
+        CMP     AL,DL
+        JE      @@lp
+@@ne:   MOVZX   EAX,AL
+        MOVZX   EDX,DL
+        SUB     EAX,EDX
+        POP     EDI
+        POP     ESI
+        RET
+@@fc:   LEA     ECX,[EDI+1]
+        JMP     @@dn
+@@2:    TEST    EDX,EDX
+        JE      @@7
+        MOV     CH,BYTE PTR [EDX]
+        TEST    CH,CH
+        JE      @@7
+        NOT     EAX
+        RET
+@@3:    MOV     CL,BYTE PTR [EAX]
+        TEST    CL,CL
+        JE      @@5
+        MOV     EAX,1
+        RET
+@@zq:   POP     EDI
+        POP     ESI
+@@5:    XOR     EAX,EAX
+@@7:
+end;
+
+function G_SameStr(const S1, S2: AnsiString): Boolean;
 asm
         CMP     EAX,EDX
         JE      @@08
@@ -1497,7 +1636,7 @@ asm
 @@07:   XOR     EAX,EAX
 end;
 
-function G_SameStrL(const S1, S2: string; maxL: Cardinal): Boolean;
+function G_SameStrL(const S1, S2: AnsiString; maxL: Cardinal): Boolean;
 asm
         CMP     EAX,EDX
         JE      @@08
@@ -1545,7 +1684,7 @@ asm
 @@09:
 end;
 
-function G_SameText(const S1, S2: string): Boolean;
+function G_SameText(const S1, S2: AnsiString): Boolean;
 asm
         CMP     EAX,EDX
         JE      @@08
@@ -1619,7 +1758,7 @@ asm
 @@08:   MOV     EAX,1
 end;
 
-function G_SameTextL(const S1, S2: string; maxL: Cardinal): Boolean;
+function G_SameTextL(const S1, S2: AnsiString; maxL: Cardinal): Boolean;
 asm
         CMP     EAX,EDX
         JE      @@08
@@ -1664,19 +1803,19 @@ end;
 
 { Функции для изменения регистра символов }
 
-function G_CharToUpper(C: Char): Char;
+function G_CharToUpper(C: AnsiChar): AnsiChar;
 asm
         MOVZX   EDX,AL
         MOV     AL,BYTE PTR [EDX+ToUpperChars]
 end;
 
-function G_CharToLower(C: Char): Char;
+function G_CharToLower(C: AnsiChar): AnsiChar;
 asm
         MOVZX   EDX,AL
         MOV     AL,BYTE PTR [EDX+ToLowerChars]
 end;
 
-procedure G_StrToUpper(var S: string);
+procedure G_StrToUpper(var S: AnsiString);
 asm
         CALL    UniqueString
         TEST    EAX,EAX
@@ -1692,7 +1831,7 @@ asm
 @@2:
 end;
 
-function G_StrToUpper(P: PChar): PChar;
+function G_StrToUpper(P: PAnsiChar): PAnsiChar;
 asm
         TEST    EAX,EAX
         JE      @@2
@@ -1708,7 +1847,7 @@ asm
 @@2:
 end;
 
-procedure G_StrToLower(var S: string);
+procedure G_StrToLower(var S: AnsiString);
 asm
         CALL    UniqueString
         TEST    EAX,EAX
@@ -1724,7 +1863,7 @@ asm
 @@2:
 end;
 
-function G_StrToLower(P: PChar): PChar;
+function G_StrToLower(P: PAnsiChar): PAnsiChar;
 asm
         TEST    EAX,EAX
         JE      @@2
@@ -1740,7 +1879,7 @@ asm
 @@2:
 end;
 
-function G_StrToUpperL(P: PChar; L: Cardinal): PChar;
+function G_StrToUpperL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     EDX
         JS      @@2
@@ -1754,7 +1893,7 @@ asm
 @@2:
 end;
 
-function G_StrToLowerL(P: PChar; L: Cardinal): PChar;
+function G_StrToLowerL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     EDX
         JS      @@2
@@ -1768,7 +1907,7 @@ asm
 @@2:
 end;
 
-function G_StrToUpperMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToUpperMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     ECX
         JS      @@2
@@ -1782,7 +1921,7 @@ asm
 @@2:    MOV     EAX,EDX
 end;
 
-function G_StrToLowerMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToLowerMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     ECX
         JS      @@2
@@ -1796,7 +1935,7 @@ asm
 @@2:    MOV     EAX,EDX
 end;
 
-function G_ToUpper(const S: string): string;
+function G_ToUpper(const S: AnsiString): AnsiString;
 var
   L: Integer;
 begin
@@ -1805,7 +1944,7 @@ begin
   G_StrToUpperMoveL(Pointer(S), Pointer(Result), L);
 end;
 
-function G_ToLower(const S: string): string;
+function G_ToLower(const S: AnsiString): AnsiString;
 var
   L: Integer;
 begin
@@ -1816,7 +1955,7 @@ end;
 
 { Перекодировка строк из DOS в Windows и обратно }
 
-procedure G_StrToAnsi(var S: string);
+procedure G_StrToAnsi(var S: AnsiString);
 asm
         CALL    UniqueString
         TEST    EAX,EAX
@@ -1832,7 +1971,7 @@ asm
 @@2:
 end;
 
-function G_StrToAnsi(P: PChar): PChar;
+function G_StrToAnsi(P: PAnsiChar): PAnsiChar;
 asm
         TEST    EAX,EAX
         JE      @@2
@@ -1848,7 +1987,7 @@ asm
 @@2:
 end;
 
-procedure G_StrToOem(var S: string);
+procedure G_StrToOem(var S: AnsiString);
 asm
         CALL    UniqueString
         TEST    EAX,EAX
@@ -1864,7 +2003,7 @@ asm
 @@2:
 end;
 
-function G_StrToOem(P: PChar): PChar;
+function G_StrToOem(P: PAnsiChar): PAnsiChar;
 asm
         TEST    EAX,EAX
         JE      @@2
@@ -1880,7 +2019,7 @@ asm
 @@2:
 end;
 
-function G_StrToAnsiL(P: PChar; L: Cardinal): PChar;
+function G_StrToAnsiL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     EDX
         JS      @@2
@@ -1894,7 +2033,7 @@ asm
 @@2:
 end;
 
-function G_StrToOemL(P: PChar; L: Cardinal): PChar;
+function G_StrToOemL(P: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     EDX
         JS      @@2
@@ -1908,7 +2047,7 @@ asm
 @@2:
 end;
 
-function G_StrToAnsiMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToAnsiMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     ECX
         JS      @@2
@@ -1922,7 +2061,7 @@ asm
 @@2:    MOV     EAX,EDX
 end;
 
-function G_StrToOemMoveL(Source, Dest: PChar; L: Cardinal): PChar;
+function G_StrToOemMoveL(Source, Dest: PAnsiChar; L: Cardinal): PAnsiChar;
 asm
         DEC     ECX
         JS      @@2
@@ -1936,7 +2075,7 @@ asm
 @@2:    MOV     EAX,EDX
 end;
 
-function G_ToAnsi(const OemStr: string): string;
+function G_ToAnsi(const OemStr: AnsiString): AnsiString;
 var
   L: Integer;
 begin
@@ -1945,7 +2084,7 @@ begin
   G_StrToAnsiMoveL(Pointer(OemStr), Pointer(Result), L);
 end;
 
-function G_ToOem(const AnsiStr: string): string;
+function G_ToOem(const AnsiStr: AnsiString): AnsiString;
 var
   L: Integer;
 begin
@@ -1956,7 +2095,7 @@ end;
 
 { Поиск, замена и удаление подстрок и отдельных символов }
 
-function G_PosStr(const FindStr, SourceStr: string; StartPos: Integer): Integer;
+function G_PosStr(const FindStr, SourceStr: AnsiString; StartPos: Integer): Integer;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -2040,7 +2179,7 @@ asm
         POP     ESI
 end;
 
-function G_PosText(const FindStr, SourceStr: string; StartPos: Integer): Integer;
+function G_PosText(const FindStr, SourceStr: AnsiString; StartPos: Integer): Integer;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -2120,7 +2259,7 @@ asm
         POP     ESI
 end;
 
-function G_LastPosStr(const FindStr, SourceStr: string; NextPos: Integer): Integer;
+function G_LastPosStr(const FindStr, SourceStr: AnsiString; NextPos: Integer): Integer;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -2197,7 +2336,7 @@ asm
         POP     ESI
 end;
 
-function G_LastPosText(const FindStr, SourceStr: string; NextPos: Integer): Integer;
+function G_LastPosText(const FindStr, SourceStr: AnsiString; NextPos: Integer): Integer;
 asm
         PUSH    ESI
         PUSH    EDI
@@ -2271,7 +2410,7 @@ asm
         POP     ESI
 end;
 
-function G_CharPos(C: Char; const S: string; StartPos: Integer): Integer;
+function G_CharPos(C: AnsiChar; const S: AnsiString; StartPos: Integer): Integer;
 asm
         TEST    EDX,EDX
         JE      @@qt
@@ -2294,7 +2433,7 @@ asm
 @@qt:   XOR     EAX,EAX
 end;
 
-function G_CharPos(C: Char; P: Pointer; StartPos: Integer): Integer;
+function G_CharPos(C: AnsiChar; P: Pointer; StartPos: Integer): Integer;
 asm
         TEST    EDX,EDX
         JE      @@qt
@@ -2317,7 +2456,7 @@ asm
 @@qt:   XOR     EAX,EAX
 end;
 
-function G_LastCharPos(C: Char; const S: string; NextPos: Integer): Integer;
+function G_LastCharPos(C: AnsiChar; const S: AnsiString; NextPos: Integer): Integer;
 asm
         TEST    EDX,EDX
         JE      @@qt
@@ -2351,7 +2490,7 @@ asm
 @@qt:   XOR     EAX,EAX
 end;
 
-function G_LastCharPos(C: Char; P: Pointer; NextPos: Integer): Integer;
+function G_LastCharPos(C: AnsiChar; P: Pointer; NextPos: Integer): Integer;
 asm
         TEST    EDX,EDX
         JE      @@qt
@@ -2385,11 +2524,11 @@ asm
 @@qt:   XOR     EAX,EAX
 end;
 
-procedure G_Paste(var Dest: string; Pos, Count: Integer; const Source: string);
+procedure G_Paste(var Dest: AnsiString; Pos, Count: Integer; const Source: AnsiString);
 var
   L1, L2: Integer;
   P, P1: PByte;
-  Temp: string;
+  Temp: AnsiString;
 begin
   L1 := Length(Dest);
   Dec(Pos);
@@ -2443,9 +2582,9 @@ begin
   end;
 end;
 
-function G_ReplaceStr(const SourceStr, FindStr, ReplacementStr: string): string;
+function G_ReplaceStr(const SourceStr, FindStr, ReplacementStr: AnsiString): AnsiString;
 var
-  P, PS: PChar;
+  P, PS: PAnsiChar;
   L, L1, L2, Count: Integer;
   I, J, K, M: Integer;
 begin
@@ -2503,9 +2642,9 @@ begin
     Result := SourceStr;
 end;
 
-function G_ReplaceText(const SourceStr, FindStr, ReplacementStr: string): string;
+function G_ReplaceText(const SourceStr, FindStr, ReplacementStr: AnsiString): AnsiString;
 var
-  P, PS: PChar;
+  P, PS: PAnsiChar;
   L, L1, L2, Count: Integer;
   I, J, K, M: Integer;
 begin
@@ -2563,7 +2702,7 @@ begin
     Result := SourceStr;
 end;
 
-function G_ReplaceChar(var S: string; OldChar, NewChar: Char): Integer;
+function G_ReplaceChar(var S: AnsiString; OldChar, NewChar: AnsiChar): Integer;
 asm
         PUSH    EBX
         PUSH    ESI
@@ -2623,11 +2762,11 @@ asm
         JNE     @@lp
 end;
 
-procedure G_ReplaceChars(var S: string; const OldCharStr, NewCharStr: string);
+procedure G_ReplaceChars(var S: AnsiString; const OldCharStr, NewCharStr: AnsiString);
 var
-  Map: array[#0..#255] of Char;
+  Map: array[#0..#255] of AnsiChar;
   I, J: Integer;
-  P: PChar;
+  P: PAnsiChar;
 begin
   J := Length(OldCharStr);
   Int256Chars(@Map);
@@ -2647,7 +2786,7 @@ begin
   end;
 end;
 
-procedure G_ReplaceCharsWithOneChar(var S: string; const OldCharSet: TSysCharSet; NewChar: Char);
+procedure G_ReplaceCharsWithOneChar(var S: AnsiString; const OldCharSet: TSysCharSet; NewChar: AnsiChar);
 asm
         PUSH    EBX
         PUSH    ESI
@@ -2692,7 +2831,7 @@ asm
         JMP     @@nx2
 end;
 
-procedure G_Delete(var S: string; Index, Count: Integer);
+procedure G_Delete(var S: AnsiString; Index, Count: Integer);
 asm
         PUSH    EBX
         PUSH    ESI
@@ -2771,7 +2910,7 @@ asm
         POP     EBX
 end;
 
-procedure G_CutLeft(var S: string; CharCount: Integer);
+procedure G_CutLeft(var S: AnsiString; CharCount: Integer);
 var
   L: Integer;
   P: ^Integer;
@@ -2800,7 +2939,7 @@ begin
     G_CutRight(S, -CharCount);
 end;
 
-procedure G_CutRight(var S: string; CharCount: Integer);
+procedure G_CutRight(var S: AnsiString; CharCount: Integer);
 var
   L: Integer;
   P: PInteger;
@@ -2823,7 +2962,7 @@ begin
     G_CutLeft(S, -CharCount);
 end;
 
-function G_DeleteStr(var S: string; const SubStrToDel: string): Integer;
+function G_DeleteStr(var S: AnsiString; const SubStrToDel: AnsiString): Integer;
 var
   I, L1: Integer;
 begin
@@ -2838,7 +2977,7 @@ begin
   end;
 end;
 
-function G_DeleteText(var S: string; const SubStrToDel: string): Integer;
+function G_DeleteText(var S: AnsiString; const SubStrToDel: AnsiString): Integer;
 var
   I, L1: Integer;
 begin
@@ -2853,7 +2992,7 @@ begin
   end;
 end;
 
-procedure G_DeleteChar(var S: string; C: Char);
+procedure G_DeleteChar(var S: AnsiString; C: AnsiChar);
 asm
         PUSH    EBX
         PUSH    ESI
@@ -2904,7 +3043,7 @@ asm
         POP     EBX
 end;
 
-procedure G_DeleteChars(var S: string; const CharsToRemove: TSysCharSet);
+procedure G_DeleteChars(var S: AnsiString; const CharsToRemove: TSysCharSet);
 asm
         PUSH    ESI
         PUSH    EDI
@@ -2955,7 +3094,7 @@ asm
         JMP     @@nx2
 end;
 
-procedure G_KeepChars(var S: string; const CharsToKeep: TSysCharSet);
+procedure G_KeepChars(var S: AnsiString; const CharsToKeep: TSysCharSet);
 asm
         PUSH    ESI
         PUSH    EDI
@@ -3006,7 +3145,7 @@ asm
         JMP     @@nx2
 end;
 
-procedure G_Compact(var S: string);
+procedure G_Compact(var S: AnsiString);
 asm
         PUSH    EBX
         PUSH    EAX
@@ -3058,7 +3197,7 @@ asm
         POP     EBX
 end;
 
-procedure G_Trim(var S: string);
+procedure G_Trim(var S: AnsiString);
 asm
         PUSH    EBX
         PUSH    EAX
@@ -3127,7 +3266,7 @@ asm
         POP     EBX
 end;
 
-procedure G_TrimLeft(var S: string);
+procedure G_TrimLeft(var S: AnsiString);
 asm
         PUSH    EBX
         PUSH    EAX
@@ -3186,7 +3325,7 @@ asm
         POP     EBX
 end;
 
-procedure G_TrimRight(var S: string);
+procedure G_TrimRight(var S: AnsiString);
 asm
         PUSH    EAX
         CALL    UniqueString
@@ -3211,7 +3350,7 @@ end;
 
 { Функции для работы с маской }
 
-function G_ApplyMask(const Mask, SourceStr: string; MaskChar: Char): string;
+function G_ApplyMask(const Mask, SourceStr: AnsiString; MaskChar: AnsiChar): AnsiString;
 asm
         PUSH    EBX
         PUSH    ESI
@@ -3254,7 +3393,7 @@ asm
         POP     EBX
 end;
 
-function G_ExtractWithMask(const S, Mask: string; MaskChar: Char): string;
+function G_ExtractWithMask(const S, Mask: AnsiString; MaskChar: AnsiChar): AnsiString;
 asm
         PUSH    EBX
         PUSH    ESI
@@ -3324,7 +3463,7 @@ asm
         POP     EBX
 end;
 
-function G_ValidateMask(const S, Mask: string; MaskChar: Char): Boolean;
+function G_ValidateMask(const S, Mask: AnsiString; MaskChar: AnsiChar): Boolean;
 asm
         TEST    EAX,EAX
         JE      @@qt2
@@ -3373,13 +3512,13 @@ asm
         POP     EBX
 end;
 
-function G_ValidateWildStr(const S, Mask: string; MaskChar, WildCard: Char): Boolean;
+function G_ValidateWildStr(const S, Mask: AnsiString; MaskChar, WildCard: AnsiChar): Boolean;
 label
   99;
 var
   L, X, X0, Q: Integer;
-  P, P1, B: PChar;
-  C: Char;
+  P, P1, B: PAnsiChar;
+  C: AnsiChar;
 begin
   X := G_CharPos(WildCard, Mask);
   if X = 0 then
@@ -3450,13 +3589,13 @@ begin
   end;
 end;
 
-function G_ValidateWildText(const S, Mask: string; MaskChar, WildCard: Char): Boolean;
+function G_ValidateWildText(const S, Mask: AnsiString; MaskChar, WildCard: AnsiChar): Boolean;
 label
   99;
 var
   L, X, X0, Q: Integer;
-  P, P1, B: PChar;
-  C: Char;
+  P, P1, B: PAnsiChar;
+  C: AnsiChar;
 begin
   X := G_CharPos(WildCard, Mask);
   Result := False;
@@ -3547,7 +3686,7 @@ end;
 
 { Другие функции для работы со строками }
 
-function G_CountOfChar(const S: string; C: Char): Integer;
+function G_CountOfChar(const S: AnsiString; C: AnsiChar): Integer;
 asm
         TEST    EAX,EAX
         JE      @@qt
@@ -3572,7 +3711,7 @@ asm
 @@qt:
 end;
 
-function G_CountOfChars(const S: string; const CharSet: TSysCharSet): Integer;
+function G_CountOfChars(const S: AnsiString; const CharSet: TSysCharSet): Integer;
 asm
         TEST    EAX,EAX
         JE      @@qt
@@ -3601,7 +3740,7 @@ asm
 @@qt:
 end;
 
-function G_IsEmpty(const S: string): Boolean;
+function G_IsEmpty(const S: AnsiString): Boolean;
 asm
         TEST    EAX,EAX
         JE      @@qt1
@@ -3618,7 +3757,7 @@ asm
 @@qt0:  XOR     EAX,EAX
 end;
 
-function G_PadLeft(const S: string; Length: Integer; PaddingChar: Char): string;
+function G_PadLeft(const S: AnsiString; Length: Integer; PaddingChar: AnsiChar): AnsiString;
 var
   K, L: Integer;
   P: ^Byte;
@@ -3639,7 +3778,7 @@ begin
     Result := S;
 end;
 
-function G_PadRight(const S: string; Length: Integer; PaddingChar: Char): string;
+function G_PadRight(const S: AnsiString; Length: Integer; PaddingChar: AnsiChar): AnsiString;
 var
   K, L: Integer;
   P: ^Byte;
@@ -3660,7 +3799,7 @@ begin
     Result := S;
 end;
 
-function G_Center(const S: string; Length: Integer; PaddingChar: Char): string;
+function G_Center(const S: AnsiString; Length: Integer; PaddingChar: AnsiChar): AnsiString;
 var
   K, L: Integer;
   P: ^Byte;
@@ -3683,10 +3822,10 @@ begin
     Result := S;
 end;
 
-function G_Duplicate(const S: string; Count: Integer): string;
+function G_Duplicate(const S: AnsiString; Count: Integer): AnsiString;
 var
   I, L: Integer;
-  P, P1: PChar;
+  P, P1: PAnsiChar;
 begin
   L := Length(S);
   if (L > 0) and (Count > 0) then
@@ -3703,7 +3842,7 @@ begin
     Result := '';
 end;
 
-procedure G_StrMoveL(const Source: string; var Dest: string; maxL: Cardinal);
+procedure G_StrMoveL(const Source: AnsiString; var Dest: AnsiString; maxL: Cardinal);
 asm
         MOV     EDX,[EDX]
         TEST    EAX,EAX
@@ -3799,7 +3938,7 @@ asm
         POP     ESI
 end;
 
-procedure G_StrReverse(var S: string);
+procedure G_StrReverse(var S: AnsiString);
 asm
         CALL    UniqueString
         TEST    EAX,EAX
@@ -3838,7 +3977,7 @@ asm
 @@qt1:
 end;
 
-function G_PCharLen(P: PChar): Integer;
+function G_PCharLen(P: PAnsiChar): Integer;
 asm
         TEST    EAX,EAX
         JE      @@qt
@@ -3872,11 +4011,11 @@ end;
 constructor TStringBuilder.Create(Capacity: Integer);
 begin
   FCapacity := G_NormalizeCapacity(Capacity);
-  if Capacity > 0 then
+  if FCapacity > 0 then
     GetMem(FChars, FCapacity);
 end;
 
-constructor TStringBuilder.Create(const S: string);
+constructor TStringBuilder.Create(const S: AnsiString);
 begin
   FLength := System.Length(S);
   if FLength > 0 then
@@ -3891,7 +4030,7 @@ begin
   end;
 end;
 
-constructor TStringBuilder.Create(const S: string; StartIndex, Count: Integer);
+constructor TStringBuilder.Create(const S: AnsiString; StartIndex, Count: Integer);
 var
   L: Integer;
   P: Pointer;
@@ -3972,7 +4111,7 @@ begin
     SetCapacity(G_NormalizeCapacity(Capacity));
 end;
 
-procedure TStringBuilder.Fill(C: Char; Index, Count: Integer);
+procedure TStringBuilder.Fill(C: AnsiChar; Index, Count: Integer);
 var
   L: Integer;
 begin
@@ -4029,7 +4168,7 @@ begin
     Inc(P);
   end;
   repeat
-    P^ := Char(G_ModDiv10(LongWord(N)) + 48);
+    P^ := AnsiChar(G_ModDiv10(LongWord(N)) + 48);
     Inc(P);
   until N = 0;
   FLength := NewL;
@@ -4074,7 +4213,7 @@ begin
   if not Hexadecimal then
     while N <> 0 do
     begin
-      P^ := Char(G_ModDiv10(N) + 48);
+      P^ := AnsiChar(G_ModDiv10(N) + 48);
       Inc(P);
     end
   else
@@ -4082,9 +4221,9 @@ begin
     begin
       M := N and $F;
       if M < 10 then
-        P^ := Char(M + 48)
+        P^ := AnsiChar(M + 48)
       else
-        P^ := Char(M + 55);
+        P^ := AnsiChar(M + 55);
       N := N shr 4;
       Inc(P);
     end;
@@ -4146,7 +4285,7 @@ begin
     Inc(P);
   end;
   repeat
-    P^ := Char(N mod 10 + 48);
+    P^ := AnsiChar(N mod 10 + 48);
     N := N div 10;
     Inc(P);
   until N = 0;
@@ -4156,7 +4295,7 @@ begin
   Result := Self;
 end;
 
-function TStringBuilder.Append(C: Char): TStringBuilder;
+function TStringBuilder.Append(C: AnsiChar): TStringBuilder;
 begin
   if FLength = FCapacity then
     SetCapacity(G_EnlargeCapacity(FCapacity));
@@ -4165,7 +4304,7 @@ begin
   Result := Self;
 end;
 
-function TStringBuilder.Append(C: Char; Count: Integer): TStringBuilder;
+function TStringBuilder.Append(C: AnsiChar; Count: Integer): TStringBuilder;
 var
   NewL, NewC: Integer;
 begin
@@ -4185,7 +4324,7 @@ begin
   Result := Self;
 end;
 
-function TStringBuilder.Append(const S: string): TStringBuilder;
+function TStringBuilder.Append(const S: AnsiString): TStringBuilder;
 var
   L, NewL, NewC: Integer;
 begin
@@ -4206,7 +4345,7 @@ begin
   Result := Self;
 end;
 
-function TStringBuilder.Append(const S: string; Count: Integer): TStringBuilder;
+function TStringBuilder.Append(const S: AnsiString; Count: Integer): TStringBuilder;
 var
   L, SumL, NewL, NewC: Integer;
   X: Pointer;
@@ -4234,7 +4373,7 @@ begin
   Result := Self;
 end;
 
-function TStringBuilder.Append(const S: string; StartIndex, Count: Integer): TStringBuilder;
+function TStringBuilder.Append(const S: AnsiString; StartIndex, Count: Integer): TStringBuilder;
 var
   L, NewL, NewC: Integer;
   P: Pointer;
@@ -4286,12 +4425,12 @@ begin
   Result := Append(#13).Append(#10);
 end;
 
-function TStringBuilder.AppendLine(const S: string): TStringBuilder;
+function TStringBuilder.AppendLine(const S: AnsiString): TStringBuilder;
 begin
   Result := Append(S).Append(#13).Append(#10);
 end;
 
-procedure TStringBuilder.Insert(Index: Integer; C: Char);
+procedure TStringBuilder.Insert(Index: Integer; C: AnsiChar);
 begin
   Dec(Index);
   if Index > FLength then
@@ -4307,7 +4446,7 @@ begin
   end;
 end;
 
-procedure TStringBuilder.Insert(Index: Integer; C: Char; Count: Integer);
+procedure TStringBuilder.Insert(Index: Integer; C: AnsiChar; Count: Integer);
 var
   NewL, NewC: Integer;
 begin
@@ -4331,7 +4470,7 @@ begin
   end;
 end;
 
-procedure TStringBuilder.Insert(Index: Integer; const S: string);
+procedure TStringBuilder.Insert(Index: Integer; const S: AnsiString);
 var
   L, NewL, NewC: Integer;
 begin
@@ -4356,7 +4495,7 @@ begin
   end;
 end;
 
-procedure TStringBuilder.Insert(Index: Integer; const S: string; Count: Integer);
+procedure TStringBuilder.Insert(Index: Integer; const S: AnsiString; Count: Integer);
 var
   L, SumL, NewL, NewC: Integer;
   X: Pointer;
@@ -4388,7 +4527,7 @@ begin
   end;
 end;
 
-procedure TStringBuilder.Insert(Index: Integer; const S: string; StartIndex,
+procedure TStringBuilder.Insert(Index: Integer; const S: AnsiString; StartIndex,
   Count: Integer);
 var
   L, NewL, NewC: Integer;
@@ -4487,7 +4626,7 @@ begin
   FLength := 0;
 end;
 
-function TStringBuilder.ToString: string;
+function TStringBuilder.ToString: AnsiString;
 begin
   if FLength > 0 then
     SetString(Result, PAnsiChar(FChars), FLength)
@@ -4495,7 +4634,7 @@ begin
     Result := '';
 end;
 
-function TStringBuilder.ToString(Index, Count: Integer): string;
+function TStringBuilder.ToString(Index, Count: Integer): AnsiString;
 var
   L: Integer;
 begin
@@ -4530,9 +4669,16 @@ begin
   Result := TStringBuilder.Create(FChars, FLength);
 end;
 
+procedure TStringBuilder.CopyFrom(ASource: TStringBuilder);
+begin
+  Clear;
+  Append(ASource.FChars, ASource.FLength)
+end;
+
+{$IFNDEF UNICODE}
 {$IFDEF USE_ACED_MEMORY}
 
-function G_CreateString(Capacity, Length: Integer): string;
+function G_CreateString(Capacity, Length: Integer): AnsiString;
 asm
           ADD     EAX,9
           PUSH    ECX
@@ -4562,7 +4708,7 @@ LOCK      DEC     [EAX]
 @@qt:
 end;
 
-function G_NewStr(const S: string): string;
+function G_NewStr(const S: AnsiString): AnsiString;
 var
   L: Integer;
   X: Pointer;
@@ -4578,7 +4724,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(Capacity: Integer): string;
+function G_NewStr(Capacity: Integer): AnsiString;
 var
   X: Pointer;
 begin
@@ -4591,7 +4737,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S: string; Capacity: Integer): string;
+function G_NewStr(const S: AnsiString; Capacity: Integer): AnsiString;
 var
   L: Integer;
   X: Pointer;
@@ -4610,7 +4756,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2: string): string;
+function G_NewStr(const S1, S2: AnsiString): AnsiString;
 var
   L1, L2, L: Integer;
   P, X: Pointer;
@@ -4635,7 +4781,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2: string; Capacity: Integer): string;
+function G_NewStr(const S1, S2: AnsiString; Capacity: Integer): AnsiString;
 var
   L1, L2, L: Integer;
   P, X: Pointer;
@@ -4662,7 +4808,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2, S3: string): string;
+function G_NewStr(const S1, S2, S3: AnsiString): AnsiString;
 var
   L1, L2, L3, L: Integer;
   P, X: Pointer;
@@ -4693,7 +4839,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2, S3: string; Capacity: Integer): string;
+function G_NewStr(const S1, S2, S3: AnsiString; Capacity: Integer): AnsiString;
 var
   L1, L2, L3, L: Integer;
   P, X: Pointer;
@@ -4726,7 +4872,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2, S3, S4: string): string;
+function G_NewStr(const S1, S2, S3, S4: AnsiString): AnsiString;
 var
   L1, L2, L3, L4, L: Integer;
   P, X: Pointer;
@@ -4763,7 +4909,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2, S3, S4: string; Capacity: Integer): string;
+function G_NewStr(const S1, S2, S3, S4: AnsiString; Capacity: Integer): AnsiString;
 var
   L1, L2, L3, L4, L: Integer;
   P, X: Pointer;
@@ -4802,7 +4948,7 @@ begin
     Result := '';
 end;
 
-function G_NewStr(const S1, S2: string; Index2, Count2: Integer): string;
+function G_NewStr(const S1, S2: AnsiString; Index2, Count2: Integer): AnsiString;
 var
   L1, L2, L: Integer;
   P, P2, X: Pointer;
@@ -4841,11 +4987,11 @@ begin
     Result := '';
 end;
 
-procedure G_Append(var S: string; const S1: string);
+procedure G_Append(var S: AnsiString; const S1: AnsiString);
 var
   LS, L1, L, C: Integer;
   P: Pointer;
-  R: string;
+  R: AnsiString;
 begin
   L1 := Length(S1);
   if L1 > 0 then
@@ -4891,11 +5037,11 @@ begin
   end;
 end;
 
-procedure G_Append(var S: string; const S1, S2: string);
+procedure G_Append(var S: AnsiString; const S1, S2: AnsiString);
 var
   LS, L1, L2, L, C: Integer;
   P: Pointer;
-  R: string;
+  R: AnsiString;
 begin
   L1 := Length(S1);
   L2 := Length(S2);
@@ -4958,11 +5104,11 @@ begin
   end;
 end;
 
-procedure G_Append(var S: string; const S1, S2, S3: string);
+procedure G_Append(var S: AnsiString; const S1, S2, S3: AnsiString);
 var
   LS, L1, L2, L3, L, C: Integer;
   P: Pointer;
-  R: string;
+  R: AnsiString;
 begin
   L1 := Length(S1);
   L2 := Length(S2);
@@ -5036,11 +5182,11 @@ begin
   end;
 end;
 
-procedure G_Append(var S: string; C: Char);
+procedure G_Append(var S: AnsiString; C: AnsiChar);
 var
   LS, L: Integer;
   P: Pointer;
-  R: string;
+  R: AnsiString;
 begin
   P := Pointer(S);
   if P = nil then
@@ -5081,11 +5227,11 @@ begin
   end;
 end;
 
-procedure G_Append(var S: string; const S1: string; Index1, Count1: Integer);
+procedure G_Append(var S: AnsiString; const S1: AnsiString; Index1, Count1: Integer);
 var
   LS, L1, L, C: Integer;
   P, P1: Pointer;
-  R: string;
+  R: AnsiString;
 begin
   if (Index1 > 0) and (Count1 > 0) then
   begin
@@ -5154,21 +5300,21 @@ begin
   end;
 end;
 
-procedure G_AppendLine(var S: string);
+procedure G_AppendLine(var S: AnsiString);
 begin
   G_Append(S, #13#10);
 end;
 
-procedure G_AppendLine(var S: string; const S1: string);
+procedure G_AppendLine(var S: AnsiString; const S1: AnsiString);
 begin
   G_Append(S, S1, #13#10);
 end;
 
-procedure G_Insert(const S1: string; var S: string; Index, Index1, Count1: Integer);
+procedure G_Insert(const S1: AnsiString; var S: AnsiString; Index, Index1, Count1: Integer);
 var
   LS, L1, L, C: Integer;
   P, P1, PS: Pointer;
-  R: string;
+  R: AnsiString;
 begin
   Dec(Index);
   LS := Length(S);
@@ -5256,6 +5402,7 @@ begin
   end;
 end;
 
+{$ENDIF}
 {$ENDIF}
 
 {$IFDEF USE_DYNAMIC_TABLES}

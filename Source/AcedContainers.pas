@@ -96,7 +96,7 @@ type
     предполагается, что данные в реестре зашифрованы и перед чтением их
     необходимо расшифровать с ключом EncryptionKey. }
 
-    procedure Load(Registry: TRegistry; const ValueName: string;
+    procedure Load(Registry: TRegistry; const ValueName: AnsiString;
       EncryptionKey: PSHA256Digest = nil); overload;
 
   { Следующий метод Save сохраняет список в бинарном потоке Writer. }
@@ -110,7 +110,7 @@ type
     сохранением шифруются с ключом EncryptionKey. Параметр CompressionMode,
     если он отличен от dcmNoCompression, определяет режим сжатия данных. }
 
-    procedure Save(Registry: TRegistry; const ValueName: string;
+    procedure Save(Registry: TRegistry; const ValueName: AnsiString;
       EncryptionKey: PSHA256Digest = nil;
       CompressionMode: TCompressionMode = dcmNoCompression); overload;
 
@@ -118,20 +118,20 @@ type
     '0' и '1'. Например, вызов FromString('10110') создаст битовую строку
     из пяти элементов со значениями: True, False, True, True, False. }
 
-    procedure FromString(const S: string);
+    procedure FromString(const S: AnsiString);
 
   { Функция ToString возвращает список в виде строки, состоящей из символов
     '0' и '1'. Например, список из пяти элементов может быть представлен
     строкой: '10101'. }
 
-    function ToString: string;
+    function ToString: AnsiString;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Метод FromBase64 загружает список из строки S, которая представляет
     собой бинарный поток данных в кодировке Base64. Если данные, помещенные
     в бинарный поток, зашифрованы, необходимо передать ключ в параметре
     EncryptionKey. }
 
-    procedure FromBase64(const S: string; EncryptionKey: PSHA256Digest = nil);
+    procedure FromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest = nil);
 
   { Функция ToBase64 сохраняет список в бинарном потоке и преобразует его
     в строку в кодировке Base64. Полученная строка возвращается как результат
@@ -141,7 +141,7 @@ type
     сжатия данных. }
 
     function ToBase64(EncryptionKey: PSHA256Digest = nil;
-      CompressionMode: TCompressionMode = dcmNoCompression): string;
+      CompressionMode: TCompressionMode = dcmNoCompression): AnsiString;
 
   { Функция SetBit устанавливает в True (1) элемент битовой строки с индексом
     Index (индексация с нуля) и возвращает предыдущее значение этого элемента. }
@@ -229,7 +229,7 @@ type
     со списком BitList. Если списки содержат различное количество элементов
     или содержат несовпадающие элементы, функция возвращает False. }
 
-    function Equals(BitList: TBitList): Boolean;
+    function Equals(BitList: TBitList): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Функция Clone возвращает экземпляр класса TBitList, который является
     копией данного списка. }
@@ -249,6 +249,10 @@ type
     FSorted: Boolean;
     procedure SetCapacity(NewCapacity: Integer);
     procedure SetMaintainSorted(Value: Boolean);
+//------------------------
+    function Get(Index: Integer): Integer;
+    procedure Put(Index: Integer; Item: Integer);
+//------------------------
   public
 
   { Конструктор Create создает экземпляр класса TIntegerList и выделяет
@@ -322,7 +326,7 @@ type
     данные в реестре зашифрованы и перед чтением их необходимо расшифровать
     с помощью ключа EncryptionKey. }
 
-    procedure Load(Registry: TRegistry; const ValueName: string;
+    procedure Load(Registry: TRegistry; const ValueName: AnsiString;
       EncryptionKey: PSHA256Digest = nil); overload;
 
   { Следующий метод Save сохраняет список в бинарном потоке Writer. }
@@ -336,7 +340,7 @@ type
     сохранением шифруются с ключом EncryptionKey. Параметр CompressionMode,
     если он отличен от dcmNoCompression, определяет режим сжатия данных. }
 
-    procedure Save(Registry: TRegistry; const ValueName: string;
+    procedure Save(Registry: TRegistry; const ValueName: AnsiString;
       EncryptionKey: PSHA256Digest = nil;
       CompressionMode: TCompressionMode = dcmNoCompression); overload;
 
@@ -345,7 +349,7 @@ type
     бинарный поток, зашифрованы, необходимо передать ключ в параметре
     EncryptionKey. }
 
-    procedure FromBase64(const S: string; EncryptionKey: PSHA256Digest = nil);
+    procedure FromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest = nil);
 
   { Функция ToBase64 сохраняет список в бинарном потоке и преобразует его
     в строку в кодировке Base64. Полученная строка возвращается как результат
@@ -355,7 +359,7 @@ type
     сжатия данных. }
 
     function ToBase64(EncryptionKey: PSHA256Digest = nil;
-      CompressionMode: TCompressionMode = dcmNoCompression): string;
+      CompressionMode: TCompressionMode = dcmNoCompression): AnsiString;
 
   { Вызов метода EnsureCapacity гарантирует, что размер внутреннего массива,
     адресуемого свойством ItemList, будет достаточен для хранения Capacity
@@ -456,12 +460,16 @@ type
     со списком IntegerList. Если списки содержат различное количество элементов
     или содержат несовпадающие элементы, функция возвращает False. }
 
-    function Equals(IntegerList: TIntegerList): Boolean;
+    function Equals(IntegerList: TIntegerList): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Функция Clone возвращает экземпляр класса TIntegerList, который является
     копией данного списка. }
 
     function Clone: TIntegerList;
+
+//---------------------------------------------------
+    property Items[Index: Integer]: Integer read Get write Put; default;
+//---------------------------------------------------
   end;
 
   
@@ -549,7 +557,7 @@ type
     данные в реестре зашифрованы и перед чтением их необходимо расшифровать
     с помощью ключа EncryptionKey. }
 
-    procedure Load(Registry: TRegistry; const ValueName: string;
+    procedure Load(Registry: TRegistry; const ValueName: AnsiString;
       EncryptionKey: PSHA256Digest = nil); overload;
 
   { Следующий метод Save сохраняет список в бинарном потоке Writer. }
@@ -563,7 +571,7 @@ type
     сохранением шифруются с ключом EncryptionKey. Параметр CompressionMode,
     если он отличен от dcmNoCompression, определяет режим сжатия данных. }
 
-    procedure Save(Registry: TRegistry; const ValueName: string;
+    procedure Save(Registry: TRegistry; const ValueName: AnsiString;
       EncryptionKey: PSHA256Digest = nil;
       CompressionMode: TCompressionMode = dcmNoCompression); overload;
 
@@ -572,7 +580,7 @@ type
     бинарный поток, зашифрованы, необходимо передать ключ в параметре
     EncryptionKey. }
 
-    procedure FromBase64(const S: string; EncryptionKey: PSHA256Digest = nil);
+    procedure FromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest = nil);
 
   { Функция ToBase64 сохраняет список в бинарном потоке и преобразует его
     в строку в кодировке Base64. Полученная строка возвращается как результат
@@ -582,7 +590,7 @@ type
     сжатия данных. }
 
     function ToBase64(EncryptionKey: PSHA256Digest = nil;
-      CompressionMode: TCompressionMode = dcmNoCompression): string;
+      CompressionMode: TCompressionMode = dcmNoCompression): AnsiString;
 
   { Вызов метода EnsureCapacity гарантирует, что размер внутреннего массива,
     адресуемого свойством ItemList, будет достаточен для хранения Capacity
@@ -683,7 +691,7 @@ type
     со списком WordList. Если списки содержат различное количество элементов
     или содержат несовпадающие элементы, функция возвращает False. }
 
-    function Equals(WordList: TWordList): Boolean;
+    function Equals(WordList: TWordList): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Функция Clone возвращает экземпляр класса TWordList, который является
     копией данного списка. }
@@ -703,6 +711,8 @@ type
     FCount: Integer;
     FOwnItems: Boolean;
     procedure SetCapacity(NewCapacity: Integer);
+    function Get(Index: Integer): Pointer;
+    procedure Put(Index: Integer; Item: Pointer);
   public
 
   { Конструктор Create создает экземпляр класса TArrayList и выделяет память
@@ -870,6 +880,11 @@ type
 
     procedure RemoveAt(Index, Count: Integer); overload;
 
+
+  { **** }
+  
+    function Remove(P: Pointer):Integer;
+
   { Метод UnorderedRemoveAt удаляет из списка элемент, находящийся в позиции
     Index (индексация с нуля). Удаляемый элемент замещается последним элементом
     списка, после чего свойство Count уменьшается на 1. Метод выполняется
@@ -900,12 +915,14 @@ type
     не указана, сравниваются указатели на соответствующие элементы списков. }
 
     function Equals(ArrayList: TArrayList;
-      CompareFunction: TCompareFunction = nil): Boolean;
+      CompareFunction: TCompareFunction = nil): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Функция Clone возвращает экземпляр класса TArrayList, который является
     копией данного списка. Свойство OwnItems нового списка равно False. }
 
     function Clone: TArrayList;
+
+    property Items[Index: Integer]: Pointer read Get write Put; default;    
   end;
 
 
@@ -1000,9 +1017,9 @@ type
     не указана, сравниваются указатели на соответствующие элементы списков. }
 
     function Equals(ArrayList: TArrayReadOnlyList;
-      CompareFunction: TCompareFunction = nil): Boolean; overload;
+      CompareFunction: TCompareFunction = nil): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
     function Equals(ArrayList: TArrayList;
-      CompareFunction: TCompareFunction = nil): Boolean; overload;
+      CompareFunction: TCompareFunction = nil): Boolean;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
 
   { Функция Clone возвращает экземпляр класса TArrayList, который является
     копией данного списка. Свойство OwnItems нового списка равно False. }
@@ -1657,7 +1674,7 @@ type
 
 
 { Класс TStringAssociationList представляет собой ассоциативный список,
-  в котором с каждым ключом типа String связано значение типа Pointer или
+  в котором с каждым ключом типа AnsiString связано значение типа Pointer или
   TObject. Ключи хранятся в виде сортированного массива. }
 
   TStringAssociationList = class(TObject)
@@ -1669,16 +1686,16 @@ type
     FCaseSensitive: Boolean;
     FOwnValues: Boolean;
     procedure SetCapacity(NewCapacity: Integer);
-    function GetItem(const Key: string): Pointer;
-    function SearchFirstGE(const Key: string): Integer;
-    procedure SetItem(const Key: string; Value: Pointer);
+    function GetItem(const Key: AnsiString): Pointer;
+    function SearchFirstGE(const Key: AnsiString): Integer;
+    procedure SetItem(const Key: AnsiString; Value: Pointer);
   public
 
   { Конструктор Create создает экземпляр класса TStringAssociationList
     и выделяет память под InitialCapacity элементов во внутренних массивах
     ключей и ассоциированных с ними значений. Параметр CaseSensitive
     определяет, нужно ли учитывать регистр символов при сортировке и поиске
-    ключей типа String. Если этот параметр равен False, большие и маленькие
+    ключей типа AnsiString. Если этот параметр равен False, большие и маленькие
     буквы в значении ключей не различаются, если True, они различаются }
 
     constructor Create(CaseSensitive: Boolean; InitialCapacity: Integer = 0);
@@ -1706,7 +1723,7 @@ type
     если свойство OwnValues равно True, старое значение приводится к типу
     TObject и для него вызывается метод Free. }
 
-    property Items[const Key: string]: Pointer read GetItem write SetItem; default;
+    property Items[const Key: AnsiString]: Pointer read GetItem write SetItem; default;
 
   { Свойство Capacity считывает или изменяет количество элементов, под которое
     распределена память во внутренних массивах. Если при добавлении нового
@@ -1758,20 +1775,20 @@ type
     адресуемом свойством KeyList. Если элемент с таким ключом отсутствует
     в списке, функция возвращает -1. }
 
-    function IndexOf(const Key: string): Integer;
+    function IndexOf(const Key: AnsiString): Integer;
 
   { Метод Add добавляет в ассоциативный список ключ Key и соответствующее
     ему значение Value. Если в списке уже есть элемент с таким ключом,
     возникает исключение. }
 
-    procedure Add(const Key: string; Value: Pointer);
+    procedure Add(const Key: AnsiString; Value: Pointer);
 
   { Метод Remove удаляет из ассоциативного списка элемент с ключом Key,
     если такой элемент имеется. Если свойство OwnValues равно True, значение,
     ассоциированное с этим ключом, приводится к типу TObject и для него
     вызывается метод Free. }
 
-    procedure Remove(const Key: string);
+    procedure Remove(const Key: AnsiString);
 
   { Следующий метод RemoveAt удаляет пару ключ-значение, находящуюся в позиции
     Index внутренних массивов (индексация с нуля). Если свойство OwnValues
@@ -1801,11 +1818,13 @@ type
     в настоящий момент количеству элементов. }
 
     procedure TrimToSize;
+
+    function ToString: AnsiString;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
   end;
 
   
 { Класс TStringHashtable представляет собой ассоциативный массив, где с каждым
-  ключом типа String связано значение типа Pointer или TObject. Ключи являются
+  ключом типа AnsiString связано значение типа Pointer или TObject. Ключи являются
   уникальными и хранятся в виде хэшированного списка. }
 
   TStringHashtable = class(TObject)
@@ -1821,15 +1840,15 @@ type
     procedure SetMaxCount(NewMaxCount: Integer);
     function GetIndex(P: Pointer): Integer;
     procedure SetCapacity(NewCapacity: Integer);
-    function GetItem(const Key: string): Pointer;
-    procedure SetItem(const Key: string; Value: Pointer);
+    function GetItem(const Key: AnsiString): Pointer;
+    procedure SetItem(const Key: AnsiString; Value: Pointer);
   public
 
   { Конструктор Create создает экземпляр класса TStringHashtable и выделяет
     память, достаточную для хранения InitialCapacity элементов во внутренних
     массивах ключей и ассоциированных с ними значений. Параметр CaseSensitive
     определяет, нужно ли учитывать регистр символов при сортировке и поиске
-    ключей типа String. Если этот параметр равен False, большие и маленькие
+    ключей типа AnsiString. Если этот параметр равен False, большие и маленькие
     буквы в значении ключей не различаются, если True, они различаются. }
 
     constructor Create(CaseSensitive: Boolean; InitialCapacity: Integer = 0);
@@ -1855,7 +1874,7 @@ type
     если свойство OwnValues равно True, старое значение приводится к типу
     TObject и для него вызывается метод Free. }
 
-    property Items[const Key: string]: Pointer read GetItem write SetItem; default;
+    property Items[const Key: AnsiString]: Pointer read GetItem write SetItem; default;
 
   { Свойство Capacity считывает или изменяет количество элементов, под которое
     распределена память во внутренних массивах. Если при добавлении нового
@@ -1867,7 +1886,7 @@ type
 
   { Свойство CaseSensitive возвращает значение одноименного параметра,
     переданного в конструктор данного класса. Если это значение равно True,
-    сравнение ключей типа String выполняется с учетом регистра символов,
+    сравнение ключей типа AnsiString выполняется с учетом регистра символов,
     если False, регистр символов игнорируется в значении ключей. }
 
     property CaseSensitive: Boolean read FCaseSensitive;
@@ -1918,20 +1937,20 @@ type
     ему значение Value. Если в списке уже есть элемент с таким ключом,
     возникает исключение. }
 
-    procedure Add(const Key: string; Value: Pointer);
+    procedure Add(const Key: AnsiString; Value: Pointer);
 
   { Функция Contains возвращает True, если в хэшированном списке присутствует
     ключ со значением Key. Если ключ с таким значением отсутствует в списке,
     функция возвращает False. }
 
-    function Contains(const Key: string): Boolean;
+    function Contains(const Key: AnsiString): Boolean;
 
   { Метод Remove удаляет из ассоциативного списка элемент с ключом Key, если
     такой элемент имеется. Если свойство OwnValues равно True, значение,
     ассоциированное с этим ключом, приводится к типу TObject и для него
     вызывается метод Free. }
 
-    procedure Remove(const Key: string);
+    procedure Remove(const Key: AnsiString);
 
   { Метод Clear очищает массив InnerKeyList и устанавливает в ноль свойство
     Count. Память, занятая под внутренние массивы, не освобождается и значение
@@ -1946,7 +1965,7 @@ type
 
 
 { Класс TStringRedBlackTree представляет собой самобалансируемое (красно-
-  черное) бинарное дерево, в узлах которого находятся ключи типа String и
+  черное) бинарное дерево, в узлах которого находятся ключи типа AnsiString и
   значения типа Pointer или TObject. }
 
   TStringRedBlackTree = class;
@@ -1957,7 +1976,7 @@ type
 
   PStringRBTreeNode = ^TStringRBTreeNode;
   TStringRBTreeNode = record
-    Key: string;                     // Ключ для поиска и сравнения элементов
+    Key: AnsiString;                     // Ключ для поиска и сравнения элементов
     Parent: PStringRBTreeNode;       // Указатель на узел-предок
     Left: PStringRBTreeNode;         // Указатель на узел-потомок слева
     Right: PStringRBTreeNode;        // Указатель на узел-потомок справа
@@ -1976,17 +1995,17 @@ type
     procedure RotateRight(Node: PStringRBTreeNode);
     procedure InsertFixUp(Node: PStringRBTreeNode);
     procedure RemoveFixUp(Node: PStringRBTreeNode);
-    function GetItem(const Key: string): Pointer;
-    procedure SetItem(const Key: string; Value: Pointer);
+    function GetItem(const Key: AnsiString): Pointer;
+    procedure SetItem(const Key: AnsiString; Value: Pointer);
     function GetFirstNode: PStringRBTreeNode;
     function GetLastNode: PStringRBTreeNode;
     function InsertNode(Parent: PStringRBTreeNode;
-      const Key: string; Value: Pointer): PStringRBTreeNode;
+      const Key: AnsiString; Value: Pointer): PStringRBTreeNode;
   public
 
   { Конструктор Create создает экземпляр класса TStringRedBlackTree.
     Параметр CaseSensitive определяет, нужно ли учитывать регистр символов
-    при сравнении ключей типа String. Если этот параметр равен False,
+    при сравнении ключей типа AnsiString. Если этот параметр равен False,
     большие и маленькие буквы в значении ключей не различаются, иначе
     различаются. }
 
@@ -2009,7 +2028,7 @@ type
     новым значением. При этом, если свойство OwnValues равно True, старое
     значение приводится к типу TObject и для него вызывается метод Free. }
 
-    property Items[const Key: string]: Pointer read GetItem write SetItem; default;
+    property Items[const Key: AnsiString]: Pointer read GetItem write SetItem; default;
 
   { Свойство Root возвращает указатель на корень красно-черного дерева
     или nil, если дерево пустое. }
@@ -2028,7 +2047,7 @@ type
 
   { Свойство CaseSensitive возвращает значение одноименного параметра,
     переданного в конструктор данного класса. Если это значение равно True,
-    сравнение ключей типа String выполняется с учетом регистра символов,
+    сравнение ключей типа AnsiString выполняется с учетом регистра символов,
     если False, регистр символов игнорируется в значении ключей. }
 
     property CaseSensitive: Boolean read FCaseSensitive;
@@ -2047,39 +2066,39 @@ type
     с таким ключом, возникает исключение. Функция возвращает указатель на
     добавленный узел красно-черного дерева. }
 
-    function Add(const Key: string; Value: Pointer): PStringRBTreeNode;
+    function Add(const Key: AnsiString; Value: Pointer): PStringRBTreeNode;
 
   { Функция SearchNode возвращает указатель на узел красно-черного дерева
     с ключом, равным Key. Если узел с таким значением ключа отсутствует,
     функция возвращает nil. }
 
-    function SearchNode(const Key: string): PStringRBTreeNode;
+    function SearchNode(const Key: AnsiString): PStringRBTreeNode;
 
   { Функция SearchFirstGreater возвращает указатель на первый (по порядку
     возрастания значений ключа) узел дерева с ключом, большим значения Key.
     Если узел с таким значением ключа отсутствует, функция возвращает nil. }
 
-    function SearchFirstGreater(const Key: string): PStringRBTreeNode;
+    function SearchFirstGreater(const Key: AnsiString): PStringRBTreeNode;
 
   { Функция SearchFirstGreaterOrEqual возвращает указатель на первый
     (по порядку возрастания значений ключа) узел дерева с ключом, большим
     или равным значению Key. Если узел с таким значением ключа отсутствует,
     функция возвращает nil. }
 
-    function SearchFirstGreaterOrEqual(const Key: string): PStringRBTreeNode;
+    function SearchFirstGreaterOrEqual(const Key: AnsiString): PStringRBTreeNode;
 
   { Функция SearchLastLesser возвращает указатель на последний (по порядку
     возрастания значений ключа) узел дерева с ключом, меньшим значения Key.
     Если узел с таким значением ключа отсутствует, функция возвращает nil. }
 
-    function SearchLastLesser(const Key: string): PStringRBTreeNode;
+    function SearchLastLesser(const Key: AnsiString): PStringRBTreeNode;
 
   { Функция SearchLastLesserOrEqual возвращает указатель на последний
     (по порядку возрастания значений ключа) узел дерева с ключом, меньшим
     или равным значению Key. Если узел с таким значением ключа отсутствует,
     функция возвращает nil. }
 
-    function SearchLastLesserOrEqual(const Key: string): PStringRBTreeNode;
+    function SearchLastLesserOrEqual(const Key: AnsiString): PStringRBTreeNode;
 
   { Функция NextNode возвращает указатель на узел красно-черного дерева,
     который следует за узлом Node в порядке увеличения значения ключа Key.
@@ -2100,7 +2119,7 @@ type
     ассоциированное с данным ключом, приводится к типу TObject и для него
     вызывается метод Free. }
 
-    procedure Remove(const Key: string);
+    procedure Remove(const Key: AnsiString);
 
   { Метод RemoveNode удаляет из красно-черного дерева узел Node. Если
     свойство OwnValues дерева равно True, значение Value этого узла приводится
@@ -2492,7 +2511,7 @@ type
     соответствующие элементы очередей. }
 
     function Equals(DoubleEndedQueue: TDoubleEndedQueue;
-      CompareFunction: TCompareFunction = nil): Boolean;
+      CompareFunction: TCompareFunction = nil): Boolean; {$IFDEF UNICODE}reintroduce; overload;{$ENDIF}
 
   { Функция Clone возвращает экземпляр класса TDoubleEndedQueue, который
     является поэлементной копией данной очереди. Свойство OwnItems новой
@@ -2656,7 +2675,7 @@ type
     с помощью функции CompareFunction данной приоритетной очереди. }
 
     function Equals(PriorityQueue: TPriorityQueue;
-      CompareValues: Boolean = False): Boolean;
+      CompareValues: Boolean = False): Boolean; reintroduce; overload;
 
   { Функция Clone возвращает экземпляр класса TPriorityQueue, который является
     копией данной очереди. Свойство OwnItems новой очереди равно False. }
@@ -2799,18 +2818,18 @@ begin
   G_CopyLongs(Bits, FBits, FCapacity);
 end;
 
-procedure TBitList.Load(Registry: TRegistry; const ValueName: string;
+procedure TBitList.Load(Registry: TRegistry; const ValueName: AnsiString;
   EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
   BR: TBinaryReader;
 begin
-  L := Registry.GetDataSize(ValueName);
+  L := Registry.GetDataSize(string(ValueName));
   if L > 0 then
   begin
     GetMem(P, L);
-    Registry.ReadBinaryData(ValueName, P^, L);
+    Registry.ReadBinaryData(string(ValueName), P^, L);
     BR := TBinaryReader.Create;
     BR.LoadFromArray(P, L, True, EncryptionKey);
     Load(BR);
@@ -2835,7 +2854,7 @@ begin
     Writer.Write(FBits, (C + 7) shr 3);
 end;
 
-procedure TBitList.Save(Registry: TRegistry; const ValueName: string;
+procedure TBitList.Save(Registry: TRegistry; const ValueName: AnsiString;
   EncryptionKey: PSHA256Digest; CompressionMode: TCompressionMode);
 var
   BW: TBinaryWriter;
@@ -2846,11 +2865,11 @@ begin
   Save(BW);
   L := BW.SaveToArray(P, EncryptionKey, CompressionMode);
   BW.Free;
-  Registry.WriteBinaryData(ValueName, P^, L);
+  Registry.WriteBinaryData(string(ValueName), P^, L);
   FreeMem(P);
 end;
 
-procedure TBitList.FromString(const S: string);
+procedure TBitList.FromString(const S: AnsiString);
 var
   L, I: Integer;
   P: PChars;
@@ -2869,7 +2888,7 @@ begin
   end;
 end;
 
-function TBitList.ToString: string;
+function TBitList.ToString: AnsiString;
 var
   I: Integer;
   P: PChars;
@@ -2887,7 +2906,7 @@ begin
   end;
 end;
 
-procedure TBitList.FromBase64(const S: string; EncryptionKey: PSHA256Digest);
+procedure TBitList.FromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
@@ -2903,7 +2922,7 @@ begin
 end;
 
 function TBitList.ToBase64(EncryptionKey: PSHA256Digest;
-  CompressionMode: TCompressionMode): string;
+  CompressionMode: TCompressionMode): AnsiString;
 var
   BW: TBinaryWriter;
   P: Pointer;
@@ -3187,18 +3206,18 @@ begin
     EnsureSorted;
 end;
 
-procedure TIntegerList.Load(Registry: TRegistry; const ValueName: string;
+procedure TIntegerList.Load(Registry: TRegistry; const ValueName: AnsiString;
   EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
   BR: TBinaryReader;
 begin
-  L := Registry.GetDataSize(ValueName);
+  L := Registry.GetDataSize(string(ValueName));
   if L > 0 then
   begin
     GetMem(P, L);
-    Registry.ReadBinaryData(ValueName, P^, L);
+    Registry.ReadBinaryData(string(ValueName), P^, L);
     BR := TBinaryReader.Create;
     BR.LoadFromArray(P, L, True, EncryptionKey);
     Load(BR);
@@ -3230,7 +3249,7 @@ begin
     Writer.Write(FItems, C * SizeOf(Integer));
 end;
 
-procedure TIntegerList.Save(Registry: TRegistry; const ValueName: string;
+procedure TIntegerList.Save(Registry: TRegistry; const ValueName: AnsiString;
   EncryptionKey: PSHA256Digest; CompressionMode: TCompressionMode);
 var
   BW: TBinaryWriter;
@@ -3241,11 +3260,11 @@ begin
   Save(BW);
   L := BW.SaveToArray(P, EncryptionKey, CompressionMode);
   BW.Free;
-  Registry.WriteBinaryData(ValueName, P^, L);
+  Registry.WriteBinaryData(string(ValueName), P^, L);
   FreeMem(P);
 end;
 
-procedure TIntegerList.FromBase64(const S: string; EncryptionKey: PSHA256Digest);
+procedure TIntegerList.FromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
@@ -3261,7 +3280,7 @@ begin
 end;
 
 function TIntegerList.ToBase64(EncryptionKey: PSHA256Digest;
-  CompressionMode: TCompressionMode): string;
+  CompressionMode: TCompressionMode): AnsiString;
 var
   BW: TBinaryWriter;
   P: Pointer;
@@ -3520,6 +3539,19 @@ begin
   Result.FSorted := FSorted;
 end;
 
+//------------------------
+function TIntegerList.Get(Index: Integer): Integer;
+begin
+  result := FItems[Index]
+end;
+
+procedure TIntegerList.Put(Index, Item: Integer);
+begin
+  FItems[Index] := Item;
+end;
+//------------------------
+
+
 { TWordList }
 
 constructor TWordList.Create(InitialCapacity: Integer);
@@ -3622,18 +3654,18 @@ begin
     EnsureSorted;
 end;
 
-procedure TWordList.Load(Registry: TRegistry; const ValueName: string;
+procedure TWordList.Load(Registry: TRegistry; const ValueName: AnsiString;
   EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
   BR: TBinaryReader;
 begin
-  L := Registry.GetDataSize(ValueName);
+  L := Registry.GetDataSize(string(ValueName));
   if L > 0 then
   begin
     GetMem(P, L);
-    Registry.ReadBinaryData(ValueName, P^, L);
+    Registry.ReadBinaryData(string(ValueName), P^, L);
     BR := TBinaryReader.Create;
     BR.LoadFromArray(P, L, True, EncryptionKey);
     Load(BR);
@@ -3665,7 +3697,7 @@ begin
     Writer.Write(FItems, C * SizeOf(Word));
 end;
 
-procedure TWordList.Save(Registry: TRegistry; const ValueName: string;
+procedure TWordList.Save(Registry: TRegistry; const ValueName: AnsiString;
   EncryptionKey: PSHA256Digest; CompressionMode: TCompressionMode);
 var
   BW: TBinaryWriter;
@@ -3676,11 +3708,11 @@ begin
   Save(BW);
   L := BW.SaveToArray(P, EncryptionKey, CompressionMode);
   BW.Free;
-  Registry.WriteBinaryData(ValueName, P^, L);
+  Registry.WriteBinaryData(string(ValueName), P^, L);
   FreeMem(P);
 end;
 
-procedure TWordList.FromBase64(const S: string; EncryptionKey: PSHA256Digest);
+procedure TWordList.FromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
@@ -3696,7 +3728,7 @@ begin
 end;
 
 function TWordList.ToBase64(EncryptionKey: PSHA256Digest;
-  CompressionMode: TCompressionMode): string;
+  CompressionMode: TCompressionMode): AnsiString;
 var
   BW: TBinaryWriter;
   P: Pointer;
@@ -4183,6 +4215,13 @@ begin
   end;
 end;
 
+function TArrayList.Remove(P: Pointer):Integer;
+begin
+  Result := ScanPointer(P);
+  if Result >= 0 then
+    RemoveAt(Result);
+end;
+
 procedure TArrayList.UnorderedRemoveAt(Index: Integer);
 begin
   if LongWord(Index) >= LongWord(FCount) then
@@ -4236,6 +4275,16 @@ begin
     end;
   end else
     Result := False;
+end;
+
+function TArrayList.Get(Index: Integer): Pointer;
+begin
+  Result := FItems^[Index]
+end;
+
+procedure TArrayList.Put(Index: Integer; Item: Pointer);
+begin
+  FItems^[Index] := Item
 end;
 
 function TArrayList.Clone: TArrayList;
@@ -5909,7 +5958,7 @@ begin
   end;
 end;
 
-function TStringAssociationList.GetItem(const Key: string): Pointer;
+function TStringAssociationList.GetItem(const Key: AnsiString): Pointer;
 var
   L: Integer;
 begin
@@ -5920,7 +5969,7 @@ begin
     Result := nil;
 end;
 
-function TStringAssociationList.SearchFirstGE(const Key: string): Integer;
+function TStringAssociationList.SearchFirstGE(const Key: AnsiString): Integer;
 var
   L, H, I: Integer;
 begin
@@ -5947,7 +5996,7 @@ begin
   Result := L;
 end;
 
-procedure TStringAssociationList.SetItem(const Key: string; Value: Pointer);
+procedure TStringAssociationList.SetItem(const Key: AnsiString; Value: Pointer);
 var
   L: Integer;
   O: Pointer;
@@ -5988,7 +6037,7 @@ begin
     SetCapacity(G_NormalizeCapacity(Capacity));
 end;
 
-function TStringAssociationList.IndexOf(const Key: string): Integer;
+function TStringAssociationList.IndexOf(const Key: AnsiString): Integer;
 var
   L, H, I, C: Integer;
 begin
@@ -6031,7 +6080,7 @@ begin
   Result := -1;
 end;
 
-procedure TStringAssociationList.Add(const Key: string; Value: Pointer);
+procedure TStringAssociationList.Add(const Key: AnsiString; Value: Pointer);
 var
   L: Integer;
 begin
@@ -6051,7 +6100,7 @@ begin
   Inc(FCount);
 end;
 
-procedure TStringAssociationList.Remove(const Key: string);
+procedure TStringAssociationList.Remove(const Key: AnsiString);
 var
   L: Integer;
 begin
@@ -6116,6 +6165,21 @@ begin
     FKeys^[I] := '';
   end;
   FCount := 0;
+end;
+
+function TStringAssociationList.ToString: AnsiString;
+var
+  j : Integer;
+  z : TStringBuilder;
+begin
+  z := TStringBuilder.Create(Count*30);
+  try
+    for j:=0 to Count-1 do
+      z.AppendLine(KeyList^[j]);
+    Result := z.ToString;
+  finally
+    z.Free;
+  end;
 end;
 
 procedure TStringAssociationList.TrimToSize;
@@ -6225,7 +6289,7 @@ begin
   FreeMem(PrevValues);
 end;
 
-function TStringHashtable.GetItem(const Key: string): Pointer;
+function TStringHashtable.GetItem(const Key: AnsiString): Pointer;
 var
   X, HashSize, HashStep: LongWord;
   P: Pointer;
@@ -6269,7 +6333,7 @@ begin
   Result := nil;
 end;
 
-procedure TStringHashtable.SetItem(const Key: string; Value: Pointer);
+procedure TStringHashtable.SetItem(const Key: AnsiString; Value: Pointer);
 var
   X, HashSize, HashStep: LongWord;
   L: Integer;
@@ -6373,7 +6437,7 @@ begin
     SetCapacity(G_EnlargePrimeCapacity((Capacity * 7) div 5));
 end;
 
-procedure TStringHashtable.Add(const Key: string; Value: Pointer);
+procedure TStringHashtable.Add(const Key: AnsiString; Value: Pointer);
 var
   X, HashSize, HashStep: LongWord;
   L: Integer;
@@ -6444,7 +6508,7 @@ begin
   Inc(FCount);
 end;
 
-function TStringHashtable.Contains(const Key: string): Boolean;
+function TStringHashtable.Contains(const Key: AnsiString): Boolean;
 var
   X, HashSize, HashStep: LongWord;
   P: Pointer;
@@ -6488,7 +6552,7 @@ begin
   Result := False;
 end;
 
-procedure TStringHashtable.Remove(const Key: string);
+procedure TStringHashtable.Remove(const Key: AnsiString);
 var
   X, HashSize, HashStep: LongWord;
   P: Pointer;
@@ -6742,7 +6806,7 @@ begin
   Node^.IsRed := False;
 end;
 
-function TStringRedBlackTree.GetItem(const Key: string): Pointer;
+function TStringRedBlackTree.GetItem(const Key: AnsiString): Pointer;
 var
   P: PStringRBTreeNode;
 begin
@@ -6753,7 +6817,7 @@ begin
     Result := nil;
 end;
 
-procedure TStringRedBlackTree.SetItem(const Key: string; Value: Pointer);
+procedure TStringRedBlackTree.SetItem(const Key: AnsiString; Value: Pointer);
 var
   P: PStringRBTreeNode;
   PP: Pointer;
@@ -6813,7 +6877,7 @@ begin
 end;
 
 function TStringRedBlackTree.InsertNode(Parent: PStringRBTreeNode;
-  const Key: string; Value: Pointer): PStringRBTreeNode;
+  const Key: AnsiString; Value: Pointer): PStringRBTreeNode;
 begin
   GetMem(Result, SizeOf(TStringRBTreeNode));
   Pointer(Result^.Key) := nil;
@@ -6842,7 +6906,7 @@ begin
   InsertFixUp(Result);
 end;
 
-function TStringRedBlackTree.Add(const Key: string; Value: Pointer): PStringRBTreeNode;
+function TStringRedBlackTree.Add(const Key: AnsiString; Value: Pointer): PStringRBTreeNode;
 var
   P: PStringRBTreeNode;
   C: Integer;
@@ -6870,7 +6934,7 @@ begin
   RaiseErrorFmt(SErrKeyDuplicatesInAssociationList, 'TStringRedBlackTree');
 end;
 
-function TStringRedBlackTree.SearchNode(const Key: string): PStringRBTreeNode;
+function TStringRedBlackTree.SearchNode(const Key: AnsiString): PStringRBTreeNode;
 var
   C: Integer;
 begin
@@ -6891,7 +6955,7 @@ begin
   Result := nil;
 end;
 
-function TStringRedBlackTree.SearchFirstGreater(const Key: string): PStringRBTreeNode;
+function TStringRedBlackTree.SearchFirstGreater(const Key: AnsiString): PStringRBTreeNode;
 var
   P: PStringRBTreeNode;
 begin
@@ -6920,7 +6984,7 @@ begin
   end;
 end;
 
-function TStringRedBlackTree.SearchFirstGreaterOrEqual(const Key: string): PStringRBTreeNode;
+function TStringRedBlackTree.SearchFirstGreaterOrEqual(const Key: AnsiString): PStringRBTreeNode;
 var
   P: PStringRBTreeNode;
 begin
@@ -6949,7 +7013,7 @@ begin
   end;
 end;
 
-function TStringRedBlackTree.SearchLastLesser(const Key: string): PStringRBTreeNode;
+function TStringRedBlackTree.SearchLastLesser(const Key: AnsiString): PStringRBTreeNode;
 var
   P: PStringRBTreeNode;
 begin
@@ -6978,7 +7042,7 @@ begin
   end;
 end;
 
-function TStringRedBlackTree.SearchLastLesserOrEqual(const Key: string): PStringRBTreeNode;
+function TStringRedBlackTree.SearchLastLesserOrEqual(const Key: AnsiString): PStringRBTreeNode;
 var
   P: PStringRBTreeNode;
 begin
@@ -7051,7 +7115,7 @@ begin
   end;
 end;
 
-procedure TStringRedBlackTree.Remove(const Key: string);
+procedure TStringRedBlackTree.Remove(const Key: AnsiString);
 var
   P: PStringRBTreeNode;
 begin
@@ -8406,7 +8470,10 @@ initialization
   Int64RBTreeNil^.Right := Int64RBTreeNil;
 
 finalization
+  {DONE: Утечка памяти}
+  {$IFNDEF DEBUG}
   if not IsMultiThread then
+  {$ENDIF}
   begin
     Dispose(Int64RBTreeNil);
     Dispose(IntegerRBTreeNil);

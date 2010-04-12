@@ -64,7 +64,7 @@ type
     загрузкой их во внутренний массив бинарного потока они расшифровываются
     с ключом EncryptionKey. }
 
-    procedure LoadFromBase64(const S: string; EncryptionKey: PSHA256Digest = nil);
+    procedure LoadFromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest = nil);
 
   { Функция LoadFromFile загружает данные бинарного потока из файла,
     дескриптор которого передается параметром FileHandle. Текущая позиция
@@ -103,7 +103,7 @@ type
 
   { Функция ReadString считывает строку типа AnsiString из бинарного потока. }
 
-    function ReadString(): string;
+    function ReadString(): AnsiString;
 
   { Функция ReadShortInt считывает значение типа ShortInt из бинарного потока. }
 
@@ -155,7 +155,7 @@ type
 
   { Функция ReadChar считывает значение типа AnsiChar из бинарного потока. }
 
-    function ReadChar(): Char;
+    function ReadChar(): AnsiChar;
   end;
 
 
@@ -219,7 +219,7 @@ type
 
   { Метод WriteString помещает в поток строку S типа AnsiString. }
 
-    procedure WriteString(const S: string);
+    procedure WriteString(const S: AnsiString);
 
   { Метод WriteShortInt помещает в поток значение типа ShortInt. }
 
@@ -269,9 +269,9 @@ type
 
     procedure WriteBoolean(V: Boolean);
 
-  { Метод WriteChar помещает в поток значение типа Char. }
+  { Метод WriteChar помещает в поток значение типа AnsiChar. }
 
-    procedure WriteChar(C: Char);
+    procedure WriteChar(C: AnsiChar);
 
   { Функция SaveToArray сохраняет данные бинарного потока в области памяти,
     адрес которой возвращается затем в параметре Bytes, а длина этой области
@@ -290,7 +290,7 @@ type
     dcmNoCompression, задает режим сжатия данных бинарного потока. }
 
     function SaveToBase64(EncryptionKey: PSHA256Digest = nil;
-      CompressionMode: TCompressionMode = dcmNoCompression): string;
+      CompressionMode: TCompressionMode = dcmNoCompression): AnsiString;
 
   { Функция SaveToFile сохраняет данные бинарного потока в файле, дескриптор
     которого передан параметром FileHandle. Текущая позиция в файле должна
@@ -493,7 +493,7 @@ begin
   Load(P, Length, EncryptionKey);
 end;
 
-procedure TBinaryReader.LoadFromBase64(const S: string; EncryptionKey: PSHA256Digest);
+procedure TBinaryReader.LoadFromBase64(const S: AnsiString; EncryptionKey: PSHA256Digest);
 var
   L: Integer;
   P: Pointer;
@@ -576,7 +576,7 @@ begin
   FPosition := X;
 end;
 
-function TBinaryReader.ReadString(): string;
+function TBinaryReader.ReadString(): AnsiString;
 var
   L, X: Integer;
 begin
@@ -723,7 +723,7 @@ begin
   Inc(FPosition);
 end;
 
-function TBinaryReader.ReadChar(): Char;
+function TBinaryReader.ReadChar(): AnsiChar;
 begin
   if FPosition = FLength then
     RaiseError(SErrReadBeyondTheEndOfStream);
@@ -807,7 +807,7 @@ begin
   FLength := X;
 end;
 
-procedure TBinaryWriter.WriteString(const S: string);
+procedure TBinaryWriter.WriteString(const S: AnsiString);
 var
   L, X: Integer;
 begin
@@ -968,11 +968,11 @@ begin
   Inc(FLength);
 end;
 
-procedure TBinaryWriter.WriteChar(C: Char);
+procedure TBinaryWriter.WriteChar(C: AnsiChar);
 begin
   if FLength = FCapacity then
     EnlargeCapacity(FLength + 1);
-  PChar(@FBytes^[FLength])^ := C;
+  PAnsiChar(@FBytes^[FLength])^ := C;
   Inc(FLength);
 end;
 
@@ -998,7 +998,7 @@ begin
 end;
 
 function TBinaryWriter.SaveToBase64(EncryptionKey: PSHA256Digest;
-  CompressionMode: TCompressionMode): string;
+  CompressionMode: TCompressionMode): AnsiString;
 var
   P: Pointer;
   L: Integer;
