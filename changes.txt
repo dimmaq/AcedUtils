@@ -1,0 +1,416 @@
+
+Изменения в коде библиотеки AcedUtils
+
+-------------------------------------------------------------------------
+AcedUtils 1.17
+-------------------------------------------------------------------------
+
+Модуль AcedContainers
+
+  Исправлена ошибка в методе RemoveNode() классов красно-черных деревьев:
+  TIntegerRedBlackTree, TInt64RedBlackTree, TStringRedBlackTree.
+
+-------------------------------------------------------------------------
+AcedUtils 1.16
+-------------------------------------------------------------------------
+
+Во все основные модули добавлены необходимые директивы компилятора
+для правильной генерации кода.
+
+-------------------------------------------------------------------------
+AcedUtils 1.15
+-------------------------------------------------------------------------
+
+Модуль AcedContainers
+
+  Исправлена ошибка в классах TIntegerHashtable и TStringHashtable,
+  которая приводила к зависанию функций Contains, Remove и других после
+  интенсивного добавления/удаления элементов хэш-таблицы.
+
+Модуль AcedStorage
+
+  В коде, реализующем хэширование коллекции, имела место та же ошибка,
+  что и в классах из AcedContainers.
+
+-------------------------------------------------------------------------
+AcedUtils 1.14
+-------------------------------------------------------------------------
+
+Модуль AcedMemory
+
+  Менеджер памяти переписан с целью повышения скорости его работы с
+  большим числом одинаковых фрагментов памяти. Кроме того, увеличено
+  число градаций размеров фрагментов памяти, помещаемых в пул. Таким
+  образом, память теперь выделяется более экономно.
+
+Модуль AcedConsts
+
+  Функции G_EnlargeCapacity и G_NormalizeCapacity скорректированы для
+  оптимального выделения памяти с учетом изменений в AcedMemory.
+
+-------------------------------------------------------------------------
+AcedUtils 1.13
+-------------------------------------------------------------------------
+
+Модуль AcedBinary
+
+  Исправлена ошибка в процедуре G_FillMem().
+
+-------------------------------------------------------------------------
+AcedUtils 1.12
+-------------------------------------------------------------------------
+
+Модуль AcedCommon
+
+  Изменен алгоритм работы функций G_Base64Encode() и G_Base64Decode().
+  Теперь он соответствует общепринятому стандарту кодирования Base64.
+
+-------------------------------------------------------------------------
+AcedUtils 1.11
+-------------------------------------------------------------------------
+
+Модуль AcedMemory
+
+  Повышено быстродействие при распределении большого числа одинаковых
+  блоков памяти.
+
+-------------------------------------------------------------------------
+AcedUtils 1.10
+-------------------------------------------------------------------------
+
+Модуль AcedCompression
+
+  Улучшено сжатие в режиме dcmNormal.
+
+-------------------------------------------------------------------------
+AcedUtils 1.09
+-------------------------------------------------------------------------
+
+Модуль AcedMemory
+
+  Теперь менеджер памяти отслеживает попытки повторного освобождения
+  блоков памяти. В этом случае он генерирует исключение.
+
+  Устранена проблема, имевшая место в многопоточных приложениях из-за
+  преждевременной выгрузки менеджера памяти.
+
+Модуль AcedBinary
+
+  Добавлены функции:
+	G_Log2
+	G_Gcd
+	G_Lcm
+	G_GenerateLongs
+	G_SwapLongs
+	G_FillWords
+	G_ScanOther_...
+	G_Replace_...
+	G_CountOf_...
+	G_CountOfUnique_...
+	G_Remove_...
+	G_Unique_...
+
+  Переименован константный массив:
+	BitMasks -> BitMasks32
+
+  Переименованы функции:
+	G_Exchange32 -> G_Swap32
+	G_Exchange16 -> G_Swap16
+	G_Exchange8 -> G_Swap8
+	G_ScanReverse_... -> G_ScanBackward_...
+	G_SearchUnique_... -> G_BinarySearch_...
+	G_AndSet_... -> G_SetIntersection_...
+	G_OrSet_... -> G_SetUnion_...
+	G_AndNotSet_... -> G_SetDifference_...
+	G_XorSet_... -> G_SetSymmetricDifference_...
+	G_SetBitScanReverse32 -> G_SetBitScanBackward32
+	G_FreeBitScanReverse32 -> G_FreeBitScanBackward32
+	G_SetBitScanReverse -> G_SetBitScanBackward
+	G_FreeBitScanReverse -> G_FreeBitScanBackward
+
+  Удалена за ненадобностью:
+	G_SearchFirst_...
+
+Модуль AcedStrings
+
+  Переименованы функции:
+	TStringBuilder.AppendNewLine -> AppendLine
+	G_AppendNewLine -> G_AppendLine
+
+Модуль AcedCommon
+
+  Переименованы функции:
+	G_CurrencyToDouble -> G_ToDouble
+	G_ThousandsOfCurrencyToDouble -> G_ThousandsToDouble
+	G_BetweenInt -> G_Between_Integer
+	G_BetweenUInt -> G_Between_LongWord
+	G_BetweenInt64 -> G_Between_Int64
+	G_BetweenFloat -> G_Between_Extended
+	G_BetweenCurr -> G_Between_Currency
+	G_StrToInt -> G_StrTo_Integer
+	G_StrToUInt -> G_StrTo_LongWord
+	G_StrToInt64 -> G_StrTo_Int64
+	G_StrToFloat -> G_StrTo_Extended
+	G_StrToCurr -> G_StrTo_Currency
+
+Новый модуль AcedAlgorithm
+
+  Типы, перенесенные из модуля AcedLists:
+	TMatchFunction
+	TCompareFunction
+
+  Новые функции:
+	G_Search
+	G_SearchBackward
+	G_Replace
+	G_CountOf
+	G_CountOfUnique
+	G_RemoveCopy
+	G_UniqueCopy
+	G_SearchMin
+	G_IndexOfMin
+	G_SearchMax
+	G_IndexOfMax
+	G_SearchMinMax
+	G_PartitionStrict
+	G_PartitionUnstrict
+	G_StablePartitionStrict
+	G_StablePartitionUnstrict
+	G_SelectTop
+	G_StableSelectTop
+	G_Rotate
+	G_RotateCopy
+	G_RandomShuffle
+	G_Sort
+	G_StableSort
+	G_PartialSort
+	G_PartialSortCopy
+	G_IsSorted
+	G_BinarySearch
+	G_SearchFirstGreater
+	G_SearchFirstGreaterOrEqual
+	G_SearchLastLesser
+	G_SearchLastLesserOrEqual
+	G_Merge
+	G_SetContainedIn
+	G_SetIntersectsWith
+	G_SetUnion
+	G_SetIntersection
+	G_SetDifference
+	G_SetSymmetricDifference
+	G_MakeHeap
+	G_PushHeap
+	G_PopHeap
+	G_SortHeap
+	G_IsHeap
+
+Модуль AcedContainers (переименован из AcedLists)
+
+  Добавлены классы очередей:
+	TDoubleEndedQueue
+	TPriorityQueue
+
+  Функция G_SortAscending перенесена в модуль AcedAlgorithm под именем
+  G_Sort, функция G_SortDescending удалена совсем по причине ее ненужности
+  (кроме всего прочего, она содержала ошибку).
+
+  Типы TCompareFunction и TMatchFunction перенесены в модуль AcedAlgorithm,
+  тип TMatch2Function удален совсем, т.к. он больше нигде не используется.
+
+  Класс TBitList
+
+     Добавлены методы:
+	FromString
+	ToString
+	SetBit
+	ResetBit
+	Contains
+
+     Переименованные члены класса:
+	Items -> Bits
+	Invert -> ToggleBit
+	NotSet -> NotBits
+	AndSet -> AndBits
+	OrSet -> OrBits
+	XorSet -> XorBits
+	AndNotSet -> AndNotBits
+
+  Классы TIntegerList и TWordList
+
+     Добавлены методы:
+	Insert (групповой)
+	RemoveAt (групповой)
+
+     Исправлен метод Remove, который раньше удалял только одно найденное
+     значение, а должен удалять все.
+
+     Переименованы:
+	Peek -> PeekBack
+	Pop -> PopBack
+
+     Удален за ненадобностью:
+	UnorderedRemove
+
+  Класс TArrayList
+
+     Добавлено свойство:
+	OwnItems
+
+     Добавлены методы:
+	Insert (групповой)
+	RemoveAt (групповой)
+	StableSort
+	IndexOf (по значению)
+	Equals (по значению)
+
+     Переименованы:
+	Peek -> PeekBack
+	Pop -> PopBack
+
+     Удалены за ненадобностью:
+	Search (Value1, Value2)
+	RemoveAndFreeItemAt
+	UnorderedRemoveAndFreeItemAt
+	ClearAndFreeItems
+
+  Класс TArrayReadOnlyList
+
+     Добавлены методы:
+	StableSort
+	IndexOf (по значению)
+	Equals (по значению)
+
+     Удален за ненадобностью:
+	Search (Value1, Value2)
+
+  Классы TIntegerAssociationList, TStringAssociationList
+
+     Добавлен методы:
+	RemoveAt (групповой)
+
+     Тип значения Value, ассоциированного с ключом, изменен с
+     TObject на Pointer
+
+  Классы TIntegerHashtable, TStringHashtable
+
+     Тип значения Value, ассоциированного с ключом, изменен с
+     TObject на Pointer
+
+  Классы красно-черных деревьев
+
+     Тип значения узла T...RBTreeNode.Value изменен с TObject на Pointer
+
+     Переименована функция:
+	SearchFirstEqualOrGreater -> SearchFirstGreaterOrEqual
+
+  Класс TLinkedList
+
+     Тип значения узла TLinkedListNode.Value изменен с TObject на Pointer
+
+     Добавлен метод Remove, удаляющий последовательность узлов.
+
+Модуль AcedStorage
+
+  Переименованы функции:
+	TSerializableCollection.SearchObject -> Search
+	TDataIndex.CompareObject -> Compare
+	TStringIndex.CompareObjects -> Compare
+	TStringIndex.SearchObject -> Search
+	TShortIntIndex.CompareObjects -> Compare
+	TShortIntIndex.SearchObject -> Search
+	TByteIndex.CompareObjects -> Compare
+	TByteIndex.SearchObject -> Search
+	TSmallIntIndex.CompareObjects -> Compare
+	TSmallIntIndex.SearchObject -> Search
+	TWordIndex.CompareObjects -> Compare
+	TWordIndex.SearchObject -> Search
+	TIntegerIndex.CompareObjects -> Compare
+	TIntegerIndex.SearchObject -> Search
+	TLongWordIndex.CompareObjects -> Compare
+	TLongWordIndex.SearchObject -> Search
+	TInt64Index.CompareObjects -> Compare
+	TInt64Index.SearchObject -> Search
+	TDateTimeIndex.CompareObjects -> Compare
+	TDateTimeIndex.SearchObject -> Search
+	TSingleIndex.CompareObjects -> Compare
+	TSingleIndex.SearchObject -> Search
+	TDoubleIndex.CompareObjects -> Compare
+	TDoubleIndex.SearchObject -> Search
+	TCurrencyIndex.CompareObjects -> Compare
+	TCurrencyIndex.SearchObject -> Search
+	TCharIndex.CompareObjects -> Compare
+	TCharIndex.SearchObject -> Search
+	TCompoundIndex.CompareObjects -> Compare
+
+-------------------------------------------------------------------------
+AcedUtils 1.08
+-------------------------------------------------------------------------
+
+Модуль AcedLists
+
+  В классы деревьев: TIntegerRedBlackTree, TStringRedBlackTree,
+  TInt64RedBlackTree добавлены следующие функции:
+
+	SearchFirstGreater,
+	SearchLastLesser,
+	SearchFirstEqualOrGreater,
+	SearchLastLesserOrEqual
+
+  для поиска узлов по значению ключа на больше-меньше.
+
+-------------------------------------------------------------------------
+AcedUtils 1.07
+-------------------------------------------------------------------------
+
+Модуль AcedLists
+
+  Добавлены классы красно-черных деревьев, поддерживающие различный тип
+  ключа: TIntegerRedBlackTree, TStringRedBlackTree, TInt64RedBlackTree.  
+
+  Чтобы избежать путаницы между ассоциативными и ассоциированными
+  списками, переименованы следующие классы:
+
+	TIntegerAssociatedList -> TIntegerAssociationList
+	TStringAssociatedList -> TStringAssociationList.
+
+Модуль AcedCrypto
+
+  Изменен алгоритм инициализации генератора псевдослучайных чисел по
+  числу Seed в соответствии с рекомендациями авторов алгоритма:
+  http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html
+  Раньше старшие биты значения Seed влияли только на старшие биты
+  инициализирующей последовательности.
+
+-------------------------------------------------------------------------
+AcedUtils 1.06
+-------------------------------------------------------------------------
+
+Модуль AcedLists
+
+  Добавлена функция PopValue и перегруженные методы: AddHead, AddTail,
+  InsertBefore, InsertAfter для работы с узлами списка TLinkedList.
+
+-------------------------------------------------------------------------
+AcedUtils 1.05
+-------------------------------------------------------------------------
+
+Модуль AcedLists
+
+  Исправлена ошибка в методе TBitList.SetAll, приводящая к обнулению
+  лишней памяти при вызове данного метода с параметром False.
+
+-------------------------------------------------------------------------
+AcedUtils 1.04
+-------------------------------------------------------------------------
+
+Модуль AcedStorage
+
+  Исправлена ошибка в функции TSerializableCollection.SaveFileDirect,
+  которая приводила к исключению при вызове этой функции.
+
+-------------------------------------------------------------------------
+AcedUtils 1.03
+-------------------------------------------------------------------------
+
+Первая публично доступная версия
+-------------------------------------------------------------------------
