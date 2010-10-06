@@ -10,26 +10,26 @@ type
 
   TSupplierObject = class(TSerializableObject)
   private
-    FCompanyName: string;    // Наименование
-    FCountry: string;        // Страна
-    FCityRegion: string;     // Город, область
-    FAddress: string;        // Адрес
-    FPostalCode: string;     // Почтовый индекс
-    FPhoneFax: string;       // Телефон, факс
-    FHttpEmail: string;      // Электронный адрес
-    FContactPerson: string;  // Контактное лицо
-    FComments: string;       // Примечание
+    FCompanyName: AnsiString;    // Наименование
+    FCountry: AnsiString;        // Страна
+    FCityRegion: AnsiString;     // Город, область
+    FAddress: AnsiString;        // Адрес
+    FPostalCode: AnsiString;     // Почтовый индекс
+    FPhoneFax: AnsiString;       // Телефон, факс
+    FHttpEmail: AnsiString;      // Электронный адрес
+    FContactPerson: AnsiString;  // Контактное лицо
+    FComments: AnsiString;       // Примечание
 
   public
-    property CompanyName: string read FCompanyName write FCompanyName;
-    property Country: string read FCountry write FCountry;
-    property CityRegion: string read FCityRegion write FCityRegion;
-    property Address: string read FAddress write FAddress;
-    property PostalCode: string read FPostalCode write FPostalCode;
-    property PhoneFax: string read FPhoneFax write FPhoneFax;
-    property HttpEmail: string read FHttpEmail write FHttpEmail;
-    property ContactPerson: string read FContactPerson write FContactPerson;
-    property Comments: string read FComments write FComments;
+    property CompanyName: AnsiString read FCompanyName write FCompanyName;
+    property Country: AnsiString read FCountry write FCountry;
+    property CityRegion: AnsiString read FCityRegion write FCityRegion;
+    property Address: AnsiString read FAddress write FAddress;
+    property PostalCode: AnsiString read FPostalCode write FPostalCode;
+    property PhoneFax: AnsiString read FPhoneFax write FPhoneFax;
+    property HttpEmail: AnsiString read FHttpEmail write FHttpEmail;
+    property ContactPerson: AnsiString read FContactPerson write FContactPerson;
+    property Comments: AnsiString read FComments write FComments;
 
     procedure Load(Reader: TBinaryReader; Version: Integer); override;
     procedure Save(Writer: TBinaryWriter); override;
@@ -71,16 +71,16 @@ type
 
   TCategoryObject = class(TSerializableObject)
   private
-    FCategoryName: string;     // Наименование категории
-    FComments: string;         // Примечание
+    FCategoryName: AnsiString;     // Наименование категории
+    FComments: AnsiString;         // Примечание
     FPicture: TPictureObject;  // Изображение, ассоциированное с категорией
 
   public
     constructor Create; override;
     destructor Destroy; override;
 
-    property CategoryName: string read FCategoryName write FCategoryName;
-    property Comments: string read FComments write FComments;
+    property CategoryName: AnsiString read FCategoryName write FCategoryName;
+    property Comments: AnsiString read FComments write FComments;
     property Picture: TPictureObject read FPicture;
 
     procedure Load(Reader: TBinaryReader; Version: Integer); override;
@@ -93,10 +93,10 @@ type
 
   TProductObject = class(TSerializableObject)
   private
-    FProductName: string;       // Наименование товара
+    FProductName: AnsiString;       // Наименование товара
     FSupplierID: Integer;       // Ссылка на поставщика
     FCategoryID: Integer;       // Ссылка на категорию
-    FQuantityPerUnit: string;   // Единица измерения
+    FQuantityPerUnit: AnsiString;   // Единица измерения
     FUnitPrice: Currency;       // Цена
     FUnitsInStock: Integer;     // На складе
     FUnitsOnOrder: Integer;     // Ожидается
@@ -104,10 +104,10 @@ type
     FLittle: Boolean;           // Мало - добавлено в версии 2
 
   public
-    property ProductName: string read FProductName write FProductName;
+    property ProductName: AnsiString read FProductName write FProductName;
     property SupplierID: Integer read FSupplierID write FSupplierID;
     property CategoryID: Integer read FCategoryID write FCategoryID;
-    property QuantityPerUnit: string read FQuantityPerUnit write FQuantityPerUnit;
+    property QuantityPerUnit: AnsiString read FQuantityPerUnit write FQuantityPerUnit;
     property UnitPrice: Currency read FUnitPrice write FUnitPrice;
     property UnitsInStock: Integer read FUnitsInStock write FUnitsInStock;
     property UnitsOnOrder: Integer read FUnitsOnOrder write FUnitsOnOrder;
@@ -150,10 +150,10 @@ const
   rpSuppliers           = 'Suppliers.xlt';
 
 var
-  SuppliersFileName: string;
-  CategoriesFileName: string;
-  ProductsFileName: string;
-  TemplatesPath: string;
+  SuppliersFileName: AnsiString;
+  CategoriesFileName: AnsiString;
+  ProductsFileName: AnsiString;
+  TemplatesPath: AnsiString;
 
 var
 { Информация о поставщиках, категориях и товарах }
@@ -778,17 +778,17 @@ begin
   end;
 end;
 
-function SuppliersCompanyNameKeyOf(SO: TSerializableObject): string;
+function SuppliersCompanyNameKeyOf(SO: TSerializableObject): AnsiString;
 begin
   Result := TSupplierObject(SO).FCompanyName;
 end;
 
-function CategoriesCategoryNameKeyOf(SO: TSerializableObject): string;
+function CategoriesCategoryNameKeyOf(SO: TSerializableObject): AnsiString;
 begin
   Result := TCategoryObject(SO).FCategoryName;
 end;
 
-function ProductsProductNameKeyOf(SO: TSerializableObject): string;
+function ProductsProductNameKeyOf(SO: TSerializableObject): AnsiString;
 begin
   Result := TProductObject(SO).FProductName;
 end;
@@ -831,7 +831,7 @@ end;
 
 procedure UpdateFileNames;
 var
-  AppPath, DataPath: string;
+  AppPath, DataPath: AnsiString;
 begin
   AppPath := ExtractFilePath(Application.EXEName);
   DataPath := AppPath + cfDataPath;

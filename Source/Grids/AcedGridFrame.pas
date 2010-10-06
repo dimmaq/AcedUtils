@@ -70,7 +70,7 @@ type
     procedure dgInfoSelectCell(Sender: TObject; AColumn, ARow: Integer; var CanSelect: Boolean);
     procedure dgInfoDblClick(Sender: TObject);
     procedure dgInfoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure dgInfoKeyPress(Sender: TObject; var Key: Char);
+    procedure dgInfoKeyPress(Sender: TObject; var Key: AnsiChar);
     procedure dgInfoMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure dgInfoMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure dgInfoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -79,10 +79,10 @@ type
 
     function GetColumnInfo(ColumnIndex: Integer): PGridColumnInfo;
     procedure SetRowCount(Value: Integer);
-    function GetCells(RowIndex, ColumnIndex: Integer): string;
-    procedure SetCells(RowIndex, ColumnIndex: Integer; const Value: string);
+    function GetCells(RowIndex, ColumnIndex: Integer): AnsiString;
+    procedure SetCells(RowIndex, ColumnIndex: Integer; const Value: AnsiString);
     procedure WriteTitle(var Rect: TRect; AColumn: Integer);
-    procedure WriteValue(var Rect: TRect; AColumn: Integer; const S: string);
+    procedure WriteValue(var Rect: TRect; AColumn: Integer; const S: AnsiString);
     function GetCellSelect: Boolean;
     procedure SetCellSelect(Value: Boolean);
     function GetGridVisible: Boolean;
@@ -156,7 +156,7 @@ type
   { SetSearchText изменяет содержимое поля ввода на строку S. Если BeginSearch
     равно False, то поиск при этом не выполняется. }
 
-    procedure SetSearchText(const S: string; BeginSearch: Boolean = True);
+    procedure SetSearchText(const S: AnsiString; BeginSearch: Boolean = True);
 
   { Число строк в таблице (без учета шапки). Значение этому свойству должно
     присваиваться в методе, назначенном свойству OnGetData. }
@@ -173,7 +173,7 @@ type
 
   { Текст, выводимый в ячейках сетки. }
 
-    property Cells[RowIndex, ColumnIndex: Integer]: string read GetCells write SetCells;
+    property Cells[RowIndex, ColumnIndex: Integer]: AnsiString read GetCells write SetCells;
 
   { Свойство, позволяющее напрямую обращаться к данным, выводимым в ячейках
     сетки. При использовании этого свойства проверка на допустимость индекса
@@ -544,7 +544,7 @@ begin
     FOnKeyDown(Self, GetSelectedRowIndex, Key, Shift);
 end;
 
-procedure TGridFrame.dgInfoKeyPress(Sender: TObject; var Key: Char);
+procedure TGridFrame.dgInfoKeyPress(Sender: TObject; var Key: AnsiChar);
 begin
   with SearchEdit do
     if Key >= #32 then
@@ -568,7 +568,7 @@ procedure TGridFrame.dgInfoMouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);
 var
   Column, Row, W: Integer;
-  S: string;
+  S: AnsiString;
   P: TPoint;
 begin
   if not FMultiline and (Shift = []) then
@@ -622,7 +622,7 @@ end;
 
 procedure TGridFrame.edSearchChange(Sender: TObject);
 var
-  S: string;
+  S: AnsiString;
   I, J, N: Integer;
   Full: Boolean;
 begin
@@ -729,7 +729,7 @@ begin
   end;
 end;
 
-function TGridFrame.GetCells(RowIndex, ColumnIndex: Integer): string;
+function TGridFrame.GetCells(RowIndex, ColumnIndex: Integer): AnsiString;
 begin
   if (RowIndex >= 0) and (RowIndex < FRowCount) then
   begin
@@ -741,7 +741,7 @@ begin
     RaiseError(SErrWrongGridRowIndex);
 end;
 
-procedure TGridFrame.SetCells(RowIndex, ColumnIndex: Integer; const Value: string);
+procedure TGridFrame.SetCells(RowIndex, ColumnIndex: Integer; const Value: AnsiString);
 begin
   if (RowIndex >= 0) and (RowIndex < FRowCount) then
   begin
@@ -770,31 +770,31 @@ begin
       case TitleAlignment of
         taLeftJustify:
           Windows.ExtTextOut(DC, Left, Top, TextFlags or ETO_CLIPPED, @Rect,
-            PChar(Title), Length(Title), nil);
+            PAnsiChar(Title), Length(Title), nil);
         taRightJustify:
           Windows.ExtTextOut(DC, Right - TextWidth(Title), Top,
-            TextFlags or ETO_CLIPPED, @Rect, PChar(Title), Length(Title), nil);
+            TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(Title), Length(Title), nil);
       else { taCenter }
         Windows.ExtTextOut(DC, Left + (Right - Left - TextWidth(Title)) div 2, Top,
-          TextFlags or ETO_CLIPPED, @Rect, PChar(Title), Length(Title), nil);
+          TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(Title), Length(Title), nil);
       end
     else
       case TitleAlignment of
         taLeftJustify:
-          DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+          DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_LEFT, nil);
         taRightJustify:
-          DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+          DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_RIGHT, nil);
       else { taCenter }
-        DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+        DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
           DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_CENTER, nil);
       end;
     Changed;
   end;
 end;
 
-procedure TGridFrame.WriteValue(var Rect: TRect; AColumn: Integer; const S: string);
+procedure TGridFrame.WriteValue(var Rect: TRect; AColumn: Integer; const S: AnsiString);
 var
   DC: HDC;
 begin
@@ -809,24 +809,24 @@ begin
       case Alignment of
         taLeftJustify:
           Windows.ExtTextOut(DC, Left, Top, TextFlags or ETO_CLIPPED, @Rect,
-            PChar(S), Length(S), nil);
+            PAnsiChar(S), Length(S), nil);
         taRightJustify:
           Windows.ExtTextOut(DC, Right - TextWidth(S), Top,
-            TextFlags or ETO_CLIPPED, @Rect, PChar(S), Length(S), nil);
+            TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(S), Length(S), nil);
       else { taCenter }
         Windows.ExtTextOut(DC, Left + (Right - Left - TextWidth(S)) div 2, Top,
-          TextFlags or ETO_CLIPPED, @Rect, PChar(S), Length(S), nil);
+          TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(S), Length(S), nil);
       end
     else
       case Alignment of
         taLeftJustify:
-          DrawTextEx(DC, PChar(S), Length(S), Rect,
+          DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_LEFT, nil);
         taRightJustify:
-          DrawTextEx(DC, PChar(S), Length(S), Rect,
+          DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_RIGHT, nil);
       else { taCenter }
-        DrawTextEx(DC, PChar(S), Length(S), Rect,
+        DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
           DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_CENTER, nil);
       end;
     Changed;
@@ -873,7 +873,7 @@ end;
 
 procedure TGridFrame.SearchNext;
 var
-  S: string;
+  S: AnsiString;
   I, J, N, RS: Integer;
   Full: Boolean;
 begin
@@ -960,7 +960,7 @@ begin
         Rect.Right := Width - RightIndent - LeftIndent;
         if not G_IsEmpty(Title) then
         begin
-          DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+          DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
             DT_CALCRECT or DT_EXPANDTABS or DT_NOPREFIX or DT_WORDBREAK, nil);
           Inc(Rect.Bottom, 4);
           if Rect.Bottom > RwH then
@@ -977,7 +977,7 @@ procedure TGridFrame.UpdateRowHeights;
 var
   I,J,RwH: Integer;
   Rect: TRect;
-  S: string;
+  S: AnsiString;
   DC: HDC;
 begin
   Rect.Left := 0;
@@ -997,7 +997,7 @@ begin
         S := FItemList^[I * FColumnCount + J];
         if not G_IsEmpty(S) then
         begin
-          DrawTextEx(DC, PChar(S), Length(S), Rect,
+          DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
             DT_CALCRECT or DT_EXPANDTABS or DT_NOPREFIX or DT_WORDBREAK,nil);
           Inc(Rect.Bottom, 4);
           if Rect.Bottom > RwH then
@@ -1195,7 +1195,7 @@ begin
     Result := -1;
 end;
 
-procedure TGridFrame.SetSearchText(const S: string; BeginSearch: Boolean);
+procedure TGridFrame.SetSearchText(const S: AnsiString; BeginSearch: Boolean);
 begin
   SearchEdit.Font.Color := clWindowText;
   if BeginSearch then

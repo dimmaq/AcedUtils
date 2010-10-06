@@ -93,7 +93,7 @@ procedure TCategoriesForm.CategoriesGridGetData(Sender: TObject);
 var
   I, Count: Integer;
   List: PSerializableObjectList;
-  P: ^string;
+  P: ^AnsiString;
   O: TCategoryObject;
 begin
   List := CategoriesCategoryNameIndex.ItemList;
@@ -190,8 +190,8 @@ begin
   if Index >= 0 then
   begin
     CategoryObject := TCategoryObject(CategoriesCategoryNameIndex.ItemList^[Index]);
-    if MessageBox(Handle, PChar('Вы уверены, что хотите удалить категорию "' + CategoryObject.CategoryName + '"?'),
-      PChar('Подтверждение'), MB_YESNO or MB_ICONQUESTION) = IDYES then
+    if MessageBox(Handle, PAnsiChar('Вы уверены, что хотите удалить категорию "' + CategoryObject.CategoryName + '"?'),
+      PAnsiChar('Подтверждение'), MB_YESNO or MB_ICONQUESTION) = IDYES then
     begin
       Complete := False;
       ReferenceFound := False;

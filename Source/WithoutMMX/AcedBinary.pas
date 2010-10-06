@@ -23,8 +23,8 @@ interface
 { Разные функции }
 
 { G_Swap32 обменивает значения двух переменных любого 4-байтного типа.
-  Например, это могут быть переменные следующих типов: String, Pointer,
-  PChar, Integer, LongWord, Single. }
+  Например, это могут быть переменные следующих типов: AnsiString, Pointer,
+  PAnsiChar, Integer, LongWord, Single. }
 
 procedure G_Swap32(var A, B);
 
@@ -34,7 +34,7 @@ procedure G_Swap32(var A, B);
 procedure G_Swap16(var A, B);
 
 { G_Swap8 обменивает значения переменных размером 1 байт, типа Byte, Boolean,
-  ShortInt, Char. }
+  ShortInt, AnsiChar. }
 
 procedure G_Swap8(var A, B);
 

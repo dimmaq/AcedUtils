@@ -110,9 +110,9 @@ procedure TSelectSupplierForm.SuppliersGridGetData(Sender: TObject);
 var
   I, Count: Integer;
   List: PSerializableObjectList;
-  P: ^string;
+  P: ^AnsiString;
   O: TSupplierObject;
-  S: string;
+  S: AnsiString;
 begin
   List := SuppliersCompanyNameIndex.ItemList;
   Count := Suppliers.Count;

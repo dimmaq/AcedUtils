@@ -54,7 +54,7 @@ procedure TCheckCategoriesForm.CategoriesGridGetData(Sender: TObject);
 var
   I, Count: Integer;
   List: PSerializableObjectList;
-  P: ^string;
+  P: ^AnsiString;
   O: TCategoryObject;
 begin
   List := CategoriesCategoryNameIndex.ItemList;

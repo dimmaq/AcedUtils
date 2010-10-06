@@ -58,17 +58,17 @@ type
     procedure dgInfoDrawCell(Sender: TObject; AColumn, ARow: Integer; Rect: TRect; AState: TGridDrawState);
     procedure dgInfoDblClick(Sender: TObject);
     procedure dgInfoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure dgInfoKeyPress(Sender: TObject; var Key: Char);
+    procedure dgInfoKeyPress(Sender: TObject; var Key: AnsiChar);
     procedure dgInfoMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure dgInfoMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure dgInfoMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 
     function GetColumnInfo(ColumnIndex: Integer): PGridColumnInfo;
     procedure SetRowCount(Value: Integer);
-    function GetCells(RowIndex, ColumnIndex: Integer): string;
-    procedure SetCells(RowIndex, ColumnIndex: Integer; const Value: string);
+    function GetCells(RowIndex, ColumnIndex: Integer): AnsiString;
+    procedure SetCells(RowIndex, ColumnIndex: Integer; const Value: AnsiString);
     procedure WriteTitle(var Rect: TRect; AColumn: Integer);
-    procedure WriteValue(var Rect: TRect; AColumn: Integer; const S: string);
+    procedure WriteValue(var Rect: TRect; AColumn: Integer; const S: AnsiString);
     function GetGridVisible: Boolean;
     procedure SetGridVisible(Value: Boolean);
     function GetEntitled: Boolean;
@@ -148,7 +148,7 @@ type
 
   { “екст, выводимый в €чейках сетки. }
 
-    property Cells[RowIndex, ColumnIndex: Integer]: string read GetCells write SetCells;
+    property Cells[RowIndex, ColumnIndex: Integer]: AnsiString read GetCells write SetCells;
 
   { —войство, позвол€ющее напр€мую обращатьс€ к данным, выводимым в €чейках
     сетки. ѕри использовании этого свойства проверка на допустимость индекса
@@ -412,7 +412,7 @@ begin
   Key := 0;
 end;
 
-procedure TViewFrame.dgInfoKeyPress(Sender: TObject; var Key: Char);
+procedure TViewFrame.dgInfoKeyPress(Sender: TObject; var Key: AnsiChar);
 begin
   if Assigned(FOnKeyPress) then
     FOnKeyPress(Self, Key);
@@ -423,7 +423,7 @@ procedure TViewFrame.dgInfoMouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);
 var
   Column, Row, W: Integer;
-  S: string;
+  S: AnsiString;
   P: TPoint;
 begin
   if not FMultiline and (Shift = []) then
@@ -504,7 +504,7 @@ begin
   end;
 end;
 
-function TViewFrame.GetCells(RowIndex, ColumnIndex: Integer): string;
+function TViewFrame.GetCells(RowIndex, ColumnIndex: Integer): AnsiString;
 begin
   if (RowIndex >= 0) and (RowIndex < FRowCount) then
   begin
@@ -516,7 +516,7 @@ begin
     RaiseError(SErrWrongGridRowIndex);
 end;
 
-procedure TViewFrame.SetCells(RowIndex, ColumnIndex: Integer; const Value: string);
+procedure TViewFrame.SetCells(RowIndex, ColumnIndex: Integer; const Value: AnsiString);
 begin
   if (RowIndex >= 0) and (RowIndex < FRowCount) then
   begin
@@ -545,31 +545,31 @@ begin
       case TitleAlignment of
         taLeftJustify:
           Windows.ExtTextOut(DC, Left, Top, TextFlags or ETO_CLIPPED, @Rect,
-            PChar(Title), Length(Title), nil);
+            PAnsiChar(Title), Length(Title), nil);
         taRightJustify:
           Windows.ExtTextOut(DC, Right - TextWidth(Title), Top,
-            TextFlags or ETO_CLIPPED, @Rect, PChar(Title), Length(Title), nil);
+            TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(Title), Length(Title), nil);
       else { taCenter }
         Windows.ExtTextOut(DC, Left + (Right - Left - TextWidth(Title)) div 2, Top,
-          TextFlags or ETO_CLIPPED, @Rect, PChar(Title), Length(Title), nil);
+          TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(Title), Length(Title), nil);
       end
     else
       case TitleAlignment of
         taLeftJustify:
-          DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+          DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_LEFT, nil);
         taRightJustify:
-          DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+          DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_RIGHT, nil);
       else { taCenter }
-        DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+        DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
           DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_CENTER, nil);
       end;
     Changed;
   end;
 end;
 
-procedure TViewFrame.WriteValue(var Rect: TRect; AColumn: Integer; const S: string);
+procedure TViewFrame.WriteValue(var Rect: TRect; AColumn: Integer; const S: AnsiString);
 var
   DC: HDC;
 begin
@@ -584,24 +584,24 @@ begin
       case Alignment of
         taLeftJustify:
           Windows.ExtTextOut(DC, Left, Top, TextFlags or ETO_CLIPPED, @Rect,
-            PChar(S), Length(S), nil);
+            PAnsiChar(S), Length(S), nil);
         taRightJustify:
           Windows.ExtTextOut(DC, Right - TextWidth(S), Top,
-            TextFlags or ETO_CLIPPED, @Rect, PChar(S), Length(S), nil);
+            TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(S), Length(S), nil);
       else { taCenter }
         Windows.ExtTextOut(DC, Left + (Right - Left - TextWidth(S)) div 2, Top,
-          TextFlags or ETO_CLIPPED, @Rect, PChar(S), Length(S), nil);
+          TextFlags or ETO_CLIPPED, @Rect, PAnsiChar(S), Length(S), nil);
       end
     else
       case Alignment of
         taLeftJustify:
-          DrawTextEx(DC, PChar(S), Length(S), Rect,
+          DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_LEFT, nil);
         taRightJustify:
-          DrawTextEx(DC, PChar(S), Length(S), Rect,
+          DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
             DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_RIGHT, nil);
       else { taCenter }
-        DrawTextEx(DC, PChar(S), Length(S), Rect,
+        DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
           DT_WORDBREAK or DT_EXPANDTABS or DT_NOPREFIX or DT_CENTER, nil);
       end;
     Changed;
@@ -651,7 +651,7 @@ begin
         Rect.Right := Width - RightIndent - LeftIndent;
         if not G_IsEmpty(Title) then
         begin
-          DrawTextEx(DC, PChar(Title), Length(Title), Rect,
+          DrawTextEx(DC, PAnsiChar(Title), Length(Title), Rect,
             DT_CALCRECT or DT_EXPANDTABS or DT_NOPREFIX or DT_WORDBREAK, nil);
           Inc(Rect.Bottom, 4);
           if Rect.Bottom > RwH then
@@ -668,7 +668,7 @@ procedure TViewFrame.UpdateRowHeights;
 var
   I,J,RwH: Integer;
   Rect: TRect;
-  S: string;
+  S: AnsiString;
   DC: HDC;
 begin
   Rect.Left := 0;
@@ -688,7 +688,7 @@ begin
         S := FItemList^[I * FColumnCount + J];
         if not G_IsEmpty(S) then
         begin
-          DrawTextEx(DC, PChar(S), Length(S), Rect,
+          DrawTextEx(DC, PAnsiChar(S), Length(S), Rect,
             DT_CALCRECT or DT_EXPANDTABS or DT_NOPREFIX or DT_WORDBREAK,nil);
           Inc(Rect.Bottom, 4);
           if Rect.Bottom > RwH then

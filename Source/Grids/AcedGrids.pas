@@ -24,7 +24,7 @@ type
 
   PGridColumnInfo = ^TGridColumnInfo;
   TGridColumnInfo = record
-    Title: string;              // Заголовок столбца
+    Title: AnsiString;              // Заголовок столбца
     Alignment: TAlignment;      // Выравнивание текста в столбце
     TitleAlignment: TAlignment; // Выравнивание текста в заголовке
     Width: Integer;             // Ширина столбца (в пикселах)
@@ -74,7 +74,7 @@ type
   TViewKeyDownEvent = procedure (Sender: TObject; Key: Word;
     Shift: TShiftState) of object;
 
-  TViewKeyPressEvent = procedure (Sender: TObject; Key: Char) of object;
+  TViewKeyPressEvent = procedure (Sender: TObject; Key: AnsiChar) of object;
 
 { Описание типа процедуры, которая вызывается при пометке или разметке записей. }
 

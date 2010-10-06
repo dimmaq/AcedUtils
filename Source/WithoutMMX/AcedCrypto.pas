@@ -195,7 +195,7 @@ procedure G_SHA256Done(H: HSHA256); overload;
   памяти, адресуемой параметром P, длиной L байт или для строки символов S. }
 
 procedure G_SHA256(P: Pointer; L: Cardinal; Hash: PSHA256Digest); overload;
-procedure G_SHA256(const S: string; Hash: PSHA256Digest); overload;
+procedure G_SHA256(const S: AnsiString; Hash: PSHA256Digest); overload;
 
 { G_SHA256SelfTest проверяет работоспособность алгоритма SHA-256 по тестовым
   векторам, приведенным в FIPS180-2. Если тест пройден успешно, функция
@@ -547,11 +547,11 @@ end;
 
 function G_RC4SelfTest: Boolean;
 const
-  PlainText: string = 'DCEE4CF92C';
-  UserKey: string = '618A63D2FB';
-  CipherText: string = '04399148D9';
+  PlainText: AnsiString = 'DCEE4CF92C';
+  UserKey: AnsiString = '618A63D2FB';
+  CipherText: AnsiString = '04399148D9';
 var
-  S, K: string;
+  S, K: AnsiString;
   H: HRC4;
 begin
   S := G_CodesToStr(PlainText);
@@ -1716,17 +1716,17 @@ end;
 
 function G_RC6SelfTest: Boolean;
 const
-  PlainTexts: array[0..1] of string =
+  PlainTexts: array[0..1] of AnsiString =
     ('00000000000000000000000000000000',
      '02132435465768798A9BACBDCEDFE0F1');
-  UserKeys: array[0..5] of string =
+  UserKeys: array[0..5] of AnsiString =
     ('00000000000000000000000000000000',
      '0123456789ABCDEF0112233445566778',
      '000000000000000000000000000000000000000000000000',
      '0123456789ABCDEF0112233445566778899AABBCCDDEEFF0',
      '0000000000000000000000000000000000000000000000000000000000000000',
      '0123456789ABCDEF0112233445566778899AABBCCDDEEFF01032547698BADCFE');
-  CipherTexts: array[0..5] of string =
+  CipherTexts: array[0..5] of AnsiString =
     ('8FC3A53656B1F778C129DF4E9848A41E',
      '524E192F4715C6231F51F6367EA43F18',
      '6CD61BCB190B30384E8A3F168690AE82',
@@ -1734,17 +1734,17 @@ const
      '8F5FBD0510D15FA893FA3FDA6E857EC2',
      'C8241816F0D7E48920AD16A1674E5D48');
 var
-  K, S: string;
+  K, S: AnsiString;
   H: HRC6;
   I: Integer;
 begin
   for I := 0 to 5 do
   begin
     K := G_CodesToStr(UserKeys[I]);
-    SetString(K, PChar(K), Length(K));
+    SetString(K, PAnsiChar(K), Length(K));
     G_RC6Init(H, Pointer(K), Length(K));
     S := G_CodesToStr(PlainTexts[I and 1]);
-    SetString(S, PChar(S), Length(S));
+    SetString(S, PAnsiChar(S), Length(S));
     G_RC6EncryptECB(H, Pointer(S));
     if not G_SameStr(G_StrToCodes(S), CipherTexts[I]) then
     begin
@@ -2522,7 +2522,7 @@ begin
   G_SHA256Done(H, Hash);
 end;
 
-procedure G_SHA256(const S: string; Hash: PSHA256Digest);
+procedure G_SHA256(const S: AnsiString; Hash: PSHA256Digest);
 var
   H: HSHA256;
 begin
@@ -2535,7 +2535,7 @@ function G_SHA256SelfTest: Boolean;
 var
   H: HSHA256;
   Hash: TSHA256Digest;
-  S: string;
+  S: AnsiString;
 begin
   G_SHA256('abc', @Hash);
   if not ((Hash[0] = $ba7816bf) and (Hash[1] = $8f01cfea) and
@@ -2740,7 +2740,7 @@ begin
   G_SHA256Done(H, Hash);
 end;
 
-procedure G_SHA256(const S: string; Hash: PSHA256Digest);
+procedure G_SHA256(const S: AnsiString; Hash: PSHA256Digest);
 var
   H: HSHA256;
 begin
@@ -2753,7 +2753,7 @@ function G_SHA256SelfTest: Boolean;
 var
   H: HSHA256;
   Hash: TSHA256Digest;
-  S: string;
+  S: AnsiString;
 begin
   G_SHA256('abc', @Hash);
   if not ((Hash[0] = $ba7816bf) and (Hash[1] = $8f01cfea) and

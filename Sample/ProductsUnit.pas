@@ -119,7 +119,7 @@ procedure TProductsForm.ProductsGridGetData(Sender: TObject);
 var
   I, Count: Integer;
   List: PSerializableObjectList;
-  P: ^string;
+  P: ^AnsiString;
   Supplier: TSupplierObject;
   O: TProductObject;
 begin
@@ -252,8 +252,8 @@ begin
   if Index >= 0 then
   begin
     ProductObject := TProductObject(ProductsProductNameIndex.ItemList^[Index]);
-    if MessageBox(Handle, PChar('Вы уверены, что хотите удалить товар "' + ProductObject.ProductName + '"?'),
-      PChar('Подтверждение'), MB_YESNO or MB_ICONQUESTION) = IDYES then
+    if MessageBox(Handle, PAnsiChar('Вы уверены, что хотите удалить товар "' + ProductObject.ProductName + '"?'),
+      PAnsiChar('Подтверждение'), MB_YESNO or MB_ICONQUESTION) = IDYES then
     begin
       Products.Delete(ProductObject.ID);
       if SaveProducts then

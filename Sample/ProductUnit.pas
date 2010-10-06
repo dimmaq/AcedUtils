@@ -120,7 +120,7 @@ end;
 procedure TProductForm.OkButtonClick(Sender: TObject);
 var
   O: TProductObject;
-  S: string;
+  S: AnsiString;
   C: Currency;
   N: Integer;
 begin

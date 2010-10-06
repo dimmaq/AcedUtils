@@ -108,7 +108,7 @@ procedure TSuppliersForm.SuppliersGridGetData(Sender: TObject);
 var
   I, Count: Integer;
   List: PSerializableObjectList;
-  P: ^string;
+  P: ^AnsiString;
   O: TSupplierObject;
 begin
   List := SuppliersCompanyNameIndex.ItemList;
@@ -215,8 +215,8 @@ begin
   if Index >= 0 then
   begin
     SupplierObject := TSupplierObject(SuppliersCompanyNameIndex.ItemList^[Index]);
-    if MessageBox(Handle, PChar('Вы уверены, что хотите удалить поставщика "' + SupplierObject.CompanyName + '"?'),
-      PChar('Подтверждение'), MB_YESNO or MB_ICONQUESTION) = IDYES then
+    if MessageBox(Handle, PAnsiChar('Вы уверены, что хотите удалить поставщика "' + SupplierObject.CompanyName + '"?'),
+      PAnsiChar('Подтверждение'), MB_YESNO or MB_ICONQUESTION) = IDYES then
     begin
       Complete := False;
       ReferenceFound := False;

@@ -59,7 +59,7 @@ type
     procedure actSuppliersReportExecute(Sender: TObject);
     procedure actProductByCategoryReportExecute(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
-    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: AnsiChar);
     procedure actProductBySupplierReportExecute(Sender: TObject);
     procedure actSuppliersCategoriesReportExecute(Sender: TObject);
   private
@@ -145,7 +145,7 @@ begin
     MakeSupplierReport;
 end;
 
-procedure TMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+procedure TMainForm.FormKeyPress(Sender: TObject; var Key: AnsiChar);
 begin
   if Key = #27 then
     actExit.Execute;
