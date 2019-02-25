@@ -156,6 +156,8 @@ type
   { Функция ReadChar считывает значение типа AnsiChar из бинарного потока. }
 
     function ReadChar(): AnsiChar;
+
+    property Bytes: PBytes read FBytes;
   end;
 
 
@@ -310,6 +312,8 @@ type
 
     function SaveToStream(Stream: TStream; EncryptionKey: PSHA256Digest = nil;
       CompressionMode: TCompressionMode = dcmNoCompression): Boolean;
+
+    property Bytes: PBytes read FBytes;
   end;
 
 

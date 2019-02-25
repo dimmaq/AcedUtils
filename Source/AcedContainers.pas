@@ -240,6 +240,19 @@ type
   
 { Класс TIntegerList - упорядоченный набор значений типа Integer }
 
+  TIntegerList = class;
+
+  TIntegerListEnumerator = class
+  private
+    FIndex: Integer;
+    FList: TIntegerList;
+  public
+    constructor Create(AList: TIntegerList);
+    function GetCurrent: Integer;
+    function MoveNext: Boolean;
+    property Current: Integer read GetCurrent;
+  end;
+
   TIntegerList = class(TObject)
   private
     FCapacity: Integer;
@@ -265,6 +278,8 @@ type
     TIntegerList и его внутренним массивом, адресуемым свойством ItemList. }
 
     destructor Destroy; override;
+
+    function GetEnumerator: TIntegerListEnumerator;    
 
   { Свойства }
 
@@ -705,6 +720,19 @@ type
 
   TGroupEnumerator = class;
 
+  TArrayList = class;
+
+  TArrayListEnumerator = class
+  private
+    FIndex: Integer;
+    FList: TArrayList;
+  public
+    constructor Create(AList: TArrayList);
+    function GetCurrent: Pointer;
+    function MoveNext: Boolean;
+    property Current: Pointer read GetCurrent;
+  end;
+
   TArrayList = class(TObject)
   private
     FCapacity: Integer;
@@ -727,6 +755,9 @@ type
     метод Free. }
 
     destructor Destroy; override;
+
+    function GetEnumerator: TArrayListEnumerator;
+
 
   { Свойства }
 
@@ -922,6 +953,8 @@ type
     копией данного списка. Свойство OwnItems нового списка равно False. }
 
     function Clone: TArrayList;
+
+    function CopyTo(ADestination: TArrayList): TArrayList;
 
     property Items[Index: Integer]: Pointer read Get write Put; default;    
   end;
@@ -1690,6 +1723,7 @@ type
     function GetItem(const Key: AnsiString): Pointer;
     function SearchFirstGE(const Key: AnsiString): Integer;
     procedure SetItem(const Key: AnsiString; Value: Pointer);
+    function Compare(const S1, S2: AnsiString): Integer;
   public
 
   { Конструктор Create создает экземпляр класса TStringAssociationList
@@ -1784,6 +1818,8 @@ type
 
     function Add(const Key: AnsiString; Value: Pointer): Integer;
 
+    function AddIfNotExists(const Key: AnsiString; Value: Pointer): Integer;
+
   { Метод Remove удаляет из ассоциативного списка элемент с ключом Key,
     если такой элемент имеется. Если свойство OwnValues равно True, значение,
     ассоциированное с этим ключом, приводится к типу TObject и для него
@@ -1821,9 +1857,10 @@ type
     procedure TrimToSize;
 
     function ToString: AnsiString;{$IFDEF UNICODE} reintroduce; overload;{$ENDIF}
+    procedure AddList(AList: TStringAssociationList);
   end;
 
-  
+
 { Класс TStringHashtable представляет собой ассоциативный массив, где с каждым
   ключом типа AnsiString связано значение типа Pointer или TObject. Ключи являются
   уникальными и хранятся в виде хэшированного списка. }
@@ -3560,6 +3597,11 @@ begin
   result := FItems[Index]
 end;
 
+function TIntegerList.GetEnumerator: TIntegerListEnumerator;
+begin
+  Result := TIntegerListEnumerator.Create(Self);
+end;
+
 procedure TIntegerList.Put(Index, Item: Integer);
 begin
   FItems[Index] := Item;
@@ -4294,11 +4336,22 @@ end;
 
 function TArrayList.Get(Index: Integer): Pointer;
 begin
+  if (Index < 0) or (Index >= FCount) then
+    RaiseError(SErrIndexOutOfRange +
+      ' [i:' + G_IntToStr(Index) + ';c:' + G_IntToStr(FCount) + ']');
   Result := FItems^[Index]
+end;
+
+function TArrayList.GetEnumerator: TArrayListEnumerator;
+begin
+  Result := TArrayListEnumerator.Create(Self);
 end;
 
 procedure TArrayList.Put(Index: Integer; Item: Pointer);
 begin
+  if (Index < 0) or (Index >= FCount) then
+    RaiseError(SErrIndexOutOfRange +
+      ' [i:' + G_IntToStr(Index) + ';c:' + G_IntToStr(FCount) + ']');
   FItems^[Index] := Item
 end;
 
@@ -4308,6 +4361,18 @@ begin
   if FCount > 0 then
     G_CopyLongs(FItems, Result.FItems, FCount);
   Result.FCount := FCount;
+end;
+
+function TArrayList.CopyTo(ADestination: TArrayList): TArrayList;
+begin
+  Result := ADestination;
+  Result.Clear;
+  if FCount > 0 then
+  begin
+    Result.Capacity := FCount;
+    G_CopyLongs(FItems, Result.FItems, FCount);
+    Result.FCount := FCount;
+  end;
 end;
 
 { TArrayReadOnlyList }
@@ -6099,8 +6164,31 @@ function TStringAssociationList.Add(const Key: AnsiString; Value: Pointer): Inte
 var L: Integer;
 begin
   L := SearchFirstGE(Key);
-  if (L < FCount) and (FKeys^[L] = Key) then
+  if (L < FCount) and  (Self.Compare(FKeys^[L], Key) = 0) then
     RaiseErrorFmt(SErrKeyDuplicatesInAssociationList, 'TStringAssociationList');
+  if FCount >= FCapacity then
+    SetCapacity(G_EnlargeCapacity(FCapacity));
+  if L < FCount then
+  begin
+    G_MoveLongs(@FKeys^[L], @FKeys^[L + 1], FCount - L);
+    G_MoveLongs(@FValues^[L], @FValues^[L + 1], FCount - L);
+  end;
+  Pointer(FKeys^[L]) := nil;
+  FKeys^[L] := Key;
+  FValues^[L] := Value;
+  Inc(FCount);
+  Result := L;
+end;
+
+function TStringAssociationList.AddIfNotExists(const Key: AnsiString; Value: Pointer): Integer;
+var L: Integer;
+begin
+  L := SearchFirstGE(Key);
+  if (L < FCount) and (Self.Compare(FKeys^[L], Key) = 0) then
+  begin
+    Result := L;
+    Exit;
+  end;
   if FCount >= FCapacity then
     SetCapacity(G_EnlargeCapacity(FCapacity));
   if L < FCount then
@@ -6169,6 +6257,14 @@ begin
   end;
 end;
 
+procedure TStringAssociationList.AddList(AList: TStringAssociationList);
+var j: Integer;
+begin
+  if Assigned(AList) then  
+    for j := 0 to AList.Count - 1 do
+      Add(AList.KeyList[j], AList.ValueList[j])    
+end;
+
 procedure TStringAssociationList.Clear(SuppressDisposingValues: Boolean);
 var
   I: Integer;
@@ -6180,6 +6276,14 @@ begin
     FKeys^[I] := '';
   end;
   FCount := 0;
+end;
+
+function TStringAssociationList.Compare(const S1, S2: AnsiString): Integer;
+begin
+  if FCaseSensitive then
+    Result := G_CompareStr(S1, S2)
+  else
+    Result := G_CompareText(S1, S2)
 end;
 
 function TStringAssociationList.ToString: AnsiString;
@@ -8470,6 +8574,48 @@ begin
   Result.FCount := FCount;
 end;
 
+{ TIntegerListEnumerator }
+
+constructor TIntegerListEnumerator.Create(AList: TIntegerList);
+begin
+  inherited Create;
+  FIndex := -1;
+  FList := AList;
+end;
+
+function TIntegerListEnumerator.GetCurrent: Integer;
+begin
+  Result := FList[FIndex]
+end;
+
+function TIntegerListEnumerator.MoveNext: Boolean;
+begin
+  Result := FIndex < FList.Count - 1;
+  if Result then
+    Inc(FIndex);
+end;
+
+{ TArrayListEnumerator }
+
+constructor TArrayListEnumerator.Create(AList: TArrayList);
+begin
+  inherited Create;
+  FIndex := -1;
+  FList := AList;
+end;
+
+function TArrayListEnumerator.GetCurrent: Pointer;
+begin
+  Result := FList.FItems^[FIndex]
+end;
+
+function TArrayListEnumerator.MoveNext: Boolean;
+begin
+  Result := FIndex < FList.Count - 1;
+  if Result then
+    Inc(FIndex);
+end;
+
 initialization
   New(StringRBTreeNil);
   StringRBTreeNil^.Parent := StringRBTreeNil;
@@ -8485,10 +8631,10 @@ initialization
   Int64RBTreeNil^.Right := Int64RBTreeNil;
 
 finalization
-  {DONE: Утечка памяти}
-  {$IFNDEF DEBUG}
-  if not IsMultiThread then
-  {$ENDIF}
+//  {DONE: Утечка памяти}
+//  {$IFNDEF DEBUG}
+//  if not IsMultiThread then
+//  {$ENDIF}
   begin
     Dispose(Int64RBTreeNil);
     Dispose(IntegerRBTreeNil);

@@ -1035,6 +1035,17 @@ uses Windows, AcedBinary, AcedCommon
 {$ENDIF}
 ;
 
+{$IFDEF UNICODE}
+{
+procedure UniqueString(var Str: AnsiString);
+begin
+  System.UniqueString(Str);
+end;
+}
+type TUniqueString = procedure (var Str: AnsiString);
+const UniqueString: TUniqueString = System.UniqueString;
+{$ENDIF}
+
 { Функции для сравнения строк }
 
 function G_CompareStr(const S1, S2: AnsiString): Integer;

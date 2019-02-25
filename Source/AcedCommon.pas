@@ -13,6 +13,8 @@ unit AcedCommon;
 
 {$B-,H+,R-,Q-,T-,X+}
 
+{$INCLUDE AcedUtils.inc}
+
 interface
 
 { Константные массивы, содержащие названия месяцев и дней недели }
@@ -486,8 +488,16 @@ procedure G_ODS(Number: Integer = 0; const S: AnsiString = '');
 
 implementation
 
-uses Windows, SysUtils,{$IFDEF UNICODE} SysConst,{$ENDIF} AcedStrings, AcedBinary, AcedConsts;
+uses
+  Windows, SysUtils,
+  {$IFDEF DELPHIXE_UP}
+    System.SysConst, System.AnsiStrings,
+  {$ENDIF}
+  AcedStrings, AcedBinary, AcedConsts
+  ;
 
+const
+  AAA = CompilerVersion;
 
 {$IFDEF UNICODE}
 procedure ConvertError(ResString: PResStringRec); local;
@@ -499,8 +509,9 @@ var
   Buffer: array[0..255] of AnsiChar;
 begin
   if Length(Format) > Length(Buffer) - 32 then ConvertError(@SFormatTooLong);
-  SetString(Result, Buffer, FloatToTextFmt(Buffer, Value, fvExtended,
-    PAnsiChar(Format)));
+  SetString(Result, Buffer,
+    {$IFDEF DELPHIXE_UP}System.AnsiStrings.{$ENDIF}FloatToTextFmt(Buffer, Value, fvExtended,
+      PAnsiChar(Format)));
 end;
 {$ENDIF}
 
@@ -1590,7 +1601,11 @@ var
   P: PAnsiChar;
 begin
   L := Length(S);
+{$IFDEF UNICODE}
+  if FormatSettings.DecimalSeparator = ',' then
+{$ELSE}
   if DecimalSeparator = ',' then
+{$ENDIF}
   begin
     I := G_CharPos('.', S);
     if I <> 0 then
@@ -1644,14 +1659,14 @@ function G_Between_Extended(const S: AnsiString; LowBound, HighBound: Extended):
 var
   N: Extended;
 begin
-  Result := TextToFloat(PAnsiChar(S), N, fvExtended) and (N >= LowBound) and (N <= HighBound);
+  Result := {$IFDEF DELPHIXE_UP}System.AnsiStrings.{$ENDIF}TextToFloat(PAnsiChar(S), N, fvExtended) and (N >= LowBound) and (N <= HighBound);
 end;
 
 function G_Between_Currency(const S: AnsiString; LowBound, HighBound: Currency): Boolean;
 var
   N: Currency;
 begin
-  Result := TextToFloat(PAnsiChar(S), N, fvCurrency) and (N >= LowBound) and (N <= HighBound);
+  Result := {$IFDEF DELPHIXE_UP}System.AnsiStrings.{$ENDIF}TextToFloat(PAnsiChar(S), N, fvCurrency) and (N >= LowBound) and (N <= HighBound);
 end;
 
 function G_StrTo_Integer(const S: AnsiString; var V: Integer): Boolean;
@@ -1884,12 +1899,12 @@ end;
 
 function G_StrTo_Extended(const S: AnsiString; var V: Extended): Boolean;
 begin
-  Result := TextToFloat(PAnsiChar(S), V, fvExtended);
+  Result := {$IFDEF DELPHIXE_UP}System.AnsiStrings.{$ENDIF}TextToFloat(PAnsiChar(S), V, fvExtended);
 end;
 
 function G_StrTo_Currency(const S: AnsiString; var V: Currency): Boolean;
 begin
-  Result := TextToFloat(PAnsiChar(S), V, fvCurrency);
+  Result := {$IFDEF DELPHIXE_UP}System.AnsiStrings.{$ENDIF}TextToFloat(PAnsiChar(S), V, fvCurrency);
 end;
 
 function G_ModDiv10(var V: LongWord): Integer;
@@ -1932,7 +1947,7 @@ var
   V1: Int64;
   VArr: array[0..6] of Integer;
   I, E, D, H, Count: Integer;
-  SB: TStringBuilder;
+  SB: TAnsiStringBuilder;
 begin
   Result := 3;
   if N = 0 then
@@ -1941,11 +1956,11 @@ begin
     Exit;
   end;
   if N > 0 then
-    SB := TStringBuilder.Create(120)
+    SB := TAnsiStringBuilder.Create(120)
   else if N <> $8000000000000000 then
   begin
     N := -N;
-    SB := TStringBuilder.Create('минус ');
+    SB := TAnsiStringBuilder.Create('минус ');
   end else
   begin                                 { -9.223.372.036.854.775.808 }
     if FormatFlags and nfShort = 0 then

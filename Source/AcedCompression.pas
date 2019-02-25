@@ -2942,12 +2942,12 @@ initialization
   InitializeCriticalSection(InflatorCriticalSection);
 
 finalization
-  if not IsMultiThread then
-  begin
+//  if not IsMultiThread then
+//  begin
     G_ReleaseDeflator;
     G_ReleaseInflator;
     DeleteCriticalSection(DeflatorCriticalSection);
     DeleteCriticalSection(InflatorCriticalSection);
-  end;
+//  end;
 end.
 
