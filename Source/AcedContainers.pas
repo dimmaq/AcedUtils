@@ -2910,11 +2910,11 @@ end;
 procedure TBitList.FromString(const S: AnsiString);
 var
   L, I: Integer;
-  P: PChars;
+  P: PAnsiChars;
 begin
   L := Length(S);
   IntSetCount(L);
-  P := PChars(S);
+  P := PAnsiChars(S);
   I := 0;
   while I < L do
   begin
@@ -2929,10 +2929,10 @@ end;
 function TBitList.ToString: AnsiString;
 var
   I: Integer;
-  P: PChars;
+  P: PAnsiChars;
 begin
   SetString(Result, nil, FCount);
-  P := PChars(Result);
+  P := PAnsiChars(Result);
   I := 0;
   while I < FCount do
   begin

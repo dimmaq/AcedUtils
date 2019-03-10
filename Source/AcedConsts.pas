@@ -92,8 +92,8 @@ type
 
 { Тип массива и указателя на массив элементов типа AnsiChar }
 
-  PChars = ^TChars;
-  TChars = array[0..ByteListUpperLimit] of AnsiChar;
+  PAnsiChars = ^TAnsiChars;
+  TAnsiChars = array[0..ByteListUpperLimit] of AnsiChar;
 
 
 { Функции для выбора оптимального размера внутреннего массива обычного

@@ -474,7 +474,7 @@ type
   private
     FLength: Integer;
     FCapacity: Integer;
-    FChars: PChars;
+    FChars: PAnsiChars;
     procedure SetLength(NewLength: Integer);
     procedure SetCapacity(NewCapacity: Integer);
   public
@@ -533,7 +533,7 @@ type
     перераспределении памяти, которое происходит при прямом или косвенном
     изменении значения свойства Capacity. }
 
-    property Chars: PChars read FChars;
+    property Chars: PAnsiChars read FChars;
 
   { Методы }
 
@@ -4111,7 +4111,7 @@ end;
 
 procedure TAnsiStringBuilder.SetCapacity(NewCapacity: Integer);
 var
-  NewChars: PChars;
+  NewChars: PAnsiChars;
 begin
   if (NewCapacity <> FCapacity) and (NewCapacity >= FLength) then
   begin
