@@ -1862,7 +1862,7 @@ begin
     until False;
     if V < 0 then
     begin
-      Result := (V = $8000000000000000) and Sign and (C = 0);
+      Result := (V = Int64($8000000000000000)) and Sign and (C = 0);
       Exit;
     end;
   end else
